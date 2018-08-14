@@ -1,4 +1,4 @@
-#Github's gitignore for common configurations
+# Github's gitignore for common configurations
 ################################################################################
 
 # Compiled source #
@@ -39,7 +39,7 @@
 ehthumbs.db
 Thumbs.db
 
-#Node.gitignore#
+# Node.gitignore
 ################################################################################
 
 # Logs
@@ -103,3 +103,12 @@ typings/
 
 # next.js build output
 .next
+
+# Github's global gitignore for VisualStudioCode
+################################################################################
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
