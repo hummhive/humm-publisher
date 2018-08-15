@@ -1,0 +1,70 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/unmute.js"></script>
+    <style>
+    .bd-navbar {
+    	min-height: 4rem;
+    	background-color: fff;
+    	/* box-shadow: 0 .5rem 1rem rgba(0,0,0,.05),inset 0 -1px 0 rgba(0,0,0,.1); */
+    	border-bottom: 1px solid #ddd;
+    }
+    .article-heading {
+    	margin-bottom: 30px;
+    	margin-top: 30px;
+    }
+  </style>
+  <link rel="stylesheet" href="/lib/trumbowyg/dist/ui/trumbowyg.min.css">
+</head>
+
+<body>
+
+  <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
+    <a class="container navbar-brand" href="/" aria-label="Bootstrap">Unmute</a>
+  </header>
+
+  <div class="container mt-5 mb-5">
+        <p class="breadcrumb"> Home > Compose</p>
+    <h4 class="article-heading">Compose your next article here</h4>
+    <form>
+        <div class="form-group">
+          <label for="ArticleTitle">Title</label>
+          <input class="form-control" type="text" id="ArticleTitle" size="50" />
+        </div>
+        <div id="trumbowyg-demo"></div>
+       <button type="submit" id="saveDraft" class="btn btn-primary">Save Draft</button>
+       <button type="submit" id="publishArticle" class="btn btn-primary">Publish</button>
+    </form>
+    </div>
+
+
+  </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.2.1.min.js"><\/script>')</script>
+    <script src="/lib/trumbowyg/dist/trumbowyg.min.js"></script>
+    <script>
+    $('#trumbowyg-demo').trumbowyg();
+    </script>
+    <script type="text/javascript">
+        document.getElementById("saveDraft").addEventListener("click", function (event) {
+            event.preventDefault()
+            DraftCreate({ "title": document.getElementById('ArticleTitle').value, "author": "pedro", "body" : "hello"}, function (hash) {
+                document.getElementById('hash').value = hash.replace(/['"]+/g, '')
+                // TO-DO: Need to find a better way to return the hash without the commas.
+            })
+        });
+
+        document.getElementById("publishArticle").addEventListener("click", function (event) {
+            event.preventDefault()
+            ArticleCreate({ "title": document.getElementById('ArticleTitle').value, "author": "pedro", "body" : "hello"}, function (hash) {
+                document.getElementById('hash').value = hash.replace(/['"]+/g, '')
+                // TO-DO: Need to find a better way to return the hash without the commas.
+            })
+        });
+    </script>
+</body>
+
+</html>

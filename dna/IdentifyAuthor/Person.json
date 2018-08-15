@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "id": "http://example.com/identifyauthor/person.json",
+  "type": "object",
+  "required": [
+    "name",
+    "ID"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": ".+"
+    },
+    "ID": {
+      "type": "string",
+      "pattern": ".+"
+    },
+    "tags": {
+      "type": "array",
+      "default": ["user"],
+      "items": {
+        "type": "string",
+        "pattern": ".+"
+      }
+    }
+  }
+}

@@ -1,0 +1,182 @@
+{
+    "Tests": [{
+            "Convey": "Register yourself as an author so you can create articles",
+            "Zome": "IdentifyAuthor",
+            "FnName": "PersonCreate",
+            "Input": {
+                "name": "Belinda Noakes",
+                "ID": "thiswillbeavalidhashkey",
+                "tags": ["a tag"]
+            },
+            "Output": "%h%",
+            "Err": null,
+            "ErrMsg": "",
+            "Regexp": "",
+            "Time": 0,
+            "Wait": 0,
+            "Exposure": "public",
+            "Raw": false,
+            "Repeat": 0,
+            "Benchmark": false
+        }, {
+            "Convey": "Register yourself as an author so you can create articles",
+            "Zome": "IdentifyAuthor",
+            "FnName": "PersonCreate",
+            "Input": {
+                "name": "Belinda Noakes",
+                "ID": "thiswillbeavalidhashkey",
+                "tags": ["a tag"]
+            },
+            "Output": "%h%",
+            "Err": null,
+            "ErrMsg": "",
+            "Regexp": "",
+            "Time": 0,
+            "Wait": 0,
+            "Exposure": "public",
+            "Raw": false,
+            "Repeat": 0,
+            "Benchmark": false
+        },
+        {
+            "Convey": "Read an author's record to find all the articles they've written",
+            "Zome": "IdentifyAuthor",
+            "FnName": "PersonRead",
+            "Input": "%h%",
+            "Output": {
+                "name": "Belinda Noakes",
+                "ID": "thiswillbeavalidhashkey",
+                "tags": ["a tag"]
+            },
+            "Err": null,
+            "ErrMsg": "",
+            "Regexp": "",
+            "Time": 0,
+            "Wait": 0,
+            "Exposure": "public",
+            "Raw": false,
+            "Repeat": 0,
+            "Benchmark": false
+        },
+        {
+            "Convey": "Update an author's record to change their details",
+            "Zome": "IdentifyAuthor",
+            "FnName": "PersonUpdate",
+            "Input": {
+                "replaces": "%h%",
+                "newEntry": {
+                    "name": "Nick Haslem",
+                    "ID": "thiswillbeavalidhashkey",
+                    "tags": ["a tag"]
+                }
+            },
+            "Output": "%h%",
+            "Err": null,
+            "ErrMsg": "",
+            "Regexp": "",
+            "Time": 0,
+            "Wait": 0,
+            "Exposure": "public",
+            "Raw": false,
+            "Repeat": 0,
+            "Benchmark": false
+        },
+        {
+            "Convey": "Read an author's record to find all the articles they've written",
+            "Zome": "IdentifyAuthor",
+            "FnName": "PersonRead",
+            "Input": "%h%",
+            "Output": {
+                "name": "Nick Haslem",
+                "ID": "thiswillbeavalidhashkey",
+                "tags": ["a tag"]
+            },
+            "Err": null,
+            "ErrMsg": "",
+            "Regexp": "",
+            "Time": 0,
+            "Wait": 0,
+            "Exposure": "public",
+            "Raw": false,
+            "Repeat": 0,
+            "Benchmark": false
+        },
+        {
+            "Convey": "Delete an author's record to remove them from the system",
+            "Zome": "IdentifyAuthor",
+            "FnName": "PersonDelete",
+            "Input": "%h%",
+            "Output": "%h%",
+            "Err": null,
+            "ErrMsg": "",
+            "Regexp": "",
+            "Time": 0,
+            "Wait": 0,
+            "Exposure": "public",
+            "Raw": false,
+            "Repeat": 0,
+            "Benchmark": false
+        },
+        {
+            "Convey": "Read an author's record after its been deleted to check its not there",
+            "Zome": "IdentifyAuthor",
+            "FnName": "PersonRead",
+            "Input": "%r1%",
+            "Output": null,
+            "Err": null,
+            "ErrMsg": "",
+            "Regexp": "",
+            "Time": 0,
+            "Wait": 0,
+            "Exposure": "public",
+            "Raw": false,
+            "Repeat": 0,
+            "Benchmark": false
+        },
+        {
+            "Convey": "Register the first author we updated and then deleted to see what happens",
+            "Zome": "IdentifyAuthor",
+            "FnName": "PersonCreate",
+            "Input": {
+                "name": "Belinda Noakes",
+                "ID": "thiswillbeavalidhashkey",
+                "tags": ["a tag"]
+            },
+            "Output": "%h%",
+            "Err": null,
+            "ErrMsg": "",
+            "Regexp": "",
+            "Time": 0,
+            "Wait": 0,
+            "Exposure": "public",
+            "Raw": false,
+            "Repeat": 0,
+            "Benchmark": false
+        },
+        {
+            "Convey": "Register the author we updated again to see what happens",
+            "Zome": "IdentifyAuthor",
+            "FnName": "PersonCreate",
+            "Input": {
+                "name": "Nick Haslem",
+                "ID": "thiswillbeavalidhashkey",
+                "tags": ["a tag"]
+            },
+            "Output": "%h%",
+            "Err": null,
+            "ErrMsg": "",
+            "Regexp": "",
+            "Time": 0,
+            "Wait": 0,
+            "Exposure": "public",
+            "Raw": false,
+            "Repeat": 0,
+            "Benchmark": false
+        }
+    ],
+    "Identity": "",
+    "Fixtures": {
+        "Agents": null
+    },
+    "Benchmark": false
+}

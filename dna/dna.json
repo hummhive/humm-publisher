@@ -1,0 +1,172 @@
+{
+    "Version": 1,
+    "UUID": "28fcbff4-8d2f-494c-a2c5-9dd845f1ab5a",
+    "Name": "Unmute",
+    "Properties": {
+        "description": "Immutable original content",
+        "language": "en"
+    },
+    "PropertiesSchemaFile": "properties_schema.json",
+    "BasedOn": {
+        "H": null
+    },
+    "RequiresVersion": 0,
+    "DHTConfig": {
+        "HashType": "sha2-256",
+        "NeighborhoodSize": 0
+    },
+    "Progenitor": {
+        "Identity": "",
+        "PubKey": null
+    },
+    "Zomes": [
+        {
+            "Name": "IdentifyAuthor",
+            "Description": "Run KYC and verify Authors, create keys",
+            "CodeFile": "IdentifyAuthor.js",
+            "RibosomeType": "js",
+            "BridgeFuncs": null,
+            "BridgeTo": "",
+            "Config": null,
+            "Entries": [
+                {
+                    "Name": "Person",
+                    "DataFormat": "json",
+                    "Schema": "",
+                    "SchemaFile": "Person.json",
+                    "Sharing": "public"
+                }
+            ],
+            "Functions": [
+                {
+                    "Name": "PersonCreate",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "PersonRead",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "PersonUpdate",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "PersonDelete",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                }
+            ]
+        },
+        {
+            "Name": "Publish",
+            "Description": "Sign and publish posts and log in DHT",
+            "CodeFile": "Publish.js",
+            "RibosomeType": "js",
+            "BridgeFuncs": null,
+            "BridgeTo": "",
+            "Config": null,
+            "Entries": [
+                {
+                    "Name": "Article",
+                    "DataFormat": "json",
+                    "Schema": "",
+                    "SchemaFile": "Article.json",
+                    "Sharing": "public"
+                }
+            ],
+            "Functions": [
+                {
+                    "Name": "ArticleCreate",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "ArticleRead",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "ArticleUpdate",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                }
+            ]
+        },
+
+        {
+            "Name": "Draft",
+            "Description": "Sign and publish posts into the Private Chain",
+            "CodeFile": "Draft.js",
+            "RibosomeType": "js",
+            "BridgeFuncs": null,
+            "BridgeTo": "",
+            "Config": null,
+            "Entries": [
+                {
+                    "Name": "Draft",
+                    "DataFormat": "json",
+                    "Schema": "",
+                    "SchemaFile": "Draft.json",
+                    "Sharing": "private"
+                }
+            ],
+            "Functions": [
+                {
+                    "Name": "DraftCreate",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "draftList",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                }
+
+            ]
+        },
+
+        {
+            "Name": "Citation",
+            "Description": "Provide details on Author, Title, Pub Date \u0026 Source Link",
+            "CodeFile": "Citation.js",
+            "RibosomeType": "js",
+            "BridgeFuncs": null,
+            "BridgeTo": "",
+            "Config": null,
+            "Entries": [
+                {
+                    "Name": "Citation",
+                    "DataFormat": "json",
+                    "Schema": "",
+                    "SchemaFile": "Citation.json",
+                    "Sharing": "public"
+                }
+            ],
+            "Functions": [
+                {
+                    "Name": "CitationCreate",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "CitationRead",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "CitationUpdate",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "CitationDelete",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                }
+            ]
+        }
+    ]
+}

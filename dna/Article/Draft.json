@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "id": "http://example.com/publish/draft.json",
+  "type": "object",
+  "required": [
+    "title"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "pattern": ".+"
+    },
+    "pubdate": {
+      "type": "string",
+      "pattern": ".+"
+    },
+    "snippet": {
+      "type": "string",
+      "pattern": ".+"
+    },
+    "tags": {
+      "default": [
+        "user"
+      ],
+      "items": {
+        "type": "string",
+        "pattern": ".+"
+      },
+      "type": "array"
+    }
+  }
+}

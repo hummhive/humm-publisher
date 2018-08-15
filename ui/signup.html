@@ -1,0 +1,67 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/unmute.js"></script>
+    <style>
+    .bd-navbar {
+	  min-height: 4rem;
+	  background-color: #3d477c;
+  	box-shadow: 0 .5rem 1rem rgba(0,0,0,.05),inset 0 -1px 0 rgba(0,0,0,.1);
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
+    <a class="navbar-brand mr-0 mr-md-2" href="/" aria-label="Bootstrap">Unmute</a>
+  </header>
+
+  <div class="container mt-5 mb-5">
+    <form>
+        <h3>Register here</h3>
+        <p>If you want to publish articles, leave comments, participate in discussions or report new content, we'll need your name and some identifying details so we can verify you're an unique individual and generate your public/private keys.</p>
+        <p>If you just want to read articles, you can always browse as a guest.
+        <div class="form-group">
+          <label for="AuthorName">Name</label>
+          <input class="form-control" type="text" id="AuthorName" size="50" />
+        </div>
+        <div class="form-group">
+          <label for="EmailAddress">Email Address</label>
+          <input class="form-control" type="text" id="EmailAddress" size="50" />
+        </div>
+        <div class="form-group">
+          <label for="Username">Username</label>
+          <input class="form-control" type="text" id="Username" size="50" />
+        </div>
+        <div class="form-group">
+          <label for="UniquePhrase">Unique Phrase</label>
+          <input class="form-control" id="UniquePhrase" size="50" type="password"/>
+      </div>
+       <button type="submit" id="submitEntry" class="btn btn-primary">Create Key</button>
+    </form>
+    </div>
+
+
+  </div>
+
+    <script type="text/javascript">
+        document.getElementById("submitEntry").addEventListener("click", function (event) {
+            event.preventDefault()
+            PersonCreate({ "name": document.getElementById('AuthorName').value, "ID": document.getElementById('ID').value }, function (hash) {
+                document.getElementById('hash').value = hash.replace(/['"]+/g, '')
+                // TO-DO: Need to find a better way to return the hash without the commas.
+            })
+        });
+        document.getElementById("readEntry").addEventListener("click", function (event) {
+            event.preventDefault()
+            PersonRead(document.getElementById('hash').value, function (task) {
+                document.getElementById('entryContent').value = task.name
+            })
+        });
+    </script>
+</body>
+
+</html>
