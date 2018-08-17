@@ -3,16 +3,10 @@
   "id": "http://example.com/publish/article.json",
   "type": "object",
   "required": [
-    "title",
-    "body",
-    "author"
+    "title"
   ],
   "properties": {
     "title": {
-      "type": "string",
-      "pattern": ".+"
-    },
-    "body": {
       "type": "string",
       "pattern": ".+"
     },
@@ -21,10 +15,6 @@
       "pattern": ".+"
     },
     "pubdate": {
-      "type": "string",
-      "pattern": ".+"
-    },
-    "snippet": {
       "type": "string",
       "pattern": ".+"
     },

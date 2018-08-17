@@ -1,3 +1,5 @@
+
+
 'use strict';
 
 // -----------------------------------------------------------------
@@ -8,29 +10,36 @@
 //  Exposed functions with custom logic https://developer.holochain.org/API_reference
 // -----------------------------------------------------------------
 
-function PersonCreate(PersonEntry) {
-  var PersonHash = commit("Person", PersonEntry);
-  debug('Create' + PersonHash)
-  return PersonHash;
+function MessageCreate (MessageEntry) {
+  MessageEntry.pubdate = new Date();
+  MessageEntry.author = App.Agent.String;
+  var MessageHash = commit("Message", MessageEntry);
+  var Messages = commit("messages_link",{Links:[{Base: App.DNA.Hash,Link: MessageHash,Tag: "messages"}]});
+  debug('Message Hash ' + MessageHash);
+  debug('Messages Link Hash ' + Messages);
+  commit("Message", MessageEntry);
+  commit("messages_link",{Links:[{Base: App.DNA.Hash,Link: MessageHash,Tag: "messages"}]});
+  return "Message Created"
 }
 
-function PersonRead(PersonHash) {
-  debug('read' + PersonHash)
-  var Person = get(PersonHash);
-  return Person;
-}
+function GetMessages() {
 
-function PersonUpdate(params) {
-  var replaces = params.replaces;
-  var newEntry = params.newEntry;
-  var PersonHash = update("Person", newEntry, replaces);
-  return PersonHash;
-}
+var links = getLinks(App.DNA.Hash, 'messages', { Load: true})
+debug("Messages:: " + JSON.stringify(links))
 
-function PersonDelete(PersonHash) {
-  var result = remove(PersonHash, "you have been deleted");
-  debug('deleted' + result)
-  return result;
+var messages=[];
+
+links.forEach(function (element){
+  var linksObject={};
+  linksObject.Hash=element.Hash;
+  linksObject.Entry=element.Entry.title
+  linksObject.Author=element.Entry.author
+  linksObject.Timestamp=element.Entry.pubdate
+  messages.push(linksObject);
+});
+
+
+return messages;
 }
 
 
@@ -42,7 +51,7 @@ function PersonDelete(PersonHash) {
  * Called only when your source chain is generated
  * @return {boolean} success
  */
-function genesis() {
+function genesis () {
   return true;
 }
 
@@ -59,16 +68,18 @@ function genesis() {
  * @param {object} sources - an array of strings containing the keys of any authors of this entry
  * @return {boolean} is valid?
  */
-function validateCommit(entryName, entry, header, pkg, sources) {
+function validateCommit (entryName, entry, header, pkg, sources) {
   switch (entryName) {
-  case "Person":
-    // be sure to consider many edge cases for validating
-    // do not just flip this to true without considering what that means
-    // the action will ONLY be successfull if this returns true, so watch out!
-    return true;
-  default:
-    // invalid entry name
-    return false;
+    case "Message":
+    case "messages_link":
+      // be sure to consider many edge cases for validating
+      // do not just flip this to true without considering what that means
+      // the action will ONLY be successfull if this returns true, so watch out!
+      return true;
+      default:
+      // invalid entry name
+      return false;
+
   }
 }
 
@@ -81,16 +92,17 @@ function validateCommit(entryName, entry, header, pkg, sources) {
  * @param {object} sources - an array of strings containing the keys of any authors of this entry
  * @return {boolean} is valid?
  */
-function validatePut(entryName, entry, header, pkg, sources) {
+function validatePut (entryName, entry, header, pkg, sources) {
   switch (entryName) {
-  case "Person":
-    // be sure to consider many edge cases for validating
-    // do not just flip this to true without considering what that means
-    // the action will ONLY be successfull if this returns true, so watch out!
-    return true;
-  default:
-    // invalid entry name
-    return false;
+    case "Message":
+    case "messages_link":
+      // be sure to consider many edge cases for validating
+      // do not just flip this to true without considering what that means
+      // the action will ONLY be successfull if this returns true, so watch out!
+      return true;
+    default:
+      // invalid entry name
+      return false;
   }
 }
 
@@ -104,16 +116,16 @@ function validatePut(entryName, entry, header, pkg, sources) {
  * @param {object} sources - an array of strings containing the keys of any authors of this entry
  * @return {boolean} is valid?
  */
-function validateMod(entryName, entry, header, replaces, pkg, sources) {
+function validateMod (entryName, entry, header, replaces, pkg, sources) {
   switch (entryName) {
-  case "Person":
-    // be sure to consider many edge cases for validating
-    // do not just flip this to true without considering what that means
-    // the action will ONLY be successfull if this returns true, so watch out!
-    return true;
-  default:
-    // invalid entry name
-    return false;
+    case "Message":
+      // be sure to consider many edge cases for validating
+      // do not just flip this to true without considering what that means
+      // the action will ONLY be successfull if this returns true, so watch out!
+      return false;
+    default:
+      // invalid entry name
+      return false;
   }
 }
 
@@ -125,16 +137,16 @@ function validateMod(entryName, entry, header, replaces, pkg, sources) {
  * @param {object} sources - an array of strings containing the keys of any authors of this entry
  * @return {boolean} is valid?
  */
-function validateDel(entryName, hash, pkg, sources) {
+function validateDel (entryName, hash, pkg, sources) {
   switch (entryName) {
-  case "Person":
-    // be sure to consider many edge cases for validating
-    // do not just flip this to true without considering what that means
-    // the action will ONLY be successfull if this returns true, so watch out!
-    return true;
-  default:
-    // invalid entry name
-    return false;
+    case "Message":
+      // be sure to consider many edge cases for validating
+      // do not just flip this to true without considering what that means
+      // the action will ONLY be successfull if this returns true, so watch out!
+      return false;
+    default:
+      // invalid entry name
+      return false;
   }
 }
 
@@ -147,16 +159,16 @@ function validateDel(entryName, hash, pkg, sources) {
  * @param {object} sources - an array of strings containing the keys of any authors of this entry
  * @return {boolean} is valid?
  */
-function validateLink(entryName, baseHash, links, pkg, sources) {
+function validateLink (entryName, baseHash, links, pkg, sources) {
   switch (entryName) {
-  case "Person":
-    // be sure to consider many edge cases for validating
-    // do not just flip this to true without considering what that means
-    // the action will ONLY be successfull if this returns true, so watch out!
-    return false;
-  default:
-    // invalid entry name
-    return false;
+    case "messages_link":
+      // be sure to consider many edge cases for validating
+      // do not just flip this to true without considering what that means
+      // the action will ONLY be successfull if this returns true, so watch out!
+      return true;
+    default:
+      // invalid entry name
+      return false;
   }
 }
 
@@ -165,7 +177,7 @@ function validateLink(entryName, baseHash, links, pkg, sources) {
  * @param {string} entryName - the name of entry to validate
  * @return {*} the data required for validation
  */
-function validatePutPkg(entryName) {
+function validatePutPkg (entryName) {
   return null;
 }
 
@@ -174,7 +186,7 @@ function validatePutPkg(entryName) {
  * @param {string} entryName - the name of entry to validate
  * @return {*} the data required for validation
  */
-function validateModPkg(entryName) {
+function validateModPkg (entryName) {
   return null;
 }
 
@@ -183,7 +195,7 @@ function validateModPkg(entryName) {
  * @param {string} entryName - the name of entry to validate
  * @return {*} the data required for validation
  */
-function validateDelPkg(entryName) {
+function validateDelPkg (entryName) {
   return null;
 }
 
@@ -192,6 +204,6 @@ function validateDelPkg(entryName) {
  * @param {string} entryName - the name of entry to validate
  * @return {*} the data required for validation
  */
-function validateLinkPkg(entryName) {
+function validateLinkPkg (entryName) {
   return null;
 }

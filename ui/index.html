@@ -10,76 +10,26 @@
 	  background-color: #3d477c;
   	box-shadow: 0 .5rem 1rem rgba(0,0,0,.05),inset 0 -1px 0 rgba(0,0,0,.1);
     }
-    li {
-	list-style: square;
-	font-size: 18px;
-}
-#messages{
-   overflow-x:scroll;
-   height: 320px;
-}
   </style>
 </head>
 
 <body>
 
   <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
-    <a class="navbar-brand mr-0 mr-md-2" href="/" aria-label="Bootstrap">Humm - Text Validator</a>
+    <a class="navbar-brand mr-0 mr-md-2" href="/" aria-label="Bootstrap">Humm</a>
   </header>
 
   <div class="container mt-5 mb-5">
-
-    <h3>Message Board</h3>
-    <div id="messages"></div>
+    <h2>Available Components</h2>
     <hr />
-    <form>
-        <div class="form-group">
-          <label for="AuthorName">Write a Short Message</label>
-          <input class="form-control" type="text" id="theMessage" size="50" />
+      <div class="row mt-4">
+        <div class="col-sm">
+          <a class="btn btn-primary" href="/messages.html" role="button">Messages</a>
         </div>
-       <button type="submit" id="submitEntry" class="btn btn-primary">Generate Message</button>
-    </form>
-
+    </div>
   </div>
   </div>
     </div>
-    <script type="text/javascript">
-
-    //Load Messages
-  
-    ArticleRead({articleCount : 12, order: true}, function (obj) {
-        let toArray = JSON.parse(obj)
-        console.log(toArray)
-        const messages = toArray.map((message) => {
-          return "<li>" + message.Entry.title + "<small style='font-size:7px; padding-left: 10px;'> (" + message.Hash + ") </small></li>";
-        }).join('')
-        document.getElementById('messages').insertAdjacentHTML('beforeend', messages)
-      })
-
-        document.getElementById("submitEntry").addEventListener("click", function (event) {
-            event.preventDefault()
-
-            ArticleCreate(
-              {"title": document.getElementById('theMessage').value, "body": "body", "author" : "author"},
-               function () {
-            })
-
-            document.getElementById('theMessage').value = ''
-
-            // Re-Render the Messages
-            // Puede mejorarse esto aqui pero decidi tirar forze xD
-
-            setTimeout(function(){ArticleRead({articleCount : 1, order: true}, function (obj) {
-                let toArray = JSON.parse(obj)
-                console.log(toArray)
-                const messages = toArray.map((message) => {
-                  return "<li>" + message.Entry.title + "<small style='font-size:7px; padding-left: 10px;'> (" + message.Hash + ") </small></li>";
-                }).join('')
-                document.getElementById('messages').insertAdjacentHTML('afterbegin', messages)
-              })}, '60')
-        });
-
-    </script>
 </body>
 
 </html>

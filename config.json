@@ -4,6 +4,7 @@
     "PeerModeAuthor": true,
     "PeerModeDHTNode": true,
     "EnableNATUPnP": true,
+    "EnableWorldModel": false,
     "BootstrapServer": "bootstrap.holochain.net:10000",
     "Loggers": {
         "App": {
@@ -24,6 +25,13 @@
             "Name": "DHT",
             "Enabled": false,
             "Format": "%{color:yellow}%{time} DHT: %{message}",
+            "Prefix": "",
+            "PrefixColor": null
+        },
+        "World": {
+            "Name": "",
+            "Enabled": false,
+            "Format": "",
             "Prefix": "",
             "PrefixColor": null
         },
