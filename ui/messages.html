@@ -47,7 +47,7 @@
 
     //Load Initial Messages
     GetMessages(function (obj) {
-     const toArray = JSON.parse(obj)
+     let toArray = JSON.parse(obj)
       toArray = toArray.sort(function(a,b){
         timeA = new Date(a.Timestamp)
         timeB = new Date(b.Timestamp)
@@ -71,7 +71,7 @@
             // Sin el timeout both the MessageCreate and GetMessages goes out at the same time and brings error
 
             setTimeout(function(){GetMessages(function (obj) {
-                const toArray = JSON.parse(obj)
+                let toArray = JSON.parse(obj)
                 toArray = toArray.sort(function(a,b){
                   timeA = new Date(a.Timestamp)
                   timeB = new Date(b.Timestamp)
