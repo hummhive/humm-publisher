@@ -1,36 +1,25 @@
 'use strict';
 
-
-function MessageCreate (MessageEntry) {
-  MessageEntry.pubdate = new Date();
-  MessageEntry.author = App.Agent.String;
-  var MessageHash = commit("Message", MessageEntry);
-  var Messages = commit("messages_link",{Links:[{Base: App.DNA.Hash,Link: MessageHash,Tag: "messages"}]});
-  //debug('Message Hash ' + MessageHash);
-  //debug('Messages Link Hash ' + Messages);
-  commit("Message", MessageEntry);
-  commit("messages_link",{Links:[{Base: App.DNA.Hash,Link: MessageHash,Tag: "messages"}]});
-  return "Message Created"
+function DraftCreate (DraftEntry) {
+  DraftEntry.pubdate = new Date();
+  DraftEntry.author = App.Agent.String;
+  var draftHash = commit("Draft", DraftEntry);
+  return draftHash;
 }
 
-function GetMessages() {
+function GetDrafts() {
 
-var links = getLinks(App.DNA.Hash, 'messages', { Load: true})
-debug("Messages:: " + JSON.stringify(links))
+  var result = query({
+    Return: {
+      Entries: true
+    },
+    Constrain: {
+      EntryTypes: ["Draft"],
+    }
+  })
 
-var messages=[];
+  return result;
 
-links.forEach(function (element){
-  var linksObject={};
-  linksObject.Hash=element.Hash;
-  linksObject.Entry=element.Entry.title
-  linksObject.Author=element.Entry.author
-  linksObject.Timestamp=element.Entry.pubdate
-  messages.push(linksObject);
-});
-
-
-return messages;
 }
 
 
@@ -61,8 +50,7 @@ function genesis () {
  */
 function validateCommit (entryName, entry, header, pkg, sources) {
   switch (entryName) {
-    case "Message":
-    case "messages_link":
+    case "Draft":
       // be sure to consider many edge cases for validating
       // do not just flip this to true without considering what that means
       // the action will ONLY be successfull if this returns true, so watch out!
@@ -85,8 +73,7 @@ function validateCommit (entryName, entry, header, pkg, sources) {
  */
 function validatePut (entryName, entry, header, pkg, sources) {
   switch (entryName) {
-    case "Message":
-    case "messages_link":
+    case "Draft":
       // be sure to consider many edge cases for validating
       // do not just flip this to true without considering what that means
       // the action will ONLY be successfull if this returns true, so watch out!
@@ -109,7 +96,7 @@ function validatePut (entryName, entry, header, pkg, sources) {
  */
 function validateMod (entryName, entry, header, replaces, pkg, sources) {
   switch (entryName) {
-    case "Message":
+    case "Draft":
       // be sure to consider many edge cases for validating
       // do not just flip this to true without considering what that means
       // the action will ONLY be successfull if this returns true, so watch out!
@@ -130,7 +117,7 @@ function validateMod (entryName, entry, header, replaces, pkg, sources) {
  */
 function validateDel (entryName, hash, pkg, sources) {
   switch (entryName) {
-    case "Message":
+    case "Draft":
       // be sure to consider many edge cases for validating
       // do not just flip this to true without considering what that means
       // the action will ONLY be successfull if this returns true, so watch out!
@@ -152,11 +139,11 @@ function validateDel (entryName, hash, pkg, sources) {
  */
 function validateLink (entryName, baseHash, links, pkg, sources) {
   switch (entryName) {
-    case "messages_link":
+    case "Draft":
       // be sure to consider many edge cases for validating
       // do not just flip this to true without considering what that means
       // the action will ONLY be successfull if this returns true, so watch out!
-      return true;
+      return false;
     default:
       // invalid entry name
       return false;

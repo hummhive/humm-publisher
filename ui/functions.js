@@ -19,3 +19,12 @@ function MessageCreate(entry) {
     var data = JSON.stringify(entry)
     xhr.send(data)
 }
+
+function DraftCreate(entry) {
+    var xhr = new XMLHttpRequest()
+    var url = '/fn/Posts/DraftCreate'
+    xhr.open('POST', url, true)
+    xhr.setRequestHeader('Content-type', 'application/json')
+    var data = JSON.stringify(entry)
+    xhr.send(data)
+}

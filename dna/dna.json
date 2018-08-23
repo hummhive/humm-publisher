@@ -45,6 +45,32 @@
                     "Exposure": "public"
                 }
             ]
+        },
+        {
+       "Name": "Posts",
+       "Description": "Sign and publish Posts locally or in the DHT",
+       "CodeFile": "Posts.js",
+       "RibosomeType": "js",
+       "Entries": [
+           {
+               "Name": "Draft",
+               "DataFormat": "json",
+               "SchemaFile": "Posts.json",
+               "Sharing": "private"
+           }
+       ],
+       "Functions": [
+           {
+               "Name": "DraftCreate",
+               "CallingType": "json",
+               "Exposure": "public"
+           },
+           {
+               "Name": "GetDrafts",
+               "CallingType": "json",
+               "Exposure": "public"
+           }
+          ]
         }
     ]
 }

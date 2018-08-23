@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "id": "http://example.com/publish/article.json",
+  "type": "object",
+  "required": [
+    "title"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "pattern": ".+"
+    },
+    "content": {
+      "type": "string",
+      "pattern": ".+"
+    },
+    "author": {
+      "type": "string",
+      "pattern": ".+"
+    },
+    "pubdate": {
+      "type": "string",
+      "pattern": ".+"
+    },
+    "tags": {
+      "default": [
+        "user"
+      ],
+      "items": {
+        "type": "string",
+        "pattern": ".+"
+      },
+      "type": "array"
+    }
+  }
+}
