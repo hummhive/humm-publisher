@@ -48,42 +48,44 @@
 <script type="text/javascript">
 //Load Initial Messages
 GetMessages(function (obj) {
- let toArray = JSON.parse(obj)
+  let toArray = JSON.parse(obj)
   toArray = toArray.sort(function(a,b){
     timeA = new Date(a.Timestamp)
     timeB = new Date(b.Timestamp)
     return timeA < timeB
   })
-    const messages = toArray.map((message) => {
-      return "<li><strong>" + message.Author + "</strong>: " + message.Entry + "<small style='font-size:7px; padding-left: 10px;'> (" + message.Hash + ") </small></li>";
-    }).join('')
-    document.getElementById('messages').insertAdjacentHTML('beforeend', messages)
-  })
 
-  //Submit the Entry and Load only the latest message.
-    document.getElementById("submitEntry").addEventListener("click", function (event) {
-        event.preventDefault()
-        MessageCreate({"title": document.getElementById('theMessage').value})
-        document.getElementById('theMessage').value = ''
+  const messages = toArray.map((message) => {
+    return "<li><strong>" + message.Author + "</strong>: " + message.Entry + "<small style='font-size:7px; padding-left: 10px;'> (" + message.Hash + ") </small></li>";
+  }).join('')
 
-        //Using a timeout but promises would be. Like a .then after el MessageCreate
-        //Why the timeout?
-        // In order to get the new message you have to wait for the Holochain to process IT
-        // Sin el timeout both the MessageCreate and GetMessages goes out at the same time and brings error
+  document.getElementById('messages').insertAdjacentHTML('beforeend', messages)
+})
 
-        setTimeout(function(){GetMessages(function (obj) {
-            let toArray = JSON.parse(obj)
-            toArray = toArray.sort(function(a,b){
-              timeA = new Date(a.Timestamp)
-              timeB = new Date(b.Timestamp)
-              return timeA < timeB
-            })
+//Submit the Entry and Load only the latest message.
+document.getElementById("submitEntry").addEventListener("click", function (event) {
+  event.preventDefault()
+  MessageCreate({"title": document.getElementById('theMessage').value})
+  document.getElementById('theMessage').value = ''
 
-            const element = toArray.shift()
-            const message = "<li><strong>" + element.Author + "</strong>: " + element.Entry + "<small style='font-size:7px; padding-left: 10px;'> (" + element.Hash + ") </small></li>";
-            document.getElementById('messages').insertAdjacentHTML('afterbegin', message)
-          })}, '60')
-    });
+  //Using a timeout but promises would be. Like a .then after el MessageCreate
+  //Why the timeout?
+  // In order to get the new message you have to wait for the Holochain to process IT
+  // Sin el timeout both the MessageCreate and GetMessages goes out at the same time and brings error
+
+  setTimeout(function(){ GetMessages(function (obj) {
+    let toArray = JSON.parse(obj)
+    toArray = toArray.sort(function(a,b){
+      timeA = new Date(a.Timestamp)
+      timeB = new Date(b.Timestamp)
+      return timeA < timeB
+    })
+
+    const element = toArray.shift()
+    const message = "<li><strong>" + element.Author + "</strong>: " + element.Entry + "<small style='font-size:7px; padding-left: 10px;'> (" + element.Hash + ") </small></li>";
+    document.getElementById('messages').insertAdjacentHTML('afterbegin', message)
+  })}, '60')
+});
 </script>
 </body>
 </html>
