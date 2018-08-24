@@ -1,77 +1,77 @@
 <html>
-
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="/functions.js"></script>
-    <style>
-    .bd-navbar {
-	  min-height: 4rem;
-    }
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script type="text/javascript" src="/functions.js"></script>
+  <style>
+  .bd-navbar {
+    min-height: 4rem;
+  }
 
-    #main-content {
-	border: 0;
-}
+  #main-content {
+    border: 0;
+  }
 
-#title {
-	border-top: 0;
-  border-left: 0;
-  border-right: 0;
-  border-radius: 0;
-}
+  #title {
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+  }
 
-    #sticky-sidebar {
+  #sticky-sidebar {
     min-height: 100vh;
-    }
+  }
   </style>
 </head>
-
 <body>
   <div class="container-fluid">
-  <div class="row">
-    <div class="col-3 px-0 border-right" id="sticky-sidebar">
+    <div class="row">
+      <div class="col-3 px-0 border-right" id="sticky-sidebar">
         <div class="py-0 sticky-top">
           <header class="navbar navbar-expand flex-column flex-md-row bd-navbar mb-3 border-bottom">
             <a class="navbar-brand m-auto" href="/" aria-label="Bootstrap">Humm</a>
           </header>
-      <ul class="nav nav-pills justify-content-center border-bottom pb-3 pt-1">
-        <li class="nav-item">
-          <a class="nav-link" href="index.html">Published</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="drafts.html">Drafts</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="post-editor.html">Compose</a>
-        </li>
-    </ul>
-    </div>
-  </div>
-  <div id="main-content" class="col-9 px-5 mt-4">
-    <div id="notice" class="alert alert-primary" role="alert" style="display: none">
-      Your draft has been saved to your local chain!
-    </div>
-    <form>
-        <div class="form-group">
-          <input class="form-control form-control-lg" type="text" id="title" size="50" placeholder="Your Awesome Title" />
+          <ul class="nav nav-pills justify-content-center border-bottom pb-3 pt-1">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Published</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="drafts.html">Drafts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="post-editor.html">Compose</a>
+            </li>
+          </ul>
         </div>
-        <div class="form-group">
-          <textarea id="content" class="form-control form-control-lg" placeholder="Got something to say?" rows="20"></textarea>
+      </div>
+      <div id="main-content" class="col-9 px-5 mt-4">
+        <div id="notice" class="alert alert-primary" role="alert" style="display: none">
+          Your draft has been saved to your local chain!
         </div>
+        <form>
+          <div class="form-group">
+            <input class="form-control form-control-lg" type="text" id="title" size="50" placeholder="Your Awesome Title" />
+          </div>
+          <div class="form-group">
+            <textarea id="content" class="form-control form-control-lg" placeholder="Got something to say?" rows="20"></textarea>
+          </div>
           <div class="btn-group" role="group">
-          <button type="button" id="saveDraft" class="btn btn-outline-btn-secondary">Save Draft</button>
-          <button type="button" id="publishPost" class="btn btn-primary">Publish</button>
-        </div>
-    </form>
-  </div>
-  </div>
+            <button type="button" id="saveDraft" class="btn btn-outline-btn-secondary">Save Draft</button>
+            <button type="button" id="publishPost" class="btn btn-primary">Publish</button>
+          </div>
+        </form>
+      </div>
     </div>
-    <script type="text/javascript">
-        document.getElementById("saveDraft").addEventListener("click", function (event) {
-            event.preventDefault()
-            DraftCreate({"title": document.getElementById('title').value, "content": document.getElementById('content').value})
-            document.getElementById('notice').style.display = "block";
-        });
-    </script>
+  </div>
+  <script type="text/javascript">
+  document.getElementById("saveDraft").addEventListener("click", function(event) {
+    event.preventDefault()
+    DraftCreate({
+      "title": document.getElementById('title').value,
+      "content": document.getElementById('content').value
+    })
+    document.getElementById('notice').style.display = "block";
+  });
+  </script>
 </body>
 </html>

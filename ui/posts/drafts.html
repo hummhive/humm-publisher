@@ -1,30 +1,26 @@
 <html>
-
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="/functions.js"></script>
-    <style>
-    .bd-navbar {
-	  min-height: 4rem;
-    }
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script type="text/javascript" src="/functions.js"></script>
+  <style>
+  .bd-navbar {
+    min-height: 4rem;
+  }
 
-    #sticky-sidebar {
+  #sticky-sidebar {
     min-height: 100vh;
-    }
+  }
 
   </style>
-
 </head>
-
 <body>
-      <div class="container-fluid">
-      <div class="row">
-        <div class="col-3 px-0 border-right" id="sticky-sidebar">
-            <div class="py-0 sticky-top">
-              <header class="navbar navbar-expand flex-column flex-md-row bd-navbar mb-3 border-bottom">
-                <a class="navbar-brand m-auto" href="/" aria-label="Bootstrap">Humm</a>
-              </header>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-3 px-0 border-right" id="sticky-sidebar">
+        <div class="py-0 sticky-top">
+          <header class="navbar navbar-expand flex-column flex-md-row bd-navbar mb-3 border-bottom">
+            <a class="navbar-brand m-auto" href="/" aria-label="Bootstrap">Humm</a>
+          </header>
           <ul class="nav nav-pills justify-content-center border-bottom pb-3 pt-1">
             <li class="nav-item">
               <a class="nav-link" href="index.html">Published</a>
@@ -35,60 +31,69 @@
             <li class="nav-item">
               <a class="nav-link" href="post-editor.html">Compose</a>
             </li>
-        </ul>
-        <div id="post-list" class="list-group list-group-flush">
+          </ul>
+          <div id="post-list" class="list-group list-group-flush">
+          </div>
         </div>
       </div>
-        </div>
-        <div id="content" class="col-9 px-5 mt-4">
+      <div id="content" class="col-9 px-5 mt-4">
 
-        </div>
       </div>
     </div>
   </div>
-    </div>
-    <script type="text/javascript">
+</div>
+</div>
+<script type="text/javascript">
 
-      GetDrafts(function (obj) {
+/* This callback loads at the very beggining in order to load the default values */
+GetDrafts(function (obj) {
 
-      var postSidebar = obj.map((post, index) => {
-      if(index == 0 ){
-    return '<a id="' + post.Hash + '" href="#" class="list-group-item list-group-item-action flex-column align-items-start active"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">' + post.Entry.title + '</h5><small>' + post.Entry.pubdate + '</small></div></a>'
-      }else{
-    return '<a id="' + post.Hash + '" href="#" class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">' + post.Entry.title + '</h5><small>' + post.Entry.pubdate + '</small></div></a>'
-      }
+  // Populate the sidebar
+  var postSidebar = obj.map((post, index) => {
+    if(index == 0 ){
+      return '<a id="' + post.Hash + '" href="#" class="list-group-item list-group-item-action flex-column align-items-start active"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">' + post.Entry.title + '</h5><small>' + post.Entry.pubdate + '</small></div></a>'
+    }else{
+      return '<a id="' + post.Hash + '" href="#" class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">' + post.Entry.title + '</h5><small>' + post.Entry.pubdate + '</small></div></a>'
+    }
   }).join('');
 
-      var postContent = obj[0].Entry.content;
+  // Since the first option is going to be the one shown by default, we grab this one.
+  var postContent = obj[0].Entry.content;
 
-      document.getElementById('post-list').insertAdjacentHTML('beforeend', postSidebar)
-      document.getElementById('content').insertAdjacentHTML('beforeend', postContent)
+  // Append the content to the Sidebar and Content
+  document.getElementById('post-list').insertAdjacentHTML('beforeend', postSidebar)
+  document.getElementById('content').insertAdjacentHTML('beforeend', postContent)
 
-      var postsItems = document.getElementsByClassName("list-group-item");
+  // This variable is going to hold the dynamic elements inserted in the sidebar in order to attach the addEventListener to each one
+  var postsItems = document.getElementsByClassName("list-group-item");
 
-      Array.from(postsItems).forEach(function(element) {
-           element.addEventListener('click', RefreshDrafts);
-         });
-      })
+  // Attaching the addEventListener here allow us to append it to every element in the sidebar.
+  Array.from(postsItems).forEach(function(element) {
+    element.addEventListener('click', RefreshDrafts);
+  });
+})
 
-      function RefreshDrafts(event){
-        GetDrafts(function (obj) {
+/*
+The primary purpose of this function is to load a new draft upon clicking one of the elements in the sidebar
+*/
+function RefreshDrafts(event){
+  GetDrafts(function (obj) {
 
-          let postContent = obj.filter(val => {
-            return val.Hash === event.target.offsetParent.getAttribute('id');
-          });
+    let postContent = obj.filter(val => {
+      return val.Hash === event.target.offsetParent.getAttribute('id');
+    });
 
-          var removeActiveElement = document.querySelector(".list-group-item.active");
-          removeActiveElement.classList.remove("active");
+    var removeActiveElement = document.querySelector(".list-group-item.active");
+    removeActiveElement.classList.remove("active");
 
-          var getActiveElement = document.getElementById(event.target.offsetParent.getAttribute('id'))
-          getActiveElement.classList.add("active");
+    var getActiveElement = document.getElementById(event.target.offsetParent.getAttribute('id'))
+    getActiveElement.classList.add("active");
 
-          document.getElementById('content').innerHTML = ''
-          document.getElementById('content').insertAdjacentHTML('beforeend', postContent[0].Entry.content)
-        })
-      }
+    document.getElementById('content').innerHTML = ''
+    document.getElementById('content').insertAdjacentHTML('beforeend', postContent[0].Entry.content)
+  })
+}
 
-    </script>
+</script>
 </body>
 </html>

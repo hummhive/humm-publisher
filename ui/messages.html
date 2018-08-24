@@ -1,26 +1,23 @@
 <html>
-
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="/functions.js"></script>
-    <style>
-    .bd-navbar {
-	  min-height: 4rem;
-	  background-color: #3d477c;
-  	box-shadow: 0 .5rem 1rem rgba(0,0,0,.05),inset 0 -1px 0 rgba(0,0,0,.1);
-    }
-    li {
-	list-style: square;
-	font-size: 14px;
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script type="text/javascript" src="/functions.js"></script>
+  <style>
+  .bd-navbar {
+    min-height: 4rem;
+    background-color: #3d477c;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.05),inset 0 -1px 0 rgba(0,0,0,.1);
+  }
+  li {
+    list-style: square;
+    font-size: 14px;
   }
   #messages{
-     overflow-x:scroll;
-     height: 320px;
+    overflow-x:scroll;
+    height: 320px;
   }
   </style>
 </head>
-
 <body>
 
   <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
@@ -28,10 +25,10 @@
   </header>
 
   <nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/">Home</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Messages</li>
-  </ol>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Messages</li>
+    </ol>
   </nav>
 
   <div class="container mt-5 mb-5">
@@ -41,57 +38,56 @@
     <div id="messages"></div>
     <hr />
     <form>
-        <div class="form-group">
-          <label for="AuthorName">Write a Short Message</label>
-          <input class="form-control" type="text" id="theMessage" size="50" />
-        </div>
-       <button type="submit" id="submitEntry" class="btn btn-primary">Generate Message</button>
+      <div class="form-group">
+        <label for="AuthorName">Write a Short Message</label>
+        <input class="form-control" type="text" id="theMessage" size="50" />
+      </div>
+      <button type="submit" id="submitEntry" class="btn btn-primary">Generate Message</button>
     </form>
   </div>
-  </div>
-    </div>
-    <script type="text/javascript">
+</div>
+</div>
+<script type="text/javascript">
 
-    //Load Initial Messages
-    GetMessages(function (obj) {
-     let toArray = JSON.parse(obj)
-      toArray = toArray.sort(function(a,b){
-        timeA = new Date(a.Timestamp)
-        timeB = new Date(b.Timestamp)
-        return timeA < timeB
-      })
-        const messages = toArray.map((message) => {
-          return "<li><strong>" + message.Author + "</strong>: " + message.Entry + "<small style='font-size:7px; padding-left: 10px;'> (" + message.Hash + ") </small></li>";
-        }).join('')
-        document.getElementById('messages').insertAdjacentHTML('beforeend', messages)
-      })
+//Load Initial Messages
+GetMessages(function (obj) {
+  let toArray = JSON.parse(obj)
+  toArray = toArray.sort(function(a,b){
+    timeA = new Date(a.Timestamp)
+    timeB = new Date(b.Timestamp)
+    return timeA < timeB
+  })
+  const messages = toArray.map((message) => {
+    return "<li><strong>" + message.Author + "</strong>: " + message.Entry + "<small style='font-size:7px; padding-left: 10px;'> (" + message.Hash + ") </small></li>";
+  }).join('')
+  document.getElementById('messages').insertAdjacentHTML('beforeend', messages)
+})
 
-      //Submit the Entry and Load only the latest message.
-        document.getElementById("submitEntry").addEventListener("click", function (event) {
-            event.preventDefault()
-            MessageCreate({"title": document.getElementById('theMessage').value})
-            document.getElementById('theMessage').value = ''
+//Submit the Entry and Load only the latest message.
+document.getElementById("submitEntry").addEventListener("click", function (event) {
+  event.preventDefault()
+  MessageCreate({"title": document.getElementById('theMessage').value})
+  document.getElementById('theMessage').value = ''
 
-            //Using a timeout but promises would be. Like a .then after el MessageCreate
-            //Why the timeout?
-            // In order to get the new message you have to wait for the Holochain to process IT
-            // Sin el timeout both the MessageCreate and GetMessages goes out at the same time and brings error
+  //Using a timeout but promises would be. Like a .then after el MessageCreate
+  //Why the timeout?
+  // In order to get the new message you have to wait for the Holochain to process IT
+  // Sin el timeout both the MessageCreate and GetMessages goes out at the same time and brings error
 
-            setTimeout(function(){GetMessages(function (obj) {
-                let toArray = JSON.parse(obj)
-                toArray = toArray.sort(function(a,b){
-                  timeA = new Date(a.Timestamp)
-                  timeB = new Date(b.Timestamp)
-                  return timeA < timeB
-                })
+  setTimeout(function(){GetMessages(function (obj) {
+    let toArray = JSON.parse(obj)
+    toArray = toArray.sort(function(a,b){
+      timeA = new Date(a.Timestamp)
+      timeB = new Date(b.Timestamp)
+      return timeA < timeB
+    })
 
-                const element = toArray.shift()
-                const message = "<li><strong>" + element.Author + "</strong>: " + element.Entry + "<small style='font-size:7px; padding-left: 10px;'> (" + element.Hash + ") </small></li>";
-                document.getElementById('messages').insertAdjacentHTML('afterbegin', message)
-              })}, '60')
-        });
+    const element = toArray.shift()
+    const message = "<li><strong>" + element.Author + "</strong>: " + element.Entry + "<small style='font-size:7px; padding-left: 10px;'> (" + element.Hash + ") </small></li>";
+    document.getElementById('messages').insertAdjacentHTML('afterbegin', message)
+  })}, '60')
+});
 
-    </script>
+</script>
 </body>
-
 </html>
