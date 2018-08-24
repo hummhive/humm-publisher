@@ -32,8 +32,11 @@
       <div class="col">
         <h3>Message Board</h3>
         <p>The purpose of this board is to test the DHT and see how links works</p>
+
         <div id="messages"></div>
+
         <hr />
+
         <form>
           <div class="form-group">
             <label for="AuthorName">Write a Short Message</label>
@@ -54,11 +57,9 @@ GetMessages(function (obj) {
     timeB = new Date(b.Timestamp)
     return timeA < timeB
   })
-
   const messages = toArray.map((message) => {
     return "<li><strong>" + message.Author + "</strong>: " + message.Entry + "<small style='font-size:7px; padding-left: 10px;'> (" + message.Hash + ") </small></li>";
   }).join('')
-
   document.getElementById('messages').insertAdjacentHTML('beforeend', messages)
 })
 
@@ -73,7 +74,7 @@ document.getElementById("submitEntry").addEventListener("click", function (event
   // In order to get the new message you have to wait for the Holochain to process IT
   // Sin el timeout both the MessageCreate and GetMessages goes out at the same time and brings error
 
-  setTimeout(function(){ GetMessages(function (obj) {
+  setTimeout(function(){GetMessages(function (obj) {
     let toArray = JSON.parse(obj)
     toArray = toArray.sort(function(a,b){
       timeA = new Date(a.Timestamp)

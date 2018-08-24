@@ -1,0 +1,99 @@
+<html>
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script type="text/javascript" src="/functions.js"></script>
+  <style>
+  .bd-navbar {
+    min-height: 4rem;
+  }
+
+  #sticky-sidebar {
+    min-height: 100vh;
+  }
+
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-3 px-0 border-right" id="sticky-sidebar">
+        <div class="py-0 sticky-top">
+          <header class="navbar navbar-expand flex-column flex-md-row bd-navbar mb-3 border-bottom">
+            <a class="navbar-brand m-auto" href="/" aria-label="Bootstrap">Humm</a>
+          </header>
+          <ul class="nav nav-pills justify-content-center border-bottom pb-3 pt-1">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Published</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Drafts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="post-editor.html">Compose</a>
+            </li>
+          </ul>
+          <div id="post-list" class="list-group list-group-flush">
+          </div>
+        </div>
+      </div>
+      <div id="content" class="col-9 px-5 mt-4">
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script type="text/javascript">
+
+/* This callback loads at the very beggining in order to load the default values */
+GetDrafts(function (obj) {
+
+  // Populate the sidebar
+  var postSidebar = obj.map((post, index) => {
+    if(index == 0 ){
+      return '<a id="' + post.Hash + '" href="#" class="list-group-item list-group-item-action flex-column align-items-start active"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">' + post.Entry.title + '</h5><small>' + post.Entry.pubdate + '</small></div></a>'
+    }else{
+      return '<a id="' + post.Hash + '" href="#" class="list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h5 class="mb-1">' + post.Entry.title + '</h5><small>' + post.Entry.pubdate + '</small></div></a>'
+    }
+  }).join('');
+
+  // Since the first option is going to be the one shown by default, we grab this one.
+  var postContent = obj[0].Entry.content;
+
+  // Append the content to the Sidebar and Content
+  document.getElementById('post-list').insertAdjacentHTML('beforeend', postSidebar)
+  document.getElementById('content').insertAdjacentHTML('beforeend', postContent)
+
+  // This variable is going to hold the dynamic elements inserted in the sidebar in order to attach the addEventListener to each one
+  var postsItems = document.getElementsByClassName("list-group-item");
+
+  // Attaching the addEventListener here allow us to append it to every element in the sidebar.
+  Array.from(postsItems).forEach(function(element) {
+    element.addEventListener('click', RefreshDrafts);
+  });
+})
+
+/*
+The primary purpose of this function is to load a new draft upon clicking one of the elements in the sidebar
+*/
+function RefreshDrafts(event){
+  GetDrafts(function (obj) {
+
+    let postContent = obj.filter(val => {
+      return val.Hash === event.target.offsetParent.getAttribute('id');
+    });
+
+    var removeActiveElement = document.querySelector(".list-group-item.active");
+    removeActiveElement.classList.remove("active");
+
+    var getActiveElement = document.getElementById(event.target.offsetParent.getAttribute('id'))
+    getActiveElement.classList.add("active");
+
+    document.getElementById('content').innerHTML = ''
+    document.getElementById('content').insertAdjacentHTML('beforeend', postContent[0].Entry.content)
+  })
+}
+
+</script>
+</body>
+</html>

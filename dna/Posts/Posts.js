@@ -8,18 +8,16 @@ function DraftCreate (DraftEntry) {
 }
 
 function GetDrafts() {
-
   var result = query({
     Return: {
-      Entries: true
+      Entries: true,
+      Hashes: true,
     },
     Constrain: {
       EntryTypes: ["Draft"],
     }
   })
-
   return result;
-
 }
 
 

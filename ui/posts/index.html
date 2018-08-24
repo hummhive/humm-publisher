@@ -1,0 +1,60 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script type="text/javascript" src="/functions.js"></script>
+    <style>
+    .bd-navbar {
+	  min-height: 4rem;
+    }
+
+    #sticky-sidebar {
+    min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+      <div class="container-fluid">
+      <div class="row">
+        <div class="col-3 px-0 border-right" id="sticky-sidebar">
+            <div class="py-0 sticky-top">
+              <header class="navbar navbar-expand flex-column flex-md-row bd-navbar mb-3 border-bottom">
+                <a class="navbar-brand m-auto" href="/" aria-label="Bootstrap">Humm</a>
+              </header>
+          <ul class="nav nav-pills justify-content-center border-bottom pb-3 pt-1">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Published</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="drafts.html">Drafts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="post-editor.html">Compose</a>
+            </li>
+        </ul>
+        <div class="list-group list-group-flush">
+          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">List group item heading</h5>
+              <small>3 days ago</small>
+            </div>
+          </a>
+        </div>
+      </div>
+        </div>
+        <div id="content" class="col-9 px-5 mt-4">
+          One of three columns
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+    <script type="text/javascript">
+        document.getElementById("saveDraft").addEventListener("click", function (event) {
+            event.preventDefault()
+            DraftCreate({"title": document.getElementById('title').value, "content": document.getElementById('content').value})
+            document.getElementById('title').value = ''
+            document.getElementById('content').value = ''
+        });
+    </script>
+</body>
+</html>
