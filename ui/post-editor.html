@@ -16,30 +16,38 @@
     <a class="navbar-brand mr-0 mr-md-2" href="/" aria-label="Bootstrap">Humm</a>
   </header>
 
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/">Home</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Post Editor</li>
-    </ol>
-  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Post Editor</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
 
-  <div class="container mt-5 mb-5">
-    <h3>Post Editor</h3>
-    <p>The purpose of this page is to test a Post Draft and Publish Function</p>
-    <form>
-        <div class="form-group">
-          <label for="title">Title</label>
-          <input class="form-control" type="text" id="title" size="50" placeholder="Some Post Title" />
-        </div>
-        <div class="form-group">
-          <label for="content">Content</label>
-          <textarea id="content" class="form-control" placeholder="Some Text Editor" cols="30" rows="5"></textarea>
-        </div>
-          <div class="btn-group" role="group">
-          <button type="button" id="saveDraft" class="btn btn-outline-btn-secondary">Save Draft</button>
-          <button type="button" id="publishPost" class="btn btn-primary">Publish</button>
-        </div>
-    </form>
+    <div class="row">
+      <div class="col">
+        <h3>Post Editor</h3>
+        <p>The purpose of this page is to test a Post Draft and Publish Function</p>
+        <form>
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input class="form-control" type="text" id="title" size="50" placeholder="Some Post Title" />
+            </div>
+            <div class="form-group">
+              <label for="content">Content</label>
+              <textarea id="content" class="form-control" placeholder="Some Text Editor" cols="30" rows="5"></textarea>
+            </div>
+              <div class="btn-group" role="group">
+              <button type="button" id="saveDraft" class="btn btn-outline-btn-secondary">Save Draft</button>
+              <button type="button" id="publishPost" class="btn btn-primary">Publish</button>
+            </div>
+        </form>
+      </div>
+    </div>
   </div>
 
 <script type="text/javascript">

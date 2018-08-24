@@ -16,25 +16,33 @@
     <a class="navbar-brand mr-0 mr-md-2" href="/" aria-label="Bootstrap">Humm</a>
   </header>
 
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/">Home</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Messages</li>
-    </ol>
-  </nav>
-
-  <div class="container mt-5 mb-5">
-    <h3>Message Board</h3>
-    <p>The purpose of this board is to test the DHT and see how links works</p>
-    <div id="messages"></div>
-    <hr />
-    <form>
-      <div class="form-group">
-        <label for="AuthorName">Write a Short Message</label>
-        <input class="form-control" type="text" id="theMessage" size="50" />
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Messages</li>
+          </ol>
+        </nav>
       </div>
-      <button type="submit" id="submitEntry" class="btn btn-primary">Generate Message</button>
-    </form>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <h3>Message Board</h3>
+        <p>The purpose of this board is to test the DHT and see how links works</p>
+        <div id="messages"></div>
+        <hr />
+        <form>
+          <div class="form-group">
+            <label for="AuthorName">Write a Short Message</label>
+            <input class="form-control" type="text" id="theMessage" size="50" />
+          </div>
+          <button type="submit" id="submitEntry" class="btn btn-primary">Generate Message</button>
+        </form>
+      </div>
+    </div>
   </div>
 
 <script type="text/javascript">
