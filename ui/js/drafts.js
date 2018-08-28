@@ -18,20 +18,21 @@ var quill = new Quill('#quill', {
 // This callback loads at the very beggining in order to load the default values
 GetDrafts(function(obj) {
 
+  if(obj.length === 0)
+  return;
+
   // Populate the sidebar
   var postSidebar = obj.map((post, index) => {
     if (index == 0) {
       return `<a id="${post.Hash}" href="#"
-                class="list-group-item list-group-item-action flex-column align-items-start active">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">${post.Entry.title}</h5><small>${post.Entry.pubdate}</small>
-                </div></a>`;
+                class="list-group-item list-group-item-action align-items-start active">
+                  <h5 class="mb-1">${post.Entry.title}</h5><small>${moment(post.Entry.pubdate).format('MMMM D, YYYY [at] h:mm A z')}</small>
+              </a>`;
     } else {
       return `<a id="${post.Hash}" href="#"
-                class="list-group-item list-group-item-action flex-column align-items-start">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">${post.Entry.title}</h5><small>${post.Entry.pubdate}</small>
-                </div></a>`;
+                class="list-group-item list-group-item-action align-items-start">
+                  <h5 class="mb-1">${post.Entry.title}</h5><small>${moment(post.Entry.pubdate).format('MMMM D, YYYY [at] h:mm A z')}</small>
+              </a>`;
     }
   }).join('');
 
@@ -61,16 +62,16 @@ the elements in the sidebar
 function RefreshDrafts(event) {
   GetDrafts(function(obj) {
 
-    let postContent = obj.filter(val => {
-      return val.Hash === event.target.offsetParent.getAttribute('id');
+    var postContent = obj.filter(val => {
+      return val.Hash === this.getAttribute('id');
     });
 
     var removeActiveElement = document.querySelector(".list-group-item.active");
     removeActiveElement.classList.remove("active");
 
-    var getActiveElement = document.getElementById(event.target.offsetParent.getAttribute('id'))
+    var getActiveElement = document.getElementById(this.getAttribute('id'))
     getActiveElement.classList.add("active");
 
     quill.setContents(JSON.parse(postContent[0].Entry.content));
-  });
+  }.bind(this));
 }
