@@ -69,6 +69,11 @@
                "Name": "GetDrafts",
                "CallingType": "json",
                "Exposure": "public"
+           },
+           {
+               "Name": "DeleteDrafts",
+               "CallingType": "json",
+               "Exposure": "public"
            }
           ]
         }
