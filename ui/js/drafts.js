@@ -12,7 +12,7 @@ var quill = new Quill('#quill', {
   readOnly: true
 });
 
-// Load them posts
+// Load the posts
 // =============================================================================
 
 // This callback loads at the very beggining in order to load the default values
@@ -20,6 +20,13 @@ GetDrafts(function(obj) {
 
   if(obj.length === 0)
   return;
+
+  //Sort Timestamps by Newest
+  obj = obj.sort(function(a,b){
+    caseA = new Date(a.Entry.pubdate)
+    caseB = new Date(b.Entry.pubdate)
+    return caseA < caseB
+  })
 
   // Populate the sidebar
   var postSidebar = obj.map((post, index) => {
