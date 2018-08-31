@@ -2,16 +2,6 @@
 // Drafts Controller
 // =============================================================================
 
-
-// init Quill editor
-// =============================================================================
-
-var quill = new Quill('#quill', {
-  modules: { toolbar: false },
-  theme: 'bubble',
-  readOnly: true
-});
-
 // Load the posts
 // =============================================================================
 
@@ -49,7 +39,7 @@ GetDrafts(function(obj) {
 
   // Append the content to the Sidebar and Content
   document.getElementById('post-list').insertAdjacentHTML('beforeend', postSidebar)
-  quill.setContents(JSON.parse(postContent));
+  document.getElementById('thePost').innerHTML = postContent;
 
   /* This variable is going to hold the dynamic elements inserted in the sidebar
    in order to attach the addEventListener to each one*/
