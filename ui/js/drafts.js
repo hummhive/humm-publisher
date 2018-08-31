@@ -35,11 +35,13 @@ GetDrafts(function(obj) {
 
   /* Since the first option is going to be the one shown by default,
   we grab this one.*/
-  var postContent = obj[0].Entry.content;
+  var postTitle = obj[0].Entry.title;
+  var postBody = obj[0].Entry.content;
 
   // Append the content to the Sidebar and Content
   document.getElementById('post-list').insertAdjacentHTML('beforeend', postSidebar)
-  document.getElementById('thePost').innerHTML = postContent;
+  document.getElementById('thePost-title').innerHTML = postTitle;
+  document.getElementById('thePost-body').innerHTML = postBody;
 
   /* This variable is going to hold the dynamic elements inserted in the sidebar
    in order to attach the addEventListener to each one*/
