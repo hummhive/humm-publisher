@@ -31,7 +31,7 @@
                     "Name": "messages_link",
                     "DataFormat": "links",
                     "Sharing":"public"
-              }
+                }
             ],
             "Functions": [
                 {
@@ -56,7 +56,12 @@
                "Name": "Draft",
                "DataFormat": "json",
                "SchemaFile": "Posts.json",
-               "Sharing": "private"
+               "Sharing": "public"
+           },
+           {
+               "Name": "draft_link",
+               "DataFormat": "links",
+               "Sharing":"public"
            }
        ],
        "Functions": [

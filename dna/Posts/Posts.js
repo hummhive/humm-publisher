@@ -4,20 +4,53 @@ function DraftCreate (DraftEntry) {
   DraftEntry.pubdate = new Date();
   DraftEntry.author = App.Agent.String;
   var draftHash = commit("Draft", DraftEntry);
-  return draftHash;
+  var draft = commit("draft_link",{Links:[{Base: App.Agent.Hash,Link: draftHash,Tag: "drafts"}]});
+  commit("Draft", DraftEntry);
+  commit("draft_link",{Links:[{Base: App.Agent.Hash,Link: draftHash,Tag: "drafts"}]});
+  return "Draft Created"
 }
 
 function GetDrafts() {
-  var result = query({
-    Return: {
-      Entries: true,
-      Hashes: true,
-    },
-    Constrain: {
-      EntryTypes: ["Draft"],
-    }
-  })
-  return result;
+  var links = getLinks(App.Agent.Hash, 'drafts', { Load: true})
+  debug("Messages:: " + JSON.stringify(links))
+
+  var drafts=[];
+
+  links.forEach(function (element){
+    var linksObject={};
+    linksObject.hash=element.Hash;
+    linksObject.title=element.Entry.title
+    linksObject.content=element.Entry.content
+    linksObject.author=element.Entry.author
+    linksObject.timestamp=element.Entry.pubdate
+    drafts.push(linksObject);
+  });
+
+  debug(drafts)
+  return drafts;
+}
+
+function DeleteDrafts(oldHash) {
+  oldHash.status = oldHash.message
+  remove(oldHash.hash, oldHash.message)
+  // On the DHT, mark the links as deleted
+  commit("draft_link",{
+   Links: [
+     {
+       Base: App.Agent.Hash,
+       Link: oldHash.hash,
+       Tag: "drafts",
+       LinkAction: HC.LinkAction.Del
+     }
+   ]
+ });
+  return true
+}
+
+function updateDraft(oldHash) {
+  var hash = update("draft", {message: "this is a test message"}, oldHash)
+  return hash
+
 }
 
 
@@ -49,6 +82,7 @@ function genesis () {
 function validateCommit (entryName, entry, header, pkg, sources) {
   switch (entryName) {
     case "Draft":
+    case "draft_link":
       // be sure to consider many edge cases for validating
       // do not just flip this to true without considering what that means
       // the action will ONLY be successfull if this returns true, so watch out!
@@ -72,6 +106,7 @@ function validateCommit (entryName, entry, header, pkg, sources) {
 function validatePut (entryName, entry, header, pkg, sources) {
   switch (entryName) {
     case "Draft":
+    case "draft_link":
       // be sure to consider many edge cases for validating
       // do not just flip this to true without considering what that means
       // the action will ONLY be successfull if this returns true, so watch out!
@@ -95,10 +130,11 @@ function validatePut (entryName, entry, header, pkg, sources) {
 function validateMod (entryName, entry, header, replaces, pkg, sources) {
   switch (entryName) {
     case "Draft":
+    case "draft_link":
       // be sure to consider many edge cases for validating
       // do not just flip this to true without considering what that means
       // the action will ONLY be successfull if this returns true, so watch out!
-      return false;
+      return true;
     default:
       // invalid entry name
       return false;
@@ -116,6 +152,7 @@ function validateMod (entryName, entry, header, replaces, pkg, sources) {
 function validateDel (entryName, hash, pkg, sources) {
   switch (entryName) {
     case "Draft":
+    case "draft_link":
       // be sure to consider many edge cases for validating
       // do not just flip this to true without considering what that means
       // the action will ONLY be successfull if this returns true, so watch out!
@@ -138,10 +175,11 @@ function validateDel (entryName, hash, pkg, sources) {
 function validateLink (entryName, baseHash, links, pkg, sources) {
   switch (entryName) {
     case "Draft":
+    case "draft_link":
       // be sure to consider many edge cases for validating
       // do not just flip this to true without considering what that means
       // the action will ONLY be successfull if this returns true, so watch out!
-      return false;
+      return true;
     default:
       // invalid entry name
       return false;
