@@ -29,6 +29,24 @@ function DraftCreate(entry) {
   xhr.send(data)
 }
 
+function DeleteDrafts(entry) {
+  var xhr = new XMLHttpRequest()
+  var url = '/fn/Posts/DeleteDrafts'
+  xhr.open('POST', url, true)
+  xhr.setRequestHeader('Content-type', 'application/json')
+  var data = JSON.stringify(entry)
+  xhr.send(data)
+}
+
+function UpdateDraft(entry) {
+  var xhr = new XMLHttpRequest()
+  var url = '/fn/Posts/UpdateDraft'
+  xhr.open('POST', url, true)
+  xhr.setRequestHeader('Content-type', 'application/json')
+  var data = JSON.stringify(entry)
+  xhr.send(data)
+}
+
 function GetDrafts(callback) {
   var xhr = new XMLHttpRequest()
   var url = '/fn/Posts/GetDrafts'
