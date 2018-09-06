@@ -1,55 +1,24 @@
-function GetMessages(callback) {
+function CreatePost(entry) {
   var xhr = new XMLHttpRequest()
-  var url = '/fn/Messages/GetMessages'
-  xhr.open('POST', url, true)
-  xhr.setRequestHeader('Content-type', 'application/json')
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      callback(xhr.responseText)
-    }
-  }
-  xhr.send()
-}
-
-function MessageCreate(entry) {
-  var xhr = new XMLHttpRequest()
-  var url = '/fn/Messages/MessageCreate'
+  var url = '/fn/Posts/CreatePost'
   xhr.open('POST', url, true)
   xhr.setRequestHeader('Content-type', 'application/json')
   var data = JSON.stringify(entry)
   xhr.send(data)
 }
 
-function DraftCreate(entry) {
+function DeletePost(entry) {
   var xhr = new XMLHttpRequest()
-  var url = '/fn/Posts/DraftCreate'
+  var url = '/fn/Posts/DeletePost'
   xhr.open('POST', url, true)
   xhr.setRequestHeader('Content-type', 'application/json')
   var data = JSON.stringify(entry)
   xhr.send(data)
 }
 
-function DeleteDrafts(entry) {
+function GetPost(hash, callback) {
   var xhr = new XMLHttpRequest()
-  var url = '/fn/Posts/DeleteDrafts'
-  xhr.open('POST', url, true)
-  xhr.setRequestHeader('Content-type', 'application/json')
-  var data = JSON.stringify(entry)
-  xhr.send(data)
-}
-
-function UpdateDraft(entry) {
-  var xhr = new XMLHttpRequest()
-  var url = '/fn/Posts/UpdateDraft'
-  xhr.open('POST', url, true)
-  xhr.setRequestHeader('Content-type', 'application/json')
-  var data = JSON.stringify(entry)
-  xhr.send(data)
-}
-
-function GetDrafts(callback) {
-  var xhr = new XMLHttpRequest()
-  var url = '/fn/Posts/GetDrafts'
+  var url = '/fn/Posts/GetPost'
   xhr.open('POST', url, true)
   xhr.setRequestHeader('Content-type', 'application/json')
   xhr.onreadystatechange = function () {
@@ -57,5 +26,34 @@ function GetDrafts(callback) {
       callback(JSON.parse(xhr.responseText))
     }
   }
-  xhr.send()
+  var data = JSON.stringify(hash)
+  xhr.send(data)
+}
+
+function GetPosts(entry, callback) {
+  var xhr = new XMLHttpRequest()
+  var url = '/fn/Posts/GetPosts'
+  xhr.open('POST', url, true)
+  xhr.setRequestHeader('Content-type', 'application/json')
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      callback(JSON.parse(xhr.responseText))
+    }
+  }
+  var data = JSON.stringify(entry)
+  xhr.send(data)
+}
+
+function EditPost(entry, callback) {
+  var xhr = new XMLHttpRequest()
+  var url = '/fn/Posts/EditPost'
+  xhr.open('POST', url, true)
+  xhr.setRequestHeader('Content-type', 'application/json')
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      callback(JSON.parse(xhr.responseText))
+    }
+  }
+  var data = JSON.stringify(entry)
+  xhr.send(data)
 }
