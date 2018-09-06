@@ -2,7 +2,7 @@
 <html lang="en-us">
 <head>
   <meta charset="utf-8">
-  <title>Dashboard - Humm</title>
+  <title>Humm Publisher</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <style>
@@ -13,6 +13,9 @@
     min-height: 100vh;
   }
   </style>
+  <script>
+  var page = "draft";
+  </script>
 </head>
 <body>
   <div class="container-fluid">
@@ -20,7 +23,7 @@
       <div class="col-3 px-0 border-right" id="sticky-sidebar">
         <div class="py-0 sticky-top">
           <header class="navbar navbar-expand flex-column flex-md-row bd-navbar mb-3 border-bottom">
-            <a class="navbar-brand m-auto" href="/" aria-label="Bootstrap">Humm</a>
+            <a class="navbar-brand m-auto" href="/" aria-label="Bootstrap">Humm Publisher</a>
           </header>
           <ul class="nav nav-pills justify-content-center border-bottom pb-3 pt-1">
             <li class="nav-item">
@@ -30,7 +33,7 @@
               <a class="nav-link active" href="#">Drafts</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="post-editor.html">Compose</a>
+              <a class="nav-link" href="/editor/">Compose</a>
             </li>
           </ul>
           <div id="post-list" class="list-group list-group-flush">
@@ -39,8 +42,8 @@
       </div>
       <div id="content" class="col-9 px-5 mt-4">
         <div class="toolbar float-right">
-          <button id="editPost" onclick="EditDraft()" type="button" class="btn btn-outline-primary btn-sm">Edit</button>
-          <button id="deletePost"  onclick="RemoveDraft()" type="button" class="btn btn-outline-dark btn-sm">Delete</button>
+          <button id="editPost" onclick="EditPost()" type="button" class="btn btn-outline-primary btn-sm">Edit</button>
+          <button id="deletePost"  onclick="RemovePost()" type="button" class="btn btn-outline-dark btn-sm">Delete</button>
         </div>
         <h1 id="thePost-title"></h1>
         <div id="thePost-body"></div>
@@ -51,6 +54,6 @@
 </div>
 <script type="text/javascript" src="/functions.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-<script type="text/javascript" src="/js/drafts.js"></script>
+<script type="text/javascript" src="/js/posts.js"></script>
 </body>
 </html>
