@@ -1,12 +1,12 @@
 // =============================================================================
-// Drafts Controller
+// Posts Controller
 // =============================================================================
 
 // Load the posts
 // =============================================================================
 
 // This callback loads at the very beggining in order to load the default values
-GetPosts("draft", function(obj) {
+GetPosts(page, function(obj) {
 
   if(obj.length === 0)
   return;
@@ -50,16 +50,16 @@ GetPosts("draft", function(obj) {
   /* Attaching the addEventListener here allow us to append it to every element
   in the sidebar.*/
   Array.from(postsItems).forEach(function(element) {
-    element.addEventListener('click', RefreshDrafts);
+    element.addEventListener('click', RefreshPosts);
   });
 })
 
 /*
-The primary purpose of this function is to load a new draft upon clicking one of
+The primary purpose of this function is to load a new post upon clicking one of
 the elements in the sidebar
 */
-function RefreshDrafts(event) {
-  GetPosts("draft",function(obj) {
+function RefreshPosts(event) {
+  GetPosts(page,function(obj) {
 
     var postContent = obj.filter(val => {
       return val.hash === this.getAttribute('id');
@@ -78,21 +78,21 @@ function RefreshDrafts(event) {
 }
 
 /*
-Delete Draft
+Delete Post
 */
 
-function RemoveDraft() {
-  var activeDraft = document.querySelector(".list-group-item.active").getAttribute('id')
-  DeletePost({hash : activeDraft, message : "deleted", type: "draft"})
+function RemovePost() {
+  var activePost = document.querySelector(".list-group-item.active").getAttribute('id')
+  DeletePost({hash : activePost, message : "deleted", type: page})
   setTimeout(function(){
   location.reload()},'30')
 }
 
 /*
-Edit Draft
+Edit Post
 */
 
-function EditDraft() {
- var activeDraft = document.querySelector(".list-group-item.active").getAttribute('id')
- window.location = '/posts/post-editor.html?entry=' + encodeURI(activeDraft);
+function EditPost() {
+ var activePost = document.querySelector(".list-group-item.active").getAttribute('id')
+ window.location = '/editor?entry=' + encodeURI(activePost);
 }
