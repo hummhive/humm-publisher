@@ -6,7 +6,7 @@
 // =============================================================================
 
 // This callback loads at the very beggining in order to load the default values
-GetDrafts(function(obj) {
+GetPosts("draft", function(obj) {
 
   if(obj.length === 0)
   return;
@@ -59,7 +59,7 @@ The primary purpose of this function is to load a new draft upon clicking one of
 the elements in the sidebar
 */
 function RefreshDrafts(event) {
-  GetDrafts(function(obj) {
+  GetPosts("draft",function(obj) {
 
     var postContent = obj.filter(val => {
       return val.hash === this.getAttribute('id');
@@ -83,9 +83,9 @@ Delete Draft
 
 function RemoveDraft() {
   var activeDraft = document.querySelector(".list-group-item.active").getAttribute('id')
-  DeleteDrafts({hash : activeDraft, message : "deleted"})
+  DeletePost({hash : activeDraft, message : "deleted", type: "draft"})
   setTimeout(function(){
-  location.reload()},'20')
+  location.reload()},'30')
 }
 
 /*
@@ -94,5 +94,5 @@ Edit Draft
 
 function EditDraft() {
  var activeDraft = document.querySelector(".list-group-item.active").getAttribute('id')
- window.location = '/posts/post-editor.html?entry=' + activeDraft;
+ window.location = '/posts/post-editor.html?entry=' + encodeURI(activeDraft);
 }
