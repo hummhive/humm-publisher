@@ -1,4 +1,4 @@
-// init Quill editor
+// init Medium editor
 // =============================================================================
 
 var editor = new MediumEditor('#editor', {
@@ -6,21 +6,42 @@ var editor = new MediumEditor('#editor', {
   anchor: { targetCheckbox: true }
 });
 
+// Helper
+
+function getParameterByName(name) {
+  var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+  return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
 // Handle saving a blog post
 // =============================================================================
 
-document.getElementById("saveDraft").addEventListener("click", function(event) {
-  event.preventDefault();
+if(getParameterByName('entry')){
 
-  DraftCreate({
-    "title": document.getElementById('title').value,
-    "content": document.getElementById('editor').innerHTML
+  GetPost(getParameterByName('entry'), function(obj) {
+
+    if(obj === null)
+    return;
+
+    document.getElementById('title').value = obj.title;
+    document.getElementById('editor').innerHTML = obj.content;
+
   });
 
-  document.getElementById('notice').style.display = "block";
-});
+  document.getElementById("saveDraft").addEventListener("click", function(event) {
+    EditPost({hash : getParameterByName('entry'), title: document.getElementById('title').value, "content": document.getElementById('editor').innerHTML, type: "draft"})
+    document.getElementById('notice').style.display = "block";
+  })
 
-function getParameterByName(name) {
-    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}else{
+
+  document.getElementById("saveDraft").addEventListener("click", function(event) {
+    event.preventDefault();
+    CreatePost({
+      "title": document.getElementById('title').value,
+      "content": document.getElementById('editor').innerHTML,
+      "type" : "draft"
+    });
+    document.getElementById('notice').style.display = "block";
+  });
 }
