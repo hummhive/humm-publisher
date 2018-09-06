@@ -3,8 +3,7 @@
   "id": "http://example.com/publish/article.json",
   "type": "object",
   "required": [
-    "title",
-    "content"
+    "title"
   ],
   "properties": {
     "title": {
@@ -16,6 +15,10 @@
       "pattern": ".+"
     },
     "author": {
+      "type": "string",
+      "pattern": ".+"
+    },
+    "type": {
       "type": "string",
       "pattern": ".+"
     },

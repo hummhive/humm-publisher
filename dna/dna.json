@@ -1,9 +1,9 @@
 {
     "Version": 1,
     "UUID": "28fcbff4-8d2f-494c-a2c5-9dd845f1ab5a",
-    "Name": "Humm",
+    "Name": "Humm Publisher",
     "Properties": {
-        "description": "Experimental Application Sandbox",
+        "description": "Personal publishing app for Humm",
         "language": "en"
     },
     "PropertiesSchemaFile": "properties_schema.json",
@@ -15,45 +15,13 @@
     },
     "Zomes": [
              {
-            "Name": "Messages",
-            "Description": "Sign and publish messages in DHT",
-            "CodeFile": "Messages.js",
-            "RibosomeType": "js",
-            "Entries": [
-                {
-                    "Name": "Message",
-                    "DataFormat": "json",
-                    "Schema": "",
-                    "SchemaFile": "Message.json",
-                    "Sharing": "public"
-                },
-                {
-                    "Name": "messages_link",
-                    "DataFormat": "links",
-                    "Sharing":"public"
-                }
-            ],
-            "Functions": [
-                {
-                    "Name": "MessageCreate",
-                    "CallingType": "json",
-                    "Exposure": "public"
-                },
-                {
-                    "Name": "GetMessages",
-                    "CallingType": "json",
-                    "Exposure": "public"
-                }
-            ]
-        },
-        {
        "Name": "Posts",
-       "Description": "Sign and publish Posts locally or in the DHT",
+       "Description": "Sign and Publish Posts locally or in the DHT",
        "CodeFile": "Posts.js",
        "RibosomeType": "js",
        "Entries": [
            {
-               "Name": "Draft",
+               "Name": "draft",
                "DataFormat": "json",
                "SchemaFile": "Posts.json",
                "Sharing": "public"
@@ -62,21 +30,42 @@
                "Name": "draft_link",
                "DataFormat": "links",
                "Sharing":"public"
+           },
+           {
+               "Name": "publish",
+               "DataFormat": "json",
+               "SchemaFile": "Posts.json",
+               "Sharing": "public"
+           },
+           {
+               "Name": "publish_link",
+               "DataFormat": "links",
+               "Sharing":"public"
            }
        ],
        "Functions": [
            {
-               "Name": "DraftCreate",
+               "Name": "CreatePost",
                "CallingType": "json",
                "Exposure": "public"
            },
            {
-               "Name": "GetDrafts",
+               "Name": "GetPosts",
                "CallingType": "json",
                "Exposure": "public"
            },
            {
-               "Name": "DeleteDrafts",
+               "Name": "GetPost",
+               "CallingType": "json",
+               "Exposure": "public"
+           },
+           {
+               "Name": "DeletePost",
+               "CallingType": "json",
+               "Exposure": "public"
+           },
+           {
+               "Name": "EditPost",
                "CallingType": "json",
                "Exposure": "public"
            }
