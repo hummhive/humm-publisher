@@ -19,7 +19,7 @@ function getParameterByName(name) {
 // Draft Functions
 // =============================================================================
 
-/* This expression does the following
+/* This function does the following
 1) It checks if the query string entry exist, the expected value is a hash-string
 2) If the entry exist, the value is sent to the Holochain
 3) If the hash doesn't exist
@@ -35,25 +35,33 @@ function draft(){
       return;
 
       document.getElementById('title').value = obj.title;
-      document.getElementById('editor').innerHTML = obj.content;
+      editor.setContent(obj.content);
 
     });
 
     document.getElementById("saveDraft").addEventListener("click", function(event) {
-      EditPost({hash : getParameterByName('entry'), title: document.getElementById('title').value, "content": document.getElementById('editor').innerHTML, type: "draft"})
+      EditPost({
+        hash: getParameterByName('entry'),
+        title: document.getElementById('title').value,
+        content: editor.getContent(),
+        type: "draft"
+      });
+
       document.getElementById('notice').innerHTML = "Post Drafted";
       document.getElementById('notice').style.display = "block";
-    })
+    });
 
-  }else{
+  } else {
 
     document.getElementById("saveDraft").addEventListener("click", function(event) {
       event.preventDefault();
+
       CreatePost({
-        "title": document.getElementById('title').value,
-        "content": document.getElementById('editor').innerHTML,
-        "type" : "draft"
+        title: document.getElementById('title').value,
+        content: editor.getContent(),
+        type: "draft"
       });
+
       document.getElementById('notice').innerHTML = "Post Drafted";
       document.getElementById('notice').style.display = "block";
     });
@@ -66,11 +74,13 @@ function draft(){
 function publish() {
   document.getElementById("publishPost").addEventListener("click", function(event) {
     event.preventDefault();
+
     CreatePost({
-      "title": document.getElementById('title').value,
-      "content": document.getElementById('editor').innerHTML,
-      "type" : "publish"
+      title: document.getElementById('title').value,
+      content: editor.getContent(),
+      type: "publish"
     });
+
     document.getElementById('notice').innerHTML = "Post Published!";
     document.getElementById('notice').style.display = "block";
   });
