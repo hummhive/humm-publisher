@@ -44,16 +44,11 @@ function GetPosts(entry, callback) {
   xhr.send(data)
 }
 
-function EditPost(entry, callback) {
+function EditPost(entry) {
   var xhr = new XMLHttpRequest()
   var url = '/fn/Posts/EditPost'
   xhr.open('POST', url, true)
   xhr.setRequestHeader('Content-type', 'application/json')
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      callback(JSON.parse(xhr.responseText))
-    }
-  }
   var data = JSON.stringify(entry)
   xhr.send(data)
 }
