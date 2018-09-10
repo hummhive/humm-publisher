@@ -117,8 +117,8 @@ function EditPost() {
 function dissmissNotification() {
   var el = document.getElementById('notice');
   el.innerHTML = '';
-  el.className('alert');
-  el.stytle.display = 'none';
+  el.className = 'alert';
+  el.style.display = 'none';
 }
 
 function notify(type, message){
