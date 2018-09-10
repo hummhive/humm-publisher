@@ -1,17 +1,27 @@
-function CreatePost(entry) {
+function CreatePost(entry, callback) {
   var xhr = new XMLHttpRequest()
   var url = '/fn/Posts/CreatePost'
   xhr.open('POST', url, true)
   xhr.setRequestHeader('Content-type', 'application/json')
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      callback(JSON.parse(xhr.responseText))
+    }
+  }
   var data = JSON.stringify(entry)
   xhr.send(data)
 }
 
-function DeletePost(entry) {
+function DeletePost(entry, callback) {
   var xhr = new XMLHttpRequest()
   var url = '/fn/Posts/DeletePost'
   xhr.open('POST', url, true)
   xhr.setRequestHeader('Content-type', 'application/json')
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      callback(JSON.parse(xhr.responseText))
+    }
+  }
   var data = JSON.stringify(entry)
   xhr.send(data)
 }
