@@ -9,7 +9,7 @@
 GetPostsByTag(page, function(obj) {
 
   if(obj.length === 0)
-  return;
+    return;
 
   //Sort Timestamps by Newest
   obj = obj.sort(function(a,b){
@@ -43,6 +43,8 @@ GetPostsByTag(page, function(obj) {
   document.getElementById('thePost-title').innerHTML = postTitle;
   document.getElementById('thePost-body').innerHTML = postBody;
 
+  showPostActions();
+
   /* This variable is going to hold the dynamic elements inserted in the sidebar
    in order to attach the addEventListener to each one*/
   var postsItems = document.getElementsByClassName("list-group-item");
@@ -59,21 +61,27 @@ The primary purpose of this function is to load a new post upon clicking one of
 the elements in the sidebar
 */
 function RefreshPosts(event) {
-  GetPosts(page,function(obj) {
+  dissmissNotification();
 
   GetPostsByTag(page,function(obj) {
+
     var postContent = obj.filter(val => {
       return val.hash === this.getAttribute('id');
     });
 
     var removeActiveElement = document.querySelector(".list-group-item.active");
-    removeActiveElement.classList.remove("active");
+
+    // Check if it wasn't removed by removeDeletedEntryFromList()
+    if (removeActiveElement)
+      removeActiveElement.classList.remove("active");
 
     var getActiveElement = document.getElementById(this.getAttribute('id'))
     getActiveElement.classList.add("active");
 
     document.getElementById('thePost-title').innerHTML = postContent[0].title;
     document.getElementById('thePost-body').innerHTML = postContent[0].content;
+
+    showPostActions();
 
   }.bind(this));
 }
@@ -84,9 +92,17 @@ Delete Post
 
 function RemovePost() {
   var activePost = document.querySelector(".list-group-item.active").getAttribute('id')
-  DeletePost({hash : activePost, message : "deleted", type: page})
-  setTimeout(function(){
-  location.reload()},'30')
+
+  DeletePost({
+    hash: activePost,
+    message: "deleted by user",
+    type: page
+  }, function (deletedHash) {
+    notify('success', 'Post deleted.');
+    hidePostActions();
+    clearContentView();
+    removeDeletedEntryFromList(deletedHash);
+  });
 }
 
 /*
@@ -96,4 +112,36 @@ Edit Post
 function EditPost() {
  var activePost = document.querySelector(".list-group-item.active").getAttribute('id')
  window.location = '/editor?entry=' + encodeURI(activePost);
+}
+
+function dissmissNotification() {
+  var el = document.getElementById('notice');
+  el.innerHTML = '';
+  el.className('alert');
+  el.stytle.display = 'none';
+}
+
+function notify(type, message){
+  var el = document.getElementById('notice');
+  el.innerHTML = message;
+  el.classList.add('alert-' + type);
+  el.style.display = 'block';
+}
+
+function showPostActions() {
+  document.getElementById('post-actions').style.display = 'block';
+}
+
+function hidePostActions() {
+  document.getElementById('post-actions').style.display = 'block';
+}
+
+function clearContentView() {
+  document.getElementById('thePost-title').innerHTML = '';
+  document.getElementById('thePost-body').innerHTML = 'No post selected. Select one from the sidebar menu.';
+}
+
+function removeDeletedEntryFromList(id) {
+  var el = document.getElementById(id);
+  el.parentNode.removeChild(el);
 }

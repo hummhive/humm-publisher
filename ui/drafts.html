@@ -41,7 +41,9 @@
         </div>
       </div>
       <div id="content" class="col-9 px-5 mt-4">
-        <div class="toolbar float-right">
+        <div id="notice" class="alert" role="alert" style="display: none"></div>
+
+        <div id="post-actions" class="toolbar float-right" style="display: none">
           <button id="editPost" onclick="EditPost()" type="button" class="btn btn-outline-primary btn-sm">Edit</button>
           <button id="deletePost"  onclick="RemovePost()" type="button" class="btn btn-outline-dark btn-sm">Delete</button>
         </div>
