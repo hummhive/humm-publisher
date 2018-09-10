@@ -6,7 +6,7 @@
 // =============================================================================
 
 // This callback loads at the very beggining in order to load the default values
-GetPosts(page, function(obj) {
+GetPostsByTag(page, function(obj) {
 
   if(obj.length === 0)
   return;
@@ -61,6 +61,7 @@ the elements in the sidebar
 function RefreshPosts(event) {
   GetPosts(page,function(obj) {
 
+  GetPostsByTag(page,function(obj) {
     var postContent = obj.filter(val => {
       return val.hash === this.getAttribute('id');
     });

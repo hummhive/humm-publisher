@@ -50,7 +50,7 @@
                "Exposure": "public"
            },
            {
-               "Name": "GetPosts",
+               "Name": "GetPostsByTag",
                "CallingType": "json",
                "Exposure": "public"
            },

@@ -14,16 +14,16 @@ function GetPost(hash) {
   return post;
 }
 
-function GetPosts(postType) {
-  var links = getLinks(App.Agent.Hash, postType, { Load: true})
+function GetPostsByTag(tag) {
+  var links = getLinks(App.Agent.Hash, tag, { Load: true })
   var posts=[];
   links.forEach(function (element){
     var linksObject={};
-    linksObject.hash=element.Hash;
-    linksObject.title=element.Entry.title
-    linksObject.content=element.Entry.content
-    linksObject.author=element.Entry.author
-    linksObject.timestamp=element.Entry.pubdate
+    linksObject.hash = element.Hash;
+    linksObject.title = element.Entry.title;
+    linksObject.content = element.Entry.content;
+    linksObject.author = element.Entry.author;
+    linksObject.timestamp = element.Entry.pubdate;
     posts.push(linksObject);
   });
 
