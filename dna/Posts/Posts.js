@@ -45,7 +45,7 @@ function DeletePost(post) {
       }
     ]
   });
-  return true;
+  return post.hash;
 }
 
 function EditPost(post) {
