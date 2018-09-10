@@ -1,7 +1,7 @@
 'use strict';
 
 function CreatePost(content) {
-  var post = PostType(content.type);
+  var post = GetPostType(content.type);
   content.pubdate = new Date();
   content.author = App.Agent.String;
   var postHash = commit(post.type, content);
@@ -30,41 +30,53 @@ function GetPostsByTag(tag) {
   return posts;
 }
 
-function DeletePost(oldHash) {
-  var post = PostType(oldHash.type);
-  remove(oldHash.hash, oldHash.message)
-  commit(post.link,{
+function DeletePost(post) {
+  var postType = GetPostType(post.type);
+
+  remove(post.hash, post.message)
+
+  commit(postType.link,{
     Links: [
       {
         Base: App.Agent.Hash,
-        Link: oldHash.hash,
-        Tag: post.type,
+        Link: post.hash,
+        Tag: postType.type,
         LinkAction: HC.LinkAction.Del
       }
     ]
   });
-  return true
+  return post.hash;
 }
 
-function EditPost(oldHash) {
-  var post = PostType(oldHash.type);
-  oldHash.pubdate = new Date();
-  oldHash.author = App.Agent.String;
-  oldHash.message = "Deleted by Edit"; //message can be improved?
-  var hash = update(post.type, {title: oldHash.title, content: oldHash.content, pupdate: oldHash.pubdate, author: oldHash.author }, oldHash.hash)
+function EditPost(post) {
+  var postType = GetPostType(post.type);
+  post.pubdate = new Date();
+  post.author = App.Agent.String;
+  post.message = "Edited by user";
 
-  DeletePost(oldHash)
+  var hash = update(
+    postType.type,
+    {
+      title: post.title,
+      content: post.content,
+      pupdate: post.pubdate,
+      author: post.author
+    },
+    post.hash
+  );
 
-  commit(post.link, {
+  DeletePost(post)
+
+  commit(postType.link, {
     Links: [
       {
         Base: App.Agent.Hash,
         Link: hash,
-        Tag: post.type
+        Tag: postType.type
       }
     ]
   });
-  
+
   return hash
 }
 
@@ -78,18 +90,18 @@ function EditPost(oldHash) {
 * @return {object} that contains the information needed for links
 */
 
-function PostType(postType){
+function GetPostType(postType){
   var post = {};
   switch (postType)
   {
     case "draft":
-    post.type = "draft";
-    post.link = "draft_link";
-    break;
+      post.type = "draft";
+      post.link = "draft_link";
+      break;
     case "publish":
-    post.type = "publish";
-    post.link = "publish_link";
-    break;
+      post.type = "publish";
+      post.link = "publish_link";
+      break;
   }
   return post;
 }
