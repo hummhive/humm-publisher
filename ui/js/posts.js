@@ -133,7 +133,7 @@ function showPostActions() {
 }
 
 function hidePostActions() {
-  document.getElementById('post-actions').style.display = 'block';
+  document.getElementById('post-actions').style.display = 'none';
 }
 
 function clearContentView() {
