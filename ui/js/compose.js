@@ -1,4 +1,4 @@
-// init
+// Startup
 // =============================================================================
 
 var editor = new MediumEditor('#editor', {
@@ -6,82 +6,102 @@ var editor = new MediumEditor('#editor', {
   anchor: { targetCheckbox: true }
 });
 
-draft()
-publish()
+// action buttons
+var btnSaveDraft = document.getElementById("saveDraft");
+var btnPublish = document.getElementById("publishPost");
 
-// Helper
+init();
 
+// Functions
+// =============================================================================
+
+function init() {
+  if(getParameterByName('entry')){
+    // Context is editing a post
+    setUpPostEditing();
+  } else {
+    // Context is creating a post
+    setupPostCreation();
+  }
+}
+
+// Get query string parameter by name
 function getParameterByName(name) {
   var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
   return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
 
-// Draft Functions
-// =============================================================================
-
-/* This function does the following
-1) It checks if the query string entry exist, the expected value is a hash-string
-2) If the entry exist, the value is sent to the Holochain
-3) If the hash doesn't exist
-*/
-
-function draft(){
-
-  if(getParameterByName('entry')){
-
-    GetPost(getParameterByName('entry'), function(obj) {
-
-      if(obj === null)
-      return;
-
-      document.getElementById('title').value = obj.title;
-      editor.setContent(obj.content);
-
-    });
-
-    document.getElementById("saveDraft").addEventListener("click", function(event) {
-      EditPost({
-        hash: getParameterByName('entry'),
-        title: document.getElementById('title').value,
-        content: editor.getContent(),
-        type: "draft"
-      });
-
-      document.getElementById('notice').innerHTML = "Post Drafted";
-      document.getElementById('notice').style.display = "block";
-    });
-
-  } else {
-
-    document.getElementById("saveDraft").addEventListener("click", function(event) {
-      event.preventDefault();
-
-      CreatePost({
-        title: document.getElementById('title').value,
-        content: editor.getContent(),
-        type: "draft"
-      });
-
-      document.getElementById('notice').innerHTML = "Post Drafted";
-      document.getElementById('notice').style.display = "block";
-    });
-  }
+// Tell the user what's going on
+function notify(type, message){
+  var el = document.getElementById('notice')
+  el.innerHTML = message;
+  el.classList.add('alert-' + type);
+  el.style.display = "block";
 }
 
-// Publish Functions
-// =============================================================================
+// Set ups the page to create a post
+function setupPostCreation() {
+  btnSaveDraft.addEventListener("click", function(event) {
+    event.preventDefault();
 
-function publish() {
-  document.getElementById("publishPost").addEventListener("click", function(event) {
+    CreatePost({
+      title: document.getElementById('title').value,
+      content: editor.getContent(),
+      type: "draft"
+    }, function (hashOfNewPost) {
+      notify('success', 'Post has been saved as draft.');
+    });
+  });
+
+  btnPublish.addEventListener("click", function(event) {
     event.preventDefault();
 
     CreatePost({
       title: document.getElementById('title').value,
       content: editor.getContent(),
       type: "publish"
+    }, function (hashOfNewPost) {
+      notify('success', 'Post Published!');
     });
+  });
+}
 
-    document.getElementById('notice').innerHTML = "Post Published!";
-    document.getElementById('notice').style.display = "block";
+// Set ups the page to edit a post
+function setUpPostEditing() {
+  // Get the post to edit
+  GetPost(getParameterByName('entry'), function(post) {
+    if(post === null)
+    return;
+
+    // Set up the editor
+    document.getElementById('title').value = post.title;
+    editor.setContent(post.content);
+  });
+
+  // Set up the actions for save as draft and publish
+  btnSaveDraft.addEventListener("click", function(event) {
+    event.preventDefault();
+
+    EditPost({
+      hash: getParameterByName('entry'),
+      title: document.getElementById('title').value,
+      content: editor.getContent(),
+      type: "draft"
+    }, function (hashOfNewPost) {
+      notify('success', 'Post has been saved as draft.');
+    });
+  });
+
+  btnPublish.addEventListener("click", function(event) {
+    event.preventDefault();
+
+    EditPost({
+      hash: getParameterByName('entry'),
+      title: document.getElementById('title').value,
+      content: editor.getContent(),
+      type: "publish"
+    }, function (hashOfNewPost) {
+      notify('success', 'Post Published!');
+    });
   });
 }
