@@ -49,35 +49,48 @@ function DeletePost(post) {
 }
 
 function EditPost(post) {
-  var postType = GetPostType(post.type);
-  post.pubdate = new Date();
-  post.author = App.Agent.String;
-  post.message = "Edited by user";
 
-  var hash = update(
-    postType.type,
-    {
-      title: post.title,
-      content: post.content,
-      pupdate: post.pubdate,
-      author: post.author
-    },
-    post.hash
-  );
+  var postType = GetPostType(post.type); //the type who actioned the function
+  var oldEntry = GetPost(post.hash);
 
-  DeletePost(post)
+  /* Check if the hash-string is valid before processing */
+  /* TODO: Check if the hash-string contains a proper entry type */
 
-  commit(postType.link, {
-    Links: [
+  if (oldEntry !== HC.HashNotFound) {
+
+    post.pubdate = new Date();
+    post.author = App.Agent.String;
+
+    var hash = update(
+      oldEntry.type, //The original type assigned to the entry
       {
-        Base: App.Agent.Hash,
-        Link: hash,
-        Tag: postType.type
-      }
-    ]
-  });
+        title: post.title,
+        content: post.content,
+        pupdate: post.pubdate,
+        type: post.type,
+        author: post.author
+      },
+      post.hash
+    );
 
-  return hash
+    oldEntry.hash = post.hash;
+    oldEntry.message = "Deleted"; //TODO: Better Reasons if Transition or Update
+
+    DeletePost(oldEntry);
+
+    commit(postType.link, {
+      Links: [
+        {
+          Base: App.Agent.Hash,
+          Link: hash,
+          Tag: postType.type //new entry or same entry
+        }
+      ]
+    });
+    return "Post Edited!"
+  }else{
+    return "The hash you have introduced is not a valid!"
+  }
 }
 
 // -----------------------------------------------------------------
