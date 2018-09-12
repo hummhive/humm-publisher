@@ -25,16 +25,6 @@
     "pubdate": {
       "type": "string",
       "pattern": ".+"
-    },
-    "tags": {
-      "default": [
-        "user"
-      ],
-      "items": {
-        "type": "string",
-        "pattern": ".+"
-      },
-      "type": "array"
     }
   }
 }
