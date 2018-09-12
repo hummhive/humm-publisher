@@ -63,7 +63,7 @@ the elements in the sidebar
 function RefreshPosts(event) {
   dissmissNotification();
 
-  GetPostsByTag(page,function(obj) {
+  GetPostsByTag(page, function(obj) {
 
     var postContent = obj.filter(val => {
       return val.hash === this.getAttribute('id');
@@ -111,7 +111,7 @@ Edit Post
 
 function EditPost() {
  var activePost = document.querySelector(".list-group-item.active").getAttribute('id')
- window.location = '/editor?entry=' + encodeURI(activePost);
+ window.location = '/editor?update=' + encodeURI(activePost);
 }
 
 function dissmissNotification() {

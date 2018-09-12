@@ -16,13 +16,26 @@ init();
 // =============================================================================
 
 function init() {
-  if(getParameterByName('entry')){
+  if(getParameterByName('update')){
     // Context is editing a post
     setUpPostEditing();
+    messages();
   } else {
     // Context is creating a post
     setupPostCreation();
   }
+}
+
+/* This is a dummy function in order to display messages upon creating
+new posts, mostly a fallback solution for vanilla Javascript */
+
+function messages(){
+  switch (getParameterByName('status')) {
+    case "publish":
+        return notify('success', 'Post Published!');
+    case "draft":
+        return notify('success', 'Post has been saved as draft.');
+      }
 }
 
 // Get query string parameter by name
@@ -49,7 +62,7 @@ function setupPostCreation() {
       content: editor.getContent(),
       type: "draft"
     }, function (hashOfNewPost) {
-      notify('success', 'Post has been saved as draft.');
+      window.location = '/editor?update=' + encodeURI(hashOfNewPost) + '&status=draft';
     });
   });
 
@@ -61,7 +74,7 @@ function setupPostCreation() {
       content: editor.getContent(),
       type: "publish"
     }, function (hashOfNewPost) {
-      notify('success', 'Post Published!');
+      window.location = '/editor?update=' + encodeURI(hashOfNewPost) + '&status=publish';
     });
   });
 }
@@ -69,7 +82,7 @@ function setupPostCreation() {
 // Set ups the page to edit a post
 function setUpPostEditing() {
   // Get the post to edit
-  GetPost(getParameterByName('entry'), function(post) {
+  GetPost(getParameterByName('update'), function(post) {
     if(post === null)
     return;
 
@@ -83,7 +96,7 @@ function setUpPostEditing() {
     event.preventDefault();
 
     EditPost({
-      hash: getParameterByName('entry'),
+      hash: getParameterByName('update'),
       title: document.getElementById('title').value,
       content: editor.getContent(),
       type: "draft"
@@ -96,7 +109,7 @@ function setUpPostEditing() {
     event.preventDefault();
 
     EditPost({
-      hash: getParameterByName('entry'),
+      hash: getParameterByName('update'),
       title: document.getElementById('title').value,
       content: editor.getContent(),
       type: "publish"
