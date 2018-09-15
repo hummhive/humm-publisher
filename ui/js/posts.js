@@ -6,10 +6,10 @@
 // =============================================================================
 
 // This callback loads at the very beggining in order to load the default values
-GetPostsByTag(page, function(obj) {
+GetPostsByStatus(status, function(obj) {
 
   if(obj.length === 0)
-    return;
+  return;
 
   //Sort Timestamps by Newest
   obj = obj.sort(function(a,b){
@@ -22,14 +22,14 @@ GetPostsByTag(page, function(obj) {
   var postSidebar = obj.map((post, index) => {
     if (index == 0) {
       return `<a id="${post.hash}" href="#"
-                class="list-group-item list-group-item-action align-items-start active">
-                  <h5 class="mb-1">${post.title}</h5><small>${moment(post.timestamp).format('MMMM D, YYYY [at] h:mm A z')}</small>
-              </a>`;
+      class="list-group-item list-group-item-action align-items-start active">
+      <h5 class="mb-1">${post.title}</h5><small>${moment(post.timestamp).format('MMMM D, YYYY [at] h:mm A z')}</small>
+      </a>`;
     } else {
       return `<a id="${post.hash}" href="#"
-                class="list-group-item list-group-item-action align-items-start">
-                  <h5 class="mb-1">${post.title}</h5><small>${moment(post.timestamp).format('MMMM D, YYYY [at] h:mm A z')}</small>
-              </a>`;
+      class="list-group-item list-group-item-action align-items-start">
+      <h5 class="mb-1">${post.title}</h5><small>${moment(post.timestamp).format('MMMM D, YYYY [at] h:mm A z')}</small>
+      </a>`;
     }
   }).join('');
 
@@ -46,7 +46,7 @@ GetPostsByTag(page, function(obj) {
   showPostActions();
 
   /* This variable is going to hold the dynamic elements inserted in the sidebar
-   in order to attach the addEventListener to each one*/
+  in order to attach the addEventListener to each one*/
   var postsItems = document.getElementsByClassName("list-group-item");
 
   /* Attaching the addEventListener here allow us to append it to every element
@@ -63,7 +63,7 @@ the elements in the sidebar
 function RefreshPosts(event) {
   dissmissNotification();
 
-  GetPostsByTag(page, function(obj) {
+  GetPostsByStatus(status, function(obj) {
 
     var postContent = obj.filter(val => {
       return val.hash === this.getAttribute('id');
@@ -73,7 +73,7 @@ function RefreshPosts(event) {
 
     // Check if it wasn't removed by removeDeletedEntryFromList()
     if (removeActiveElement)
-      removeActiveElement.classList.remove("active");
+    removeActiveElement.classList.remove("active");
 
     var getActiveElement = document.getElementById(this.getAttribute('id'))
     getActiveElement.classList.add("active");
@@ -95,10 +95,11 @@ function RemovePost() {
 
   DeletePost({
     hash: activePost,
-    message: "deleted by user",
-    type: page
+    status: status
   }, function (deletedHash) {
-    notify('success', 'Post deleted.');
+    status !== "trash" ?
+    notify('success', 'Post sent to the trash.') :
+    notify('success', 'Post Deleted.');
     hidePostActions();
     clearContentView();
     removeDeletedEntryFromList(deletedHash);
@@ -110,8 +111,8 @@ Edit Post
 */
 
 function EditPost() {
- var activePost = document.querySelector(".list-group-item.active").getAttribute('id')
- window.location = '/editor?update=' + encodeURI(activePost);
+  var activePost = document.querySelector(".list-group-item.active").getAttribute('id')
+  window.location = '/editor?update=' + encodeURI(activePost);
 }
 
 function dissmissNotification() {
@@ -121,10 +122,10 @@ function dissmissNotification() {
   el.style.display = 'none';
 }
 
-function notify(type, message){
+function notify(status, message){
   var el = document.getElementById('notice');
   el.innerHTML = message;
-  el.classList.add('alert-' + type);
+  el.classList.add('alert-' + status);
   el.style.display = 'block';
 }
 

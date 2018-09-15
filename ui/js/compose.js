@@ -32,10 +32,10 @@ new posts, mostly a fallback solution for vanilla Javascript */
 function messages(){
   switch (getParameterByName('status')) {
     case "publish":
-        return notify('success', 'Post Published!');
+    return notify('success', 'Post Published!');
     case "draft":
-        return notify('success', 'Post has been saved as draft.');
-      }
+    return notify('success', 'Post has been saved as draft.');
+  }
 }
 
 // Get query string parameter by name
@@ -45,10 +45,10 @@ function getParameterByName(name) {
 }
 
 // Tell the user what's going on
-function notify(type, message){
+function notify(status, message){
   var el = document.getElementById('notice')
   el.innerHTML = message;
-  el.classList.add('alert-' + type);
+  el.classList.add('alert-' + status);
   el.style.display = "block";
 }
 
@@ -60,7 +60,7 @@ function setupPostCreation() {
     CreatePost({
       title: document.getElementById('title').value,
       content: editor.getContent(),
-      type: "draft"
+      status: "draft"
     }, function (hashOfNewPost) {
       window.location = '/editor?update=' + encodeURI(hashOfNewPost) + '&status=draft';
     });
@@ -72,7 +72,7 @@ function setupPostCreation() {
     CreatePost({
       title: document.getElementById('title').value,
       content: editor.getContent(),
-      type: "publish"
+      status: "publish"
     }, function (hashOfNewPost) {
       window.location = '/editor?update=' + encodeURI(hashOfNewPost) + '&status=publish';
     });
@@ -99,7 +99,7 @@ function setUpPostEditing() {
       hash: getParameterByName('update'),
       title: document.getElementById('title').value,
       content: editor.getContent(),
-      type: "draft"
+      status: "draft"
     }, function (hashOfNewPost) {
       notify('success', 'Post has been saved as draft.');
     });
@@ -112,7 +112,7 @@ function setUpPostEditing() {
       hash: getParameterByName('update'),
       title: document.getElementById('title').value,
       content: editor.getContent(),
-      type: "publish"
+      status: "publish"
     }, function (hashOfNewPost) {
       notify('success', 'Post Published!');
     });
