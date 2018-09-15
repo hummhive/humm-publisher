@@ -18,11 +18,15 @@
       "type": "string",
       "pattern": ".+"
     },
-    "type": {
+    "status": {
       "type": "string",
       "pattern": ".+"
     },
     "pubdate": {
+      "type": "string",
+      "pattern": ".+"
+    },
+    "lastupdate": {
       "type": "string",
       "pattern": ".+"
     }
