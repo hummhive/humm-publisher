@@ -40,9 +40,9 @@ function GetPost(hash, callback) {
   xhr.send(data)
 }
 
-function GetPostsByTag(entry, callback) {
+function GetPostsByStatus(entry, callback) {
   var xhr = new XMLHttpRequest()
-  var url = '/fn/Posts/GetPostsByTag'
+  var url = '/fn/Posts/GetPostsByStatus'
   xhr.open('POST', url, true)
   xhr.setRequestHeader('Content-type', 'application/json')
   xhr.onreadystatechange = function () {
