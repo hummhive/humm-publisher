@@ -21,24 +21,13 @@
        "RibosomeType": "js",
        "Entries": [
            {
-               "Name": "draft",
+               "Name": "post",
                "DataFormat": "json",
                "SchemaFile": "Posts.json",
                "Sharing": "public"
            },
            {
-               "Name": "draft_link",
-               "DataFormat": "links",
-               "Sharing":"public"
-           },
-           {
-               "Name": "publish",
-               "DataFormat": "json",
-               "SchemaFile": "Posts.json",
-               "Sharing": "public"
-           },
-           {
-               "Name": "publish_link",
+               "Name": "post_link",
                "DataFormat": "links",
                "Sharing":"public"
            }
@@ -50,7 +39,7 @@
                "Exposure": "public"
            },
            {
-               "Name": "GetPostsByTag",
+               "Name": "GetPostsByStatus",
                "CallingType": "json",
                "Exposure": "public"
            },
