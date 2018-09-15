@@ -5,6 +5,7 @@
   <title>Published posts - Humm Publisher</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">  <style>
   <style>
   .bd-navbar {
     min-height: 4rem;
@@ -14,7 +15,7 @@
   }
   </style>
   <script>
-  var page = "publish";
+  var status = "publish";
   </script>
 </head>
 <body>
@@ -30,10 +31,13 @@
               <a class="nav-link active" href="#">Published</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/drafts.html">Drafts</a>
+              <a class="nav-link" href="drafts.html">Drafts</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/editor/">Compose</a>
+              <a class="nav-link" href="trash.html"><i class="fas fa-trash"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/editor/"><i class="fas fa-edit"></i></a>
             </li>
           </ul>
           <div id="post-list" class="list-group list-group-flush">
@@ -45,7 +49,7 @@
 
         <div id="post-actions" class="toolbar float-right" style="display: none">
           <button id="editPost" onclick="EditPost()" type="button" class="btn btn-outline-primary btn-sm">Edit</button>
-          <button id="deletePost"  onclick="RemovePost()" type="button" class="btn btn-outline-dark btn-sm">Delete</button>
+          <button id="deletePost"  onclick="RemovePost()" type="button" class="btn btn-outline-dark btn-sm">Trash</button>
         </div>
         <h1 id="thePost-title"></h1>
         <div id="thePost-body"></div>
