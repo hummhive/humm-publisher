@@ -118,3 +118,4 @@ typings/
 
 agent.txt
 priv.key
+db/
