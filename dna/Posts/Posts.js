@@ -113,6 +113,10 @@ function genesis () {
   return true;
 }
 
+function bridgeGenesis() {
+  return true
+}
+
 // -----------------------------------------------------------------
 //  Validation functions for every change to the local chain or DHT
 // -----------------------------------------------------------------

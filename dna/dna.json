@@ -18,6 +18,7 @@
        "Name": "Posts",
        "Description": "Sign and Publish Posts locally or in the DHT",
        "CodeFile": "Posts.js",
+       "BridgeFuncs": ["CreatePost", "GetPostsByStatus"],
        "RibosomeType": "js",
        "Entries": [
            {
@@ -55,6 +56,11 @@
            },
            {
                "Name": "EditPost",
+               "CallingType": "json",
+               "Exposure": "public"
+           },
+           {
+               "Name": "bridgeTest",
                "CallingType": "json",
                "Exposure": "public"
            }
