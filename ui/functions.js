@@ -1,6 +1,6 @@
 function CreatePost(entry, callback) {
   var xhr = new XMLHttpRequest()
-  var url = '/fn/Posts/CreatePost'
+  var url = '../fn/Posts/CreatePost'
   xhr.open('POST', url, true)
   xhr.setRequestHeader('Content-type', 'application/json')
   xhr.onreadystatechange = function () {
@@ -14,7 +14,7 @@ function CreatePost(entry, callback) {
 
 function DeletePost(entry, callback) {
   var xhr = new XMLHttpRequest()
-  var url = '/fn/Posts/DeletePost'
+  var url = '../fn/Posts/DeletePost'
   xhr.open('POST', url, true)
   xhr.setRequestHeader('Content-type', 'application/json')
   xhr.onreadystatechange = function () {
@@ -28,7 +28,7 @@ function DeletePost(entry, callback) {
 
 function GetPost(hash, callback) {
   var xhr = new XMLHttpRequest()
-  var url = '/fn/Posts/GetPost'
+  var url = '../fn/Posts/GetPost'
   xhr.open('POST', url, true)
   xhr.setRequestHeader('Content-type', 'application/json')
   xhr.onreadystatechange = function () {
@@ -42,7 +42,7 @@ function GetPost(hash, callback) {
 
 function GetPostsByStatus(entry, callback) {
   var xhr = new XMLHttpRequest()
-  var url = '/fn/Posts/GetPostsByStatus'
+  var url = '../fn/Posts/GetPostsByStatus'
   xhr.open('POST', url, true)
   xhr.setRequestHeader('Content-type', 'application/json')
   xhr.onreadystatechange = function () {
@@ -56,7 +56,7 @@ function GetPostsByStatus(entry, callback) {
 
 function EditPost(entry, callback) {
   var xhr = new XMLHttpRequest()
-  var url = '/fn/Posts/EditPost'
+  var url = '../fn/Posts/EditPost'
   xhr.open('POST', url, true)
   xhr.setRequestHeader('Content-type', 'application/json')
   xhr.onreadystatechange = function () {

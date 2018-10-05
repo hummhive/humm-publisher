@@ -62,7 +62,7 @@ function setupPostCreation() {
       content: editor.getContent(),
       status: "draft"
     }, function (hashOfNewPost) {
-      window.location = '/editor?update=' + encodeURI(hashOfNewPost) + '&status=draft';
+      window.location = '?update=' + encodeURI(hashOfNewPost) + '&status=draft';
     });
   });
 
@@ -74,7 +74,7 @@ function setupPostCreation() {
       content: editor.getContent(),
       status: "publish"
     }, function (hashOfNewPost) {
-      window.location = '/editor?update=' + encodeURI(hashOfNewPost) + '&status=publish';
+      window.location = '?update=' + encodeURI(hashOfNewPost) + '&status=publish';
     });
   });
 }
