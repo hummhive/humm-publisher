@@ -11,6 +11,9 @@ function CreatePost(content) {
   content.author = App.Agent.String;
   var postHash = commit(POST_TAG, content);
   commit(POST_LINK,{Links:[{Base: App.Agent.Hash,Link: postHash,Tag: POST_TAG}]});
+  if(content.status == "publish"){ //This should be a default until we get a licensing system
+  commit(POST_LINK,{Links:[{Base: anchor("posts", "public"),Link: postHash,Tag: POST_TAG}]});
+  }
   return postHash;
 }
 
@@ -19,9 +22,32 @@ function GetPost(hash) {
   return post;
 }
 
-function GetPostsByStatus(status) {
+function GetPublicPosts(param) {
+
+  var links = getLinks(anchor("posts", "public"), POST_TAG, { Load: true})
+
+  var posts=[];
+
+  links.forEach(function (element){
+    var linksObject={};
+    if(element.Entry.status == status){
+      linksObject.hash = element.Hash;
+      linksObject.title = element.Entry.title;
+      linksObject.content = element.Entry.content;
+      linksObject.author = element.Entry.author;
+      linksObject.status = element.Entry.status;
+      linksObject.timestamp = element.Entry.pubdate;
+      posts.push(linksObject);
+    }
+  });
+
+  return posts;
+}
+
+function GetPostsByStatus(status, condition) {
 
   var links = getLinks(App.Agent.Hash, POST_TAG, { Load: true})
+
   var posts=[];
 
   links.forEach(function (element){
@@ -60,7 +86,7 @@ function DeletePost(post) {
       ]
     });
   }
-  return true;
+  return post.hash;
 }
 
 function EditPost(post) {
@@ -95,6 +121,11 @@ function EditPost(post) {
         }
       ]
     });
+
+    if(post.status == "publish"){
+      commit(POST_LINK,{Links:[{Base: anchor("posts", "public"),Link: hash,Tag: POST_TAG}]});
+    }
+
     return "Post Edited!"
   }else{
     return "The hash you have introduced is not a valid!"
@@ -111,6 +142,24 @@ function EditPost(post) {
 */
 function genesis () {
   return true;
+}
+
+function bridgeGenesis() {
+  return true
+}
+
+function anchor(anchorType, anchorText) {
+  return call('anchors', 'anchor', {
+    anchorType: anchorType,
+    anchorText: anchorText
+  }).replace(/"/g, '');
+}
+
+function anchorExists(anchorType, anchorText) {
+  return call('anchors', 'exists', {
+    anchorType: anchorType,
+    anchorText: anchorText
+  });
 }
 
 // -----------------------------------------------------------------
