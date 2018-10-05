@@ -3,7 +3,9 @@
   "id": "http://example.com/publish/article.json",
   "type": "object",
   "required": [
-    "title"
+    "title",
+    "status",
+    "content"
   ],
   "properties": {
     "title": {
