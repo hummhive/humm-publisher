@@ -10,9 +10,10 @@ function CreatePost(content) {
   content.pubdate = new Date();
   content.author = App.Agent.String;
   var postHash = commit(POST_TAG, content);
-  commit(POST_LINK,{Links:[{Base: App.Agent.Hash,Link: postHash,Tag: POST_TAG}]});
-  if(content.status == "publish"){ //This should be a default until we get a licensing system
-  commit(POST_LINK,{Links:[{Base: anchor("posts", "public"),Link: postHash,Tag: POST_TAG}]});
+  if(content.status === "publish"){
+    commit(POST_LINK,{Links:[{Base: anchor("posts", "public"),Link: postHash,Tag: POST_TAG}]});
+  }else{
+    commit(POST_LINK,{Links:[{Base: App.Agent.Hash,Link: postHash,Tag: POST_TAG}]});
   }
   return postHash;
 }
@@ -22,15 +23,11 @@ function GetPost(hash) {
   return post;
 }
 
-function GetPublicPosts(param) {
-
+function GetPublicPosts() {
   var links = getLinks(anchor("posts", "public"), POST_TAG, { Load: true})
-
   var posts=[];
-
   links.forEach(function (element){
     var linksObject={};
-    if(element.Entry.status == status){
       linksObject.hash = element.Hash;
       linksObject.title = element.Entry.title;
       linksObject.content = element.Entry.content;
@@ -38,18 +35,15 @@ function GetPublicPosts(param) {
       linksObject.status = element.Entry.status;
       linksObject.timestamp = element.Entry.pubdate;
       posts.push(linksObject);
-    }
   });
-
   return posts;
 }
 
 function GetPostsByStatus(status, condition) {
-
-  var links = getLinks(App.Agent.Hash, POST_TAG, { Load: true})
-
+  var getPostsbyAgent = getLinks(App.Agent.Hash, POST_TAG, { Load: true})
+  var getPublicPosts = getLinks(anchor("posts", "public"), POST_TAG, { Load: true})
+  var links = getPostsbyAgent.concat(getPublicPosts)
   var posts=[];
-
   links.forEach(function (element){
     var linksObject={};
     if(element.Entry.status == status){
@@ -62,18 +56,12 @@ function GetPostsByStatus(status, condition) {
       posts.push(linksObject);
     }
   });
-
   return posts;
 }
 
 function DeletePost(post) {
-  if(post.status !== "trash"){
-    var oldEntry = GetPost(post.hash);
-    oldEntry.hash = post.hash;
-    oldEntry.status = "trash";
-    oldEntry.message = "Sent to the Trash";
-    oldEntry.lastupdate = new Date();
-    EditPost(oldEntry);
+  if(post.prevStat == "publish"){
+    commit(POST_LINK,{Links:[{Base: anchor("posts", "public"),Link: post.hash,Tag: POST_TAG,LinkAction: HC.LinkAction.Del}]});
   }else{
     commit(POST_LINK,{
       Links: [
@@ -96,7 +84,6 @@ function EditPost(post) {
   /* Check if the hash-string is valid before processing */
 
   if (oldEntry !== HC.HashNotFound) {
-
     var hash = update(
       POST_TAG,
       {
@@ -110,22 +97,28 @@ function EditPost(post) {
       post.hash
     );
 
+    post.prevStat = oldEntry.status
     DeletePost(post);
 
-    commit(POST_LINK, {
-      Links: [
-        {
-          Base: App.Agent.Hash,
+    if(post.status == "publish"){
+      commit(POST_LINK,{
+        Links:[
+          {Base: anchor("posts", "public"),
           Link: hash,
           Tag: POST_TAG
-        }
-      ]
-    });
-
-    if(post.status == "publish"){
-      commit(POST_LINK,{Links:[{Base: anchor("posts", "public"),Link: hash,Tag: POST_TAG}]});
+        }]
+      });
+    }else{
+      commit(POST_LINK, {
+        Links: [
+          {
+            Base: App.Agent.Hash,
+            Link: hash,
+            Tag: POST_TAG
+          }
+        ]
+      });
     }
-
     return "Post Edited!"
   }else{
     return "The hash you have introduced is not a valid!"
