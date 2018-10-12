@@ -1,47 +1,49 @@
 'use strict';
 
 /* Define Constants */
-var POST_TAG = "post";
-var POST_LINK = "post_link";
+
+var POSTS_TAG = "post";
+var TAGS = "tags"
+var POSTS_LINK = "post_link";
+var TAGS_LINK = "tag_link";
 
 /* Public Exposed Functions */
 
 function CreatePost(content) {
   content.pubdate = new Date();
   content.author = App.Agent.String;
-  var postHash = commit(POST_TAG, content);
-  if(content.status === "publish"){
-    commit(POST_LINK,{Links:[{Base: anchor("posts", "public"),Link: postHash,Tag: POST_TAG}]});
-  }else{
-    commit(POST_LINK,{Links:[{Base: App.Agent.Hash,Link: postHash,Tag: POST_TAG}]});
-  }
+  var postHash = commit(POSTS_TAG, content);
+  CreatePostLinks(content, postHash)
+  if ("tags" in content)
+  CreateTags(content, postHash)
   return postHash;
 }
 
-function GetPost(hash) {
-  var post = get(hash)
-  return post;
-}
-
-function GetPublicPosts() {
-  var links = getLinks(anchor("posts", "public"), POST_TAG, { Load: true})
+function GetPublicPosts(query) {
+  if(typeof query !== "undefined"){
+    var links = getLinks(anchor("tags", query.tag), TAGS, { Load: true})
+    debug(links)
+  }else{
+    var links = getLinks(anchor("posts", "public"), POSTS_TAG, { Load: true})
+  }
   var posts=[];
   links.forEach(function (element){
     var linksObject={};
-      linksObject.hash = element.Hash;
-      linksObject.title = element.Entry.title;
-      linksObject.content = element.Entry.content;
-      linksObject.author = element.Entry.author;
-      linksObject.status = element.Entry.status;
-      linksObject.timestamp = element.Entry.pubdate;
-      posts.push(linksObject);
+    linksObject.hash = element.Hash;
+    linksObject.title = element.Entry.title;
+    linksObject.content = element.Entry.content;
+    linksObject.author = element.Entry.author;
+    linksObject.status = element.Entry.status;
+    linksObject.tags = element.Entry.tags;
+    linksObject.timestamp = element.Entry.pubdate;
+    posts.push(linksObject);
   });
   return posts;
 }
 
 function GetPostsByStatus(status, condition) {
-  var getPostsbyAgent = getLinks(App.Agent.Hash, POST_TAG, { Load: true})
-  var getPublicPosts = getLinks(anchor("posts", "public"), POST_TAG, { Load: true})
+  var getPostsbyAgent = getLinks(App.Agent.Hash, POSTS_TAG, { Load: true})
+  var getPublicPosts = getLinks(anchor("posts", "public"), POSTS_TAG, { Load: true})
   var links = getPostsbyAgent.concat(getPublicPosts)
   var posts=[];
   links.forEach(function (element){
@@ -52,6 +54,7 @@ function GetPostsByStatus(status, condition) {
       linksObject.content = element.Entry.content;
       linksObject.author = element.Entry.author;
       linksObject.status = element.Entry.status;
+      linksObject.tags = element.Entry.tags;
       linksObject.timestamp = element.Entry.pubdate;
       posts.push(linksObject);
     }
@@ -60,70 +63,76 @@ function GetPostsByStatus(status, condition) {
 }
 
 function DeletePost(post) {
-  if(post.prevStat == "publish"){
-    commit(POST_LINK,{Links:[{Base: anchor("posts", "public"),Link: post.hash,Tag: POST_TAG,LinkAction: HC.LinkAction.Del}]});
-  }else{
-    commit(POST_LINK,{
-      Links: [
-        {
-          Base: App.Agent.Hash,
-          Link: post.hash,
-          Tag: POST_TAG,
-          LinkAction: HC.LinkAction.Del
-        }
-      ]
-    });
-  }
-  return post.hash;
-}
-
-function EditPost(post) {
-
-  var oldEntry = GetPost(post.hash);
-
-  /* Check if the hash-string is valid before processing */
-
-  if (oldEntry !== HC.HashNotFound) {
-    var hash = update(
-      POST_TAG,
-      {
-        title: post.title,
-        content: post.content,
-        pupdate: oldEntry.pubdate,
-        lastupdate: new Date(),
-        status: post.status,
-        author: oldEntry.author
-      },
-      post.hash
-    );
-
-    post.prevStat = oldEntry.status
-    DeletePost(post);
-
-    if(post.status == "publish"){
-      commit(POST_LINK,{
-        Links:[
-          {Base: anchor("posts", "public"),
-          Link: hash,
-          Tag: POST_TAG
-        }]
-      });
+  if (post.hash !== HC.HashNotFound) {
+    if(post.prevState === "publish" || !post.prevState in post && post.status === "publish"){
+      commit(POSTS_LINK,{Links:[{Base: anchor("posts", "public"),Link: post.hash,Tag: POSTS_TAG,LinkAction: HC.LinkAction.Del}]});
     }else{
-      commit(POST_LINK, {
+      commit(POSTS_LINK,{
         Links: [
           {
             Base: App.Agent.Hash,
-            Link: hash,
-            Tag: POST_TAG
+            Link: post.hash,
+            Tag: POSTS_TAG,
+            LinkAction: HC.LinkAction.Del
           }
         ]
       });
     }
-    return "Post Edited!"
+    UnlinkPostFromTags(post.hash);
+    remove(post.hash, "post deleted by agent");
+    return "Post Deleted";
+  }else{
+    return "Hash not found!"
+  }
+}
+
+function EditPost(post) {
+  if (post.hash !== HC.HashNotFound) {
+    var prevState = get(post.hash)
+    var newState = {title: post.title, content: post.content, author: post.author, tags: post.tags, status: post.status}
+    post.prevState = prevState.status
+    try{
+      var newPost = CreatePost(newState)
+    } catch (exception) {
+      debug("Error committing links " + exception);
+      return post.hash;
+    }
+    DeletePost(post, prevState);
+    return newPost
   }else{
     return "The hash you have introduced is not a valid!"
   }
 }
+
+/* Helpers Functions / Private - Non Exposed */
+
+function GetPost(hash) {
+  var post = get(hash)
+  return post;
+}
+
+function CreatePostLinks(content, postHash){
+  if(content.status === "publish"){
+    commit(POSTS_LINK,{Links:[{Base: anchor("posts", "public"),Link: postHash,Tag: POSTS_TAG}]});
+  }else{
+    commit(POSTS_LINK,{Links:[{Base: App.Agent.Hash,Link: postHash,Tag: POSTS_TAG}]});
+  }
+}
+
+function UnlinkPostFromTags(postHash){
+  var post = GetPost(postHash)
+  post.tags.forEach(function (element){
+  commit(TAGS_LINK,{Links:[{Base: anchor("tags", element),Link: postHash,Tag: TAGS,LinkAction: HC.LinkAction.Del}]});
+  })
+}
+
+function CreateTags(content, postHash){
+  content.tags.forEach(function (tag){
+    debug(tag)
+    commit(TAGS_LINK,{Links:[{Base: anchor("tags", tag),Link: postHash,Tag:TAGS}]});
+  })
+}
+
 
 // -----------------------------------------------------------------
 //  The Genesis Function https://developer.holochain.org/genesis
@@ -140,6 +149,10 @@ function genesis () {
 function bridgeGenesis() {
   return true
 }
+
+// -----------------------------------------------------------------
+//  Mixins
+// -----------------------------------------------------------------
 
 function anchor(anchorType, anchorText) {
   return call('anchors', 'anchor', {
@@ -170,8 +183,9 @@ function anchorExists(anchorType, anchorText) {
 */
 function validateCommit (entryName, entry, header, pkg, sources) {
   switch (entryName) {
-    case POST_TAG:
-    case POST_LINK:
+    case POSTS_TAG:
+    case POSTS_LINK:
+    case TAGS_LINK:
     // be sure to consider many edge cases for validating
     // do not just flip this to true without considering what that means
     // the action will ONLY be successfull if this returns true, so watch out!
@@ -194,8 +208,9 @@ function validateCommit (entryName, entry, header, pkg, sources) {
 */
 function validatePut (entryName, entry, header, pkg, sources) {
   switch (entryName) {
-    case POST_TAG:
-    case POST_LINK:
+    case POSTS_TAG:
+    case POSTS_LINK:
+    case TAGS_LINK:
     // be sure to consider many edge cases for validating
     // do not just flip this to true without considering what that means
     // the action will ONLY be successfull if this returns true, so watch out!
@@ -218,8 +233,9 @@ function validatePut (entryName, entry, header, pkg, sources) {
 */
 function validateMod (entryName, entry, header, replaces, pkg, sources) {
   switch (entryName) {
-    case POST_TAG:
-    case POST_LINK:
+    case POSTS_TAG:
+    case POSTS_LINK:
+    case TAGS_LINK:
     // be sure to consider many edge cases for validating
     // do not just flip this to true without considering what that means
     // the action will ONLY be successfull if this returns true, so watch out!
@@ -240,8 +256,9 @@ function validateMod (entryName, entry, header, replaces, pkg, sources) {
 */
 function validateDel (entryName, hash, pkg, sources) {
   switch (entryName) {
-    case POST_TAG:
-    case POST_LINK:
+    case POSTS_TAG:
+    case POSTS_LINK:
+    case TAGS_LINK:
     // be sure to consider many edge cases for validating
     // do not just flip this to true without considering what that means
     // the action will ONLY be successfull if this returns true, so watch out!
@@ -263,8 +280,9 @@ function validateDel (entryName, hash, pkg, sources) {
 */
 function validateLink (entryName, baseHash, links, pkg, sources) {
   switch (entryName) {
-    case POST_TAG:
-    case POST_LINK:
+    case POSTS_TAG:
+    case POSTS_LINK:
+    case TAGS_LINK:
     // be sure to consider many edge cases for validating
     // do not just flip this to true without considering what that means
     // the action will ONLY be successfull if this returns true, so watch out!

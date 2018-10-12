@@ -24,13 +24,13 @@
       "type": "string",
       "pattern": ".+"
     },
-    "pubdate": {
+    "status": {
       "type": "string",
       "pattern": ".+"
     },
-    "lastupdate": {
-      "type": "string",
-      "pattern": ".+"
+    "tags": {
+      "type": "array",
+      "items": {}
     }
   }
 }
