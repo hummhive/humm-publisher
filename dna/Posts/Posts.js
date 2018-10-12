@@ -12,13 +12,13 @@ var TAGS_LINK = "tag_link";
 function CreatePost(content) {
   content.pubdate = new Date();
   content.author = App.Agent.String;
+  content.tags = JSON.parse(JSON.stringify(content.tags).replace(/"\s+|\s+"/g,'"'))
   var postHash = commit(POSTS_TAG, content);
   CreatePostLinks(content, postHash)
   if ("tags" in content)
   CreateTags(content, postHash)
   return postHash;
 }
-
 function GetPublicPosts(query) {
   if(typeof query !== "undefined"){
     var links = getLinks(anchor("tags", query.tag), TAGS, { Load: true})
@@ -127,7 +127,7 @@ function UnlinkPostFromTags(postHash){
 
 function CreateTags(content, postHash){
   content.tags.forEach(function (tag){
-    commit(TAGS_LINK,{Links:[{Base: anchor("tags", tag),Link: postHash,Tag:TAGS}]});
+    commit(TAGS_LINK,{Links:[{Base: anchor("tags", tag.replace(/\s+/g, '')),Link: postHash,Tag:TAGS}]});
   })
 }
 
