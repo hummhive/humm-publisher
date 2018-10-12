@@ -97,12 +97,10 @@ function RemovePost() {
     hash: activePost,
     status: status
   }, function (deletedHash) {
-    status !== "trash" ?
-    notify('success', 'Post sent to the trash.') :
     notify('success', 'Post Deleted.');
     hidePostActions();
     clearContentView();
-    removeDeletedEntryFromList(deletedHash);
+    removeDeletedEntryFromList(activePost);
   });
 }
 

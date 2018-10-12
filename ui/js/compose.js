@@ -59,6 +59,7 @@ function setupPostCreation() {
 
     CreatePost({
       title: document.getElementById('title').value,
+      tags: document.getElementById('tags').value.split(','),
       content: editor.getContent(),
       status: "draft"
     }, function (hashOfNewPost) {
@@ -71,6 +72,7 @@ function setupPostCreation() {
 
     CreatePost({
       title: document.getElementById('title').value,
+      tags: document.getElementById('tags').value.split(','),
       content: editor.getContent(),
       status: "publish"
     }, function (hashOfNewPost) {
@@ -88,6 +90,7 @@ function setUpPostEditing() {
 
     // Set up the editor
     document.getElementById('title').value = post.title;
+    document.getElementById('tags').value = post.tags;
     editor.setContent(post.content);
   });
 
@@ -98,10 +101,11 @@ function setUpPostEditing() {
     EditPost({
       hash: getParameterByName('update'),
       title: document.getElementById('title').value,
+      tags: document.getElementById('tags').value.split(','),
       content: editor.getContent(),
       status: "draft"
     }, function (hashOfNewPost) {
-      notify('success', 'Post has been saved as draft.');
+      window.location = '?update=' + encodeURI(hashOfNewPost) + '&status=draft';
     });
   });
 
@@ -111,10 +115,11 @@ function setUpPostEditing() {
     EditPost({
       hash: getParameterByName('update'),
       title: document.getElementById('title').value,
+      tags: document.getElementById('tags').value.split(','),
       content: editor.getContent(),
       status: "publish"
     }, function (hashOfNewPost) {
-      notify('success', 'Post Published!');
+      window.location = '?update=' + encodeURI(hashOfNewPost) + '&status=publish';
     });
   });
 }
