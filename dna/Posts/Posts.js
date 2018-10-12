@@ -64,7 +64,6 @@ function GetPostsByStatus(status, condition) {
 function DeletePost(post) {
   if (post.hash !== HC.HashNotFound) {
     if(post.prevState === "publish" || !("prevState" in post) && post.status === "publish"){
-      debug("test")
       commit(POSTS_LINK,{Links:[{Base: anchor("posts", "public"),Link: post.hash,Tag: POSTS_TAG,LinkAction: HC.LinkAction.Del}]});
     }else{
       commit(POSTS_LINK,{
