@@ -54,6 +54,20 @@ function GetPostsByStatus(entry, callback) {
   xhr.send(data)
 }
 
+function GetPostsWithTags(entry, callback) {
+  var xhr = new XMLHttpRequest()
+  var url = '../fn/Posts/GetPostsWithTags'
+  xhr.open('POST', url, true)
+  xhr.setRequestHeader('Content-type', 'application/json')
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      callback(JSON.parse(xhr.responseText))
+    }
+  }
+  var data = JSON.stringify(entry)
+  xhr.send(data)
+}
+
 function GetPublicPosts(entry, callback) {
   var xhr = new XMLHttpRequest()
   var url = '../fn/Posts/GetPublicPosts'
