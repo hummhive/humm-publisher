@@ -27,35 +27,33 @@ function GetPublicPosts(query) {
   }
   var posts=[];
   links.forEach(function (element){
-    var linksObject={};
-    linksObject.hash = element.Hash;
-    linksObject.title = element.Entry.title;
-    linksObject.content = element.Entry.content;
-    linksObject.author = element.Entry.author;
-    linksObject.status = element.Entry.status;
-    linksObject.tags = element.Entry.tags;
-    linksObject.pubdate = element.Entry.pubdate;
-    posts.push(linksObject);
+    var postsObject={};
+    postsObject.hash = element.Hash;
+    postsObject.title = element.Entry.title;
+    postsObject.content = element.Entry.content;
+    postsObject.author = element.Entry.author;
+    postsObject.status = element.Entry.status;
+    postsObject.tags = element.Entry.tags;
+    postsObject.pubdate = element.Entry.pubdate;
+    posts.push(postsObject);
   });
   return posts;
 }
 
-function GetPostsByStatus(status, condition) {
+function GetPostsByStatus(status) {
   var getPostsbyAgent = getLinks(App.Agent.Hash, POSTS_TAG, { Load: true})
-  var getPublicPosts = getLinks(anchor("posts", "public"), POSTS_TAG, { Load: true})
-  var links = getPostsbyAgent.concat(getPublicPosts)
   var posts=[];
-  links.forEach(function (element){
-    var linksObject={};
+  getPostsbyAgent.forEach(function (element){
+    var postsObject={};
     if(element.Entry.status == status){
-      linksObject.hash = element.Hash;
-      linksObject.title = element.Entry.title;
-      linksObject.content = element.Entry.content;
-      linksObject.author = element.Entry.author;
-      linksObject.status = element.Entry.status;
-      linksObject.tags = element.Entry.tags;
-      linksObject.pubdate = element.Entry.pubdate;
-      posts.push(linksObject);
+      postsObject.hash = element.Hash;
+      postsObject.title = element.Entry.title;
+      postsObject.content = element.Entry.content;
+      postsObject.author = element.Entry.author;
+      postsObject.status = element.Entry.status;
+      postsObject.tags = element.Entry.tags;
+      postsObject.pubdate = element.Entry.pubdate;
+      posts.push(postsObject);
     }
   });
   return posts;
@@ -63,9 +61,17 @@ function GetPostsByStatus(status, condition) {
 
 function DeletePost(post) {
   if (post.hash !== HC.HashNotFound) {
-    if(post.prevState === "publish" || !("prevState" in post) && post.status === "publish"){
-      commit(POSTS_LINK,{Links:[{Base: anchor("posts", "public"),Link: post.hash,Tag: POSTS_TAG,LinkAction: HC.LinkAction.Del}]});
-    }else{
+    if(post.prevState === "publish" || !("prevState" in post) && post.status === "publish")
+      commit(POSTS_LINK,{
+        Links:[
+          {
+            Base: anchor("posts", "public"),
+            Link: post.hash,
+            Tag: POSTS_TAG,
+            LinkAction: HC.LinkAction.Del
+          }
+        ]
+      });
       commit(POSTS_LINK,{
         Links: [
           {
@@ -76,7 +82,6 @@ function DeletePost(post) {
           }
         ]
       });
-    }
     UnlinkPostFromTags(post.hash);
     remove(post.hash, "post deleted by agent");
     return "Post Deleted";
@@ -111,11 +116,9 @@ function GetPost(hash) {
 }
 
 function CreatePostLinks(content, postHash){
-  if(content.status === "publish"){
+  if(content.status === "publish")
     commit(POSTS_LINK,{Links:[{Base: anchor("posts", "public"),Link: postHash,Tag: POSTS_TAG}]});
-  }else{
     commit(POSTS_LINK,{Links:[{Base: App.Agent.Hash,Link: postHash,Tag: POSTS_TAG}]});
-  }
 }
 
 function UnlinkPostFromTags(postHash){
@@ -127,7 +130,7 @@ function UnlinkPostFromTags(postHash){
 
 function CreateTags(content, postHash){
   content.tags.forEach(function (tag){
-    commit(TAGS_LINK,{Links:[{Base: anchor("tags", tag.replace(/\s+/g, '')),Link: postHash,Tag:TAGS}]});
+    commit(TAGS_LINK,{Links:[{Base: anchor("tags", tag),Link: postHash,Tag:TAGS}]});
   })
 }
 
