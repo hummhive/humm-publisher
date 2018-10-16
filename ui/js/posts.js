@@ -11,10 +11,10 @@ GetPostsByStatus(status, function(obj) {
   if(obj.length === 0)
   return;
 
-  //Sort Timestamps by Newest
+  //Sort pupdate by Newest
   obj = obj.sort(function(a,b){
-    caseA = new Date(a.timestamp)
-    caseB = new Date(b.timestamp)
+    caseA = new Date(a.pupdate)
+    caseB = new Date(b.pupdate)
     return caseA < caseB
   })
 
@@ -23,12 +23,12 @@ GetPostsByStatus(status, function(obj) {
     if (index == 0) {
       return `<a id="${post.hash}" href="#"
       class="list-group-item list-group-item-action align-items-start active">
-      <h5 class="mb-1">${post.title}</h5><small>${moment(post.timestamp).format('MMMM D, YYYY [at] h:mm A z')}</small>
+      <h5 class="mb-1">${post.title}</h5><small>${moment(post.pupdate).format('MMMM D, YYYY [at] h:mm A z')}</small>
       </a>`;
     } else {
       return `<a id="${post.hash}" href="#"
       class="list-group-item list-group-item-action align-items-start">
-      <h5 class="mb-1">${post.title}</h5><small>${moment(post.timestamp).format('MMMM D, YYYY [at] h:mm A z')}</small>
+      <h5 class="mb-1">${post.title}</h5><small>${moment(post.pupdate).format('MMMM D, YYYY [at] h:mm A z')}</small>
       </a>`;
     }
   }).join('');

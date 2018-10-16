@@ -34,7 +34,7 @@ function GetPublicPosts(query) {
     linksObject.author = element.Entry.author;
     linksObject.status = element.Entry.status;
     linksObject.tags = element.Entry.tags;
-    linksObject.timestamp = element.Entry.pubdate;
+    linksObject.pubdate = element.Entry.pubdate;
     posts.push(linksObject);
   });
   return posts;
@@ -54,7 +54,7 @@ function GetPostsByStatus(status, condition) {
       linksObject.author = element.Entry.author;
       linksObject.status = element.Entry.status;
       linksObject.tags = element.Entry.tags;
-      linksObject.timestamp = element.Entry.pubdate;
+      linksObject.pubdate = element.Entry.pubdate;
       posts.push(linksObject);
     }
   });
