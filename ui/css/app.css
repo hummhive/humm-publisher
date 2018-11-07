@@ -1,15 +1,95 @@
 .bd-navbar {
   min-height: 4rem;
-  background-color: #3d477c;
-  box-shadow: 0 .5rem 1rem rgba(0,0,0,.05),inset 0 -1px 0 rgba(0,0,0,.1);
 }
 
-#messages li {
-  list-style: square;
-  font-size: 14px;
+#main-content {
+  border: 0;
 }
 
-#messages {
-  overflow-x:scroll;
-  height: 320px;
+.medium-editor-toolbar-form {
+	padding: 7px;
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input {
+	height: 25px;
+	padding-left: 6px;
+	border: 1px solid #f0f0f0;
+	margin-left: 17px;
+	padding-bottom: 0;
+	margin-top: 4px;
+	padding-top: 1px;
+}
+
+#medium-editor-toolbar-anchor-target-field-1 {
+	margin-left: 12px;
+}
+
+blockquote{
+  font-size: 1.4em;
+  width:60%;
+  font-family:Open Sans;
+  font-style:italic;
+  color: #555555;
+  padding:1.2em 30px 1.2em 75px;
+  border-left:8px solid #007bff ;
+  line-height:1.6;
+  position: relative;
+  background:#EDEDED;
+}
+
+blockquote::before{
+  font-family:Arial;
+  content: "\201C";
+  color:#78C0A8;
+  font-size:4em;
+  position: absolute;
+  left: 10px;
+  top:-10px;
+}
+
+.form-control:focus {
+	background-color: transparent;
+	border-color: #80bdff;
+	box-shadow: none;
+}
+
+.form-group.button-group {
+	position: fixed;
+	bottom: 0;
+}
+
+body {
+	overflow-x: hidden;
+}
+
+.medium-editor-toolbar {
+	height: auto;
+}
+
+.medium-editor-placeholder-relative, .medium-editor-placeholder-relative::after {
+	font-style: normal;
+	color: #777;
+	font-size: 20px;
+	/* margin-top: 0px; */
+}
+
+#title, #tags {
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0;
+  border-bottom: 1px solid #f4f4f4;
+}
+
+#sticky-sidebar {
+  min-height: 100vh;
+}
+
+.medium-editor-element {
+	word-wrap: break-word;
+	min-height: 100px;
+	outline: none;
+	padding-top: 6px;
+	padding-bottom: 32px;
+	padding-left: 7px;
 }
