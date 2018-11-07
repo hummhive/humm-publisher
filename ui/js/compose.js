@@ -3,6 +3,11 @@
 
 var editor = new MediumEditor('#editor', {
   disableExtraSpaces: true,
+  buttonLabels: 'fontawesome',
+  autoLink: true,
+  toolbar: {
+    buttons: ['bold', 'italic', {name: 'image', contentFA: "<i class='far fa-images'></i>"}, 'anchor', {name: 'h2', contentFA: "H2"} , {name: 'h3', contentFA: "H3"}, 'orderedlist', 'unorderedlist', 'justifyLeft', 'justifyCenter', 'justifyRight'],
+  },
   anchor: { targetCheckbox: true }
 });
 
