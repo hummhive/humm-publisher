@@ -20,6 +20,14 @@
       "type": "string",
       "pattern": ".+"
     },
+    "status": {
+      "type": "string",
+      "pattern": ".+"
+    },
+    "status": {
+      "type": "string",
+      "pattern": ".+"
+    },
     "tags": {
       "type": "array",
       "items": {}
