@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import agent from './agent';
 import { loadingBarReducer } from 'react-redux-loading-bar';
-import questions from './questions';
+import posts from './posts';
 
 export default combineReducers({
   agent,
-  questions,
+  posts,
   loadingBar: loadingBarReducer
 });

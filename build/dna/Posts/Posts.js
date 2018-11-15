@@ -8,19 +8,20 @@ var TAGS_LINK = "tag_link";
 function CreatePost(content) {
     content.pubdate = new Date();
     content.author = App.Agent.String;
+    content.tags = JSON.parse(JSON.stringify(content.tags).replace(/"\s+|\s+"/g, '"'));
     var postHash = commit(POSTS_TAG, content);
     CreatePostLinks(content, postHash);
-    if ("tags" in content) {
-        content.tags = JSON.parse(JSON.stringify(content.tags).replace(/"\s+|\s+"/g, '"'));
+    if ("tags" in content)
         CreateTags(content, postHash);
-    }
     return postHash;
 }
-function getAgentInfo() {
-    return App.Agent.String;
-}
 function GetPublicPosts(query) {
-    var links = getLinks(anchor("posts", "public"), POSTS_TAG, { Load: true });
+    if (typeof query !== "undefined") {
+        var links = getLinks(anchor("tags", query.tag), TAGS, { Load: true });
+    }
+    else {
+        var links = getLinks(anchor("posts", "public"), POSTS_TAG, { Load: true });
+    }
     var posts = [];
     links.forEach(function (element) {
         var postsObject = {};
@@ -35,13 +36,86 @@ function GetPublicPosts(query) {
     });
     return posts;
 }
+function GetAgentInfo() {
+    return { "name": App.Agent.String, "key": App.Key.Hash };
+}
+function GetPostsByStatus(status) {
+    var getPostsbyAgent = getLinks(App.Agent.Hash, POSTS_TAG, { Load: true });
+    var posts = [];
+    getPostsbyAgent.forEach(function (element) {
+        var postsObject = {};
+        if (status === "any" || element.Entry.status === status) {
+            postsObject.hash = element.Hash;
+            postsObject.title = element.Entry.title;
+            postsObject.content = element.Entry.content;
+            postsObject.author = element.Entry.author;
+            postsObject.status = element.Entry.status;
+            postsObject.tags = element.Entry.tags;
+            postsObject.pubdate = element.Entry.pubdate;
+            posts.push(postsObject);
+        }
+    });
+    return posts;
+}
+function DeletePost(post) {
+    if (post.hash !== HC.HashNotFound) {
+        if (post.prevState === "publish" || !("prevState" in post) && post.status === "publish")
+            commit(POSTS_LINK, {
+                Links: [
+                    {
+                        Base: anchor("posts", "public"),
+                        Link: post.hash,
+                        Tag: POSTS_TAG,
+                        LinkAction: HC.LinkAction.Del
+                    }
+                ]
+            });
+        commit(POSTS_LINK, {
+            Links: [
+                {
+                    Base: App.Agent.Hash,
+                    Link: post.hash,
+                    Tag: POSTS_TAG,
+                    LinkAction: HC.LinkAction.Del
+                }
+            ]
+        });
+        UnlinkPostFromTags(post.hash);
+        remove(post.hash, "post deleted by agent");
+        return "Post Deleted";
+    }
+    else {
+        return "Hash not found!";
+    }
+}
+function EditPost(post) {
+    if (post.hash !== HC.HashNotFound) {
+        var prevState = get(post.hash);
+        var newState = { title: post.title, content: post.content, author: post.author, tags: post.tags, status: post.status };
+        post.prevState = prevState.status;
+        try {
+            var newPost = CreatePost(newState);
+        }
+        catch (exception) {
+            debug("Error committing links " + exception);
+            return post.hash;
+        }
+        DeletePost(post, prevState);
+        return newPost;
+    }
+    else {
+        return "The hash you have introduced is not a valid!";
+    }
+}
 /* Helpers Functions / Private - Non Exposed */
 function GetPost(hash) {
-    var post = get(hash, { GetMask: HC.GetMask.All });
+    var post = get(hash);
     return post;
 }
 function CreatePostLinks(content, postHash) {
-    commit(POSTS_LINK, { Links: [{ Base: anchor("posts", "public"), Link: postHash, Tag: POSTS_TAG }] });
+    if (content.status === "publish")
+        commit(POSTS_LINK, { Links: [{ Base: anchor("posts", "public"), Link: postHash, Tag: POSTS_TAG }] });
+    commit(POSTS_LINK, { Links: [{ Base: App.Agent.Hash, Link: postHash, Tag: POSTS_TAG }] });
 }
 function UnlinkPostFromTags(postHash) {
     var post = GetPost(postHash);

@@ -40,12 +40,16 @@ function GetPublicPosts(query) {
   return posts;
 }
 
+function GetAgentInfo(){
+  return {"name": App.Agent.String, "key": App.Key.Hash};
+}
+
 function GetPostsByStatus(status) {
   var getPostsbyAgent = getLinks(App.Agent.Hash, POSTS_TAG, { Load: true})
   var posts=[];
   getPostsbyAgent.forEach(function (element){
     var postsObject={};
-    if(element.Entry.status == status){
+    if(status === "any" || element.Entry.status === status){
       postsObject.hash = element.Hash;
       postsObject.title = element.Entry.title;
       postsObject.content = element.Entry.content;

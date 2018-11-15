@@ -1,39 +1,61 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { handleInitialData } from '../actions'
+import { FaEdit } from 'react-icons/fa'
 import LoadingBar from 'react-redux-loading-bar'
-import { Container, Row, Col } from 'react-bootstrap'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import Dashboard from './Dashboard'
-import Navigation from './Navigation'
-import Question from './Question'
-import NewQuestion from './NewQuestion'
+import { Container, Row, Col, Badge } from 'react-bootstrap'
+import { BrowserRouter as Router, Route, Link, NavLink, Redirect} from 'react-router-dom'
+import Post from './Post'
+import Compose from './Compose'
+import Sidebar from './Sidebar'
 
 class App extends Component {
   componentDidMount () {
     this.props.dispatch(handleInitialData())
   }
   render () {
+    console.log(this.props)
+    const {loading, agent, postcount} = this.props
     return (
       <Router>
         <React.Fragment>
             <LoadingBar />
-          <Container fluid className="p-0">
+              <Route exact path="/" render={() => (
+                  <Redirect to='/post' />
+                )}/>
+          <Container fluid={true}>
             <Row>
-              <Col md={12}>
-                <Navigation />
-              </Col>
-            </Row>
-          </Container>
-          <Container>
-            <Row className="h-100 mt-5">
-              <Col md={12} className="align-self-center">
-                <div>
-                  <Route path="/" exact component={Dashboard} />
-                  <Route path="/question/:id" component={Question} />
-                  <Route path="/add" component={NewQuestion} />
+              <Col md={3} className="px-0 border-right" id="sticky-sidebar">
+                <div className="py-0 sticky-top">
+                  <header className="navbar navbar-expand flex-column flex-md-row bd-navbar mb-3 border-bottom">
+                    <Link className="navbar-brand m-auto" to="/post" aria-label="Bootstrap">Humm Publisher</Link>
+                  </header>
+                  <ul className="nav nav-pills justify-content-center border-bottom pb-3 pt-1">
+                    <li className="nav-item">
+                      <NavLink className="nav-link" to='/post'>Articles <Badge variant="light">{agent !== null ? postcount : "0"}</Badge></NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink className="nav-link" to='/compose'><FaEdit /></NavLink>
+                    </li>
+                  </ul>
+                  <div id="post-list" className="list-group list-group-flush">
+                    <Route path={"/:page?/:id?/"} component={Sidebar} />
+                      {agent !== null &&
+                        <span className="footer-author"><small><strong>Signed as: </strong>{agent.name}</small></span>
+                      }
+                  </div>
                 </div>
               </Col>
+              <div id="content" className="col-9 px-5 mt-4">
+              {loading === true ? (
+                <p>Loading data from Holochain...</p>
+              ) : (
+                <React.Fragment>
+                <Route path="/compose/:id?/" component={Compose} />
+                <Route path={"/post/:id?/"} component={Post} />
+                </React.Fragment>
+              )}
+              </div>
             </Row>
           </Container>
         </React.Fragment>
@@ -41,4 +63,13 @@ class App extends Component {
     )
   }
 }
-export default connect()(App)
+
+function mapStateToProps ({ agent, posts }) {
+  return {
+    agent,
+    loading: agent === null,
+    postcount: Object.values(posts).length
+  }
+}
+
+export default connect(mapStateToProps)(App)
