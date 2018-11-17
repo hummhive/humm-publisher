@@ -45,6 +45,11 @@
                "Exposure": "public"
            },
            {
+            "Name": "CreatePostAPI",
+            "CallingType": "json",
+            "Exposure": "public"
+           },
+           {
                "Name": "GetAgentInfo",
                "CallingType": "json",
                "Exposure": "public"

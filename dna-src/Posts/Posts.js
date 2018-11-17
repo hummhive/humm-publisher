@@ -9,6 +9,18 @@ var TAGS_LINK = "tag_link";
 
 /* Public Exposed Functions */
 
+function CreatePostAPI(postEntry) {
+  postEntry = JSON.parse(postEntry);
+  var postHash = commit(POSTS_TAG, postEntry);
+
+  CreatePostLinks(postEntry, postHash);
+
+  if ("tags" in postEntry)
+    CreateTags(postEntry, postHash);
+
+  return postHash;
+}
+
 function CreatePost(content) {
   content.pubdate = new Date();
   content.author = App.Agent.String;
@@ -19,6 +31,7 @@ function CreatePost(content) {
   CreateTags(content, postHash)
   return postHash;
 }
+
 function GetPublicPosts(query) {
   if(typeof query !== "undefined"){
     var links = getLinks(anchor("tags", query.tag), TAGS, { Load: true})
@@ -122,7 +135,7 @@ function GetPost(hash) {
 function CreatePostLinks(content, postHash){
   if(content.status === "publish")
     commit(POSTS_LINK,{Links:[{Base: anchor("posts", "public"),Link: postHash,Tag: POSTS_TAG}]});
-    commit(POSTS_LINK,{Links:[{Base: App.Agent.Hash,Link: postHash,Tag: POSTS_TAG}]});
+  commit(POSTS_LINK,{Links:[{Base: App.Agent.Hash,Link: postHash,Tag: POSTS_TAG}]});
 }
 
 function UnlinkPostFromTags(postHash){
@@ -137,7 +150,6 @@ function CreateTags(content, postHash){
     commit(TAGS_LINK,{Links:[{Base: anchor("tags", tag),Link: postHash,Tag:TAGS}]});
   })
 }
-
 
 // -----------------------------------------------------------------
 //  The Genesis Function https://developer.holochain.org/genesis
