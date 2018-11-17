@@ -1,123 +1,118 @@
 {
-    "Version": 1,
-    "UUID": "28fcbff4-8d2f-494c-a2c5-9dd845f1ab5a",
-    "Name": "Humm Publisher",
-    "Properties": {
-        "description": "Personal publishing app for Humm",
-        "language": "en"
-    },
-    "PropertiesSchemaFile": "properties_schema.json",
-    "BasedOn": "",
-    "RequiresVersion": 0,
-    "DHTConfig": {
-        "HashType": "sha2-256",
-        "RedundancyFactor": 0
-    },
-    "Zomes": [
-             {
-       "Name": "Posts",
-       "Description": "Sign and Publish Posts locally or in the DHT",
-       "CodeFile": "Posts.js",
-       "RibosomeType": "js",
-       "BridgeFuncs": ["CreatePost", "GetPostsByStatus"],
-       "Entries": [
-           {
-               "Name": "post",
-               "DataFormat": "json",
-               "SchemaFile": "Posts.json",
-               "Sharing": "public"
-           },
-           {
-               "Name": "post_link",
-               "DataFormat": "links",
-               "Sharing":"public"
-           },
-           {
-               "Name": "tag_link",
-               "DataFormat": "links",
-               "Sharing":"public"
-           }
-       ],
-       "Functions": [
-           {
-               "Name": "CreatePost",
-               "CallingType": "json",
-               "Exposure": "public"
-           },
-           {
-            "Name": "CreatePostAPI",
-            "CallingType": "json",
-            "Exposure": "public"
-           },
-           {
-               "Name": "GetAgentInfo",
-               "CallingType": "json",
-               "Exposure": "public"
-           },
-           {
-               "Name": "GetPostsByStatus",
-               "CallingType": "json",
-               "Exposure": "public"
-           },
-           {
-               "Name": "GetPublicPosts",
-               "CallingType": "json",
-               "Exposure": "public"
-           },
-           {
-               "Name": "GetPost",
-               "CallingType": "json",
-               "Exposure": "public"
-           },
-           {
-               "Name": "DeletePost",
-               "CallingType": "json",
-               "Exposure": "public"
-           },
-           {
-               "Name": "EditPost",
-               "CallingType": "json",
-               "Exposure": "public"
-           }
-          ]
+  "Version": 1,
+  "UUID": "28fcbff4-8d2f-494c-a2c5-9dd845f1ab5a",
+  "Name": "Humm Publisher",
+  "Properties": {
+    "description": "Personal publishing app for Humm",
+    "language": "en"
+  },
+  "PropertiesSchemaFile": "properties_schema.json",
+  "BasedOn": "",
+  "RequiresVersion": 0,
+  "DHTConfig": {
+    "HashType": "sha2-256",
+    "RedundancyFactor": 0
+  },
+  "Zomes": [{
+      "Name": "Posts",
+      "Description": "Sign and Publish Posts locally or in the DHT",
+      "CodeFile": "Posts.js",
+      "RibosomeType": "js",
+      "BridgeFuncs": ["CreatePost", "GetPostsByStatus"],
+      "Entries": [{
+          "Name": "post",
+          "DataFormat": "json",
+          "SchemaFile": "Posts.json",
+          "Sharing": "public"
         },
         {
-    "Name": "anchors",
-    "Description": "anchors mixin",
-    "RibosomeType": "js",
-    "CodeFile": "anchors.js",
-    "Config": {
-      "ErrorHandling": "throwErrors"
+          "Name": "post_link",
+          "DataFormat": "links",
+          "Sharing": "public"
+        },
+        {
+          "Name": "tag_link",
+          "DataFormat": "links",
+          "Sharing": "public"
+        }
+      ],
+      "Functions": [{
+          "Name": "CreatePost",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "CreatePostAPI",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "GetAgentInfo",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "GetPostsByStatus",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "GetPublicPosts",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "GetPost",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "DeletePost",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "EditPost",
+          "CallingType": "json",
+          "Exposure": "public"
+        }
+      ]
     },
-    "Entries": [
-      {
-        "Name": "anchor",
-        "DataFormat": "json",
-        "SchemaFile": "anchor.json",
-        "Sharing": "public"
+    {
+      "Name": "anchors",
+      "Description": "anchors mixin",
+      "RibosomeType": "js",
+      "CodeFile": "anchors.js",
+      "Config": {
+        "ErrorHandling": "throwErrors"
       },
-      {
-        "Name": "anchor_link",
-        "DataFormat": "links"
-      }
-    ],
-    "Functions": [
-      {
-        "Name": "anchor",
-        "CallingType": "json",
-        "Exposure": "public"
-      },
-      {
-        "Name": "exists",
-        "CallingType": "json",
-        "Exposure": "public"
-      },
-      {
-        "Name": "anchors",
-        "CallingType": "string",
-        "Exposure": "public"
-      }
-    ]
+      "Entries": [{
+          "Name": "anchor",
+          "DataFormat": "json",
+          "SchemaFile": "anchor.json",
+          "Sharing": "public"
+        },
+        {
+          "Name": "anchor_link",
+          "DataFormat": "links"
+        }
+      ],
+      "Functions": [{
+          "Name": "anchor",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "exists",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "anchors",
+          "CallingType": "string",
+          "Exposure": "public"
+        }
+      ]
     }
-    ]
+  ]
 }
