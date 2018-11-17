@@ -113,6 +113,56 @@
           "Exposure": "public"
         }
       ]
+    },
+    {
+      "Name": "comments",
+      "Description": "Manage individual comments",
+      "RibosomeType": "js",
+      "CodeFile": "comments.js",
+      "Entries": [{
+          "Name": "comment",
+          "Required": true,
+          "DataFormat": "json",
+          "Sharing": "public",
+          "SchemaFile": "comments.json"
+        },
+        {
+          "Name": "comment_post_link",
+          "DataFormat": "links",
+          "Sharing": "public"
+        },
+        {
+          "Name": "comment_author_link",
+          "DataFormat": "links",
+          "Sharing": "public"
+        }
+      ],
+      "Functions": [{
+          "Name": "commentCreate",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "commentRead",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "commentUpdate",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "commentDelete",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "getLinkedComments",
+          "CallingType": "json",
+          "Exposure": "public"
+        }
+      ]
     }
   ]
 }

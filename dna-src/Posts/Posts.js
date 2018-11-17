@@ -11,6 +11,7 @@ var TAGS_LINK = "tag_link";
 
 function CreatePostAPI(postEntry) {
   postEntry = JSON.parse(postEntry);
+  postEntry.uuid = generateUUIDv4();
   var postHash = commit(POSTS_TAG, postEntry);
 
   CreatePostLinks(postEntry, postHash);
@@ -22,13 +23,18 @@ function CreatePostAPI(postEntry) {
 }
 
 function CreatePost(content) {
+  content.uuid = generateUUIDv4();
   content.pubdate = new Date();
   content.author = App.Agent.String;
   content.tags = JSON.parse(JSON.stringify(content.tags).replace(/"\s+|\s+"/g,'"'))
+
   var postHash = commit(POSTS_TAG, content);
+
   CreatePostLinks(content, postHash)
+
   if ("tags" in content)
-  CreateTags(content, postHash)
+    CreateTags(content, postHash)
+
   return postHash;
 }
 
@@ -149,6 +155,12 @@ function CreateTags(content, postHash){
   content.tags.forEach(function (tag){
     commit(TAGS_LINK,{Links:[{Base: anchor("tags", tag),Link: postHash,Tag:TAGS}]});
   })
+}
+
+// UUIDv4 credit: https://gist.github.com/LeverOne/1308368
+function generateUUIDv4(a,b) {
+  for(b=a='';a++<36;b+=a*51&52?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'-');
+  return b;
 }
 
 // -----------------------------------------------------------------
