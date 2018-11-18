@@ -22,23 +22,26 @@ function CreatePostAPI(postEntry) {
   return postHash;
 }
 
-function CreatePost(content) {
-  content.author = App.Agent.String;
-  if(typeof content.pubdate === "undefined")
-  content.pubdate = +new Date
-  if(typeof content.lastupdate === "undefined")
-  content.lastupdate = +new Date
-  if(typeof content.tags !== "undefined")
-  content.tags = JSON.parse(JSON.stringify(content.tags).replace(/"\s+|\s+"/g,'"'))
-
-  var postHash = commit(POSTS_TAG, content);
-
-  CreatePostLinks(content, postHash)
-
-  if ("tags" in content)
-    CreateTags(content, postHash)
-
-  return postHash;
+function CreatePost(postEntry) {
+  postEntry.author = App.Agent.String;
+  //We check all the conditions. We need to make sure to double-check this function
+  //Since it runs when creating a post and when editing one.
+  //So we don't want a new pupdate or uuid.
+  //I'm leaving the last update checked off since we are importing it from the publisher
+  //upon updating it.
+  if(typeof postEntry.uuid === "undefined")
+  postEntry.uuid = generateUUIDv4();
+  if(typeof postEntry.pubdate === "undefined")
+  postEntry.pubdate = +new Date
+  if(typeof postEntry.lastupdate === "undefined")
+  postEntry.lastupdate = +new Date
+  if(typeof postEntry.tags !== "undefined")
+  postEntry.tags = JSON.parse(JSON.stringify(postEntry.tags).replace(/"\s+|\s+"/g,'"'))
+  var postHash = commit(POSTS_TAG, postEntry);
+  CreatePostLinks(postEntry, postHash)
+  if ("tags" in postEntry)
+    CreateTags(postEntry, postHash)
+  return {"hash": postHash, "uuid" : postEntry.uuid}
 }
 
 function GetPublicPosts(query) {
@@ -57,6 +60,8 @@ function GetPublicPosts(query) {
     postsObject.status = element.Entry.status;
     postsObject.tags = element.Entry.tags;
     postsObject.pubdate = element.Entry.pubdate;
+    postsObject.lastupdate = element.Entry.lastupdate;
+    postsObject.uuid = element.Entry.uuid;
     posts.push(postsObject);
   });
   return posts;
@@ -79,6 +84,8 @@ function GetPostsByStatus(status) {
       postsObject.status = element.Entry.status;
       postsObject.tags = element.Entry.tags;
       postsObject.pubdate = element.Entry.pubdate;
+      postsObject.lastupdate = element.Entry.lastupdate;
+      postsObject.uuid = element.Entry.uuid;
       posts.push(postsObject);
     }
   });
