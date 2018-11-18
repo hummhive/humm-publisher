@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Button, Card, Form, Alert } from 'react-bootstrap'
+import { Button, Card, Form, Alert, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import { FaEdit } from 'react-icons/fa'
 import { newPostDispatch, editPostDispatch  } from '../actions'
 import { BrowserRouter as Router, Route, Redirect, withRouter} from 'react-router-dom'
 import Editor from 'react-medium-editor';
+// load theme styles with webpack
 require('medium-editor/dist/css/medium-editor.css');
 require('medium-editor/dist/css/themes/beagle.css');
 
@@ -16,15 +17,26 @@ class Compose extends Component {
     tags: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.tags : "",
     content: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.content : "",
     status: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.status : "",
-    redirect: false
+    redirect: false,
+    toHome: false,
   }
 
   handleSubmit = (e) => {
     e.preventDefault()
-    const { dispatch, post } = this.props
-    dispatch(newPostDispatch(this.state.title, this.state.tags.split(','), this.state.content, this.state.status)).then(() => {
+    const { dispatch, post, agent } = this.props
+    dispatch(newPostDispatch(this.state.title, agent.name, +new Date, +new Date,  this.state.tags.split(','), this.state.content, this.state.status)).then(() => {
     this.setState(() => ({
       redirect: true
+    }))
+    })
+  }
+
+  handleUpdateSubmit = (e) => {
+    e.preventDefault()
+    const { dispatch, post, agent } = this.props
+    dispatch(editPostDispatch(post.hash, post.uuid, this.state.title, agent.name, post.pubdate, +new Date,  this.state.tags, this.state.content, this.state.status)).then(() => {
+    this.setState(() => ({
+      toHome: true
     }))
     })
   }
@@ -45,7 +57,6 @@ class Compose extends Component {
   }
 
  componentWillReceiveProps(nextProps) {
-
  if(nextProps.post !== null && nextProps.post.hash === nextProps.match.params.id){
  this.state = { title: nextProps.post.title, tags: nextProps.post.tags, content: nextProps.post.content, status: nextProps.post.status}
 }else{
@@ -54,13 +65,15 @@ class Compose extends Component {
 }
 
   render() {
-        console.log(this.props)
-    const { post, match } = this.props
+
+    const { post, match, history } = this.props
     const { content, title } = this.state;
     const submitEnabled = content.length > 0 && title.length > 0;
 
     if (this.state.redirect === true) {
-      return <Redirect push to={{ pathname: `/compose/${post.hash}`, state: { "referrer": post.status } }}  />
+      return <Redirect push to={{ pathname: `/compose/${post.hash}`, state: { "referrer": "created" } }}  />
+    }else if(this.state.toHome === true){
+      return <Redirect push to={{ pathname: `/post/`, state: { "referrer": "updated" } }}  />
     }
 
     if (post === null && typeof match.params.id !== "undefined" ) {
@@ -70,11 +83,11 @@ class Compose extends Component {
    return (
      <React.Fragment>
 
-      {typeof this.props.history.location.state !== "undefined" && typeof this.props.history.location.state.referrer !== "undefined" && (
-         <Alert variant='primary'>The post has been updated</Alert>
+      {typeof history.location.state !== "undefined" && history.location.state.referrer === "created" && (
+         <Alert variant='primary'>The post has been created {post.status === "publish" ? "and published to the blog" : "and stored as a draft"}</Alert>
       )}
 
-     <Form onSubmit={this.handleSubmit}>
+     <Form onSubmit={typeof match.params.id !== "undefined" && match.params.id === post.hash ? this.handleUpdateSubmit : this.handleSubmit}>
          <div className="form-group">
            <input id="title" name="title" value={this.state.title} className="form-control form-control-lg" type="text" size="50" onChange={this.handleChange} placeholder="Some Sweet Title Here" />
          </div>
@@ -89,10 +102,14 @@ class Compose extends Component {
                options={{autoLink: true, toolbar: {buttons: ['bold', 'italic', 'h1', 'h2', 'image', 'anchor', 'orderedlist', 'unorderedlist', 'justifyLeft', 'justifyCenter', 'justifyRight']}}}
              />
          </div>
-          {post !== null && match.params.id === post.hash ? (
+          {typeof match.params.id !== "undefined" && match.params.id === post.hash ? (
             <div className="form-group button-group">
-           <button type="submit" id="saveDraft" name="status" value="draft" onClick={this.handleChange} className="btn btn-outline-btn-secondary mr-1" disabled={!submitEnabled}>Update Draft</button>
+            <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">WARNING: The Hash of the post will be replaced!!</Tooltip>}>
+           <button type="submit" id="saveDraft" name="status" value="draft" onClick={this.handleChange} className="btn btn-outline-btn-secondary mr-1" disabled={!submitEnabled}>Save as Draft</button>
+           </OverlayTrigger>
+           <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">WARNING: The Hash of the post will be replaced!!</Tooltip>}>
            <button type="submit" id="publishPost" name="status" value="publish" onClick={this.handleChange} className="btn btn-primary" disabled={!submitEnabled}>Re-Publish</button>
+           </OverlayTrigger>
             </div>
             ) : (
                 <div className="form-group button-group">
@@ -110,17 +127,17 @@ Compose.propTypes = {
  dispatch: PropTypes.func
 };
 
-function mapStateToProps({posts}, OwnProps){
+function mapStateToProps({agent, posts}, OwnProps){
 
  if(Object.keys(posts).length === 0)
- return { "post" : null }
+ return {agent, "post" : null }
  if(typeof OwnProps.match.params.id !== "undefined"){
  const id = Object.keys(posts).filter(id => posts[id].hash === OwnProps.match.params.id)
  const post = posts[id]
-return {post: post ? posts[id] : null};
+return {agent, post: post ? posts[id] : null};
 }else{
-  const postsObj = Object.values(posts).sort((a, b) => a.pubdate < b.pubdate);
-  return {"post" : postsObj[0]};
+  const postsObj = Object.values(posts).sort((a, b) => a.lastupdate < b.lastupdate);
+  return {agent, "post" : postsObj[0]};
 }
 
 }

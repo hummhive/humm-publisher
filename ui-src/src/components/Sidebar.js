@@ -10,9 +10,9 @@ class Sidebar extends Component {
     return (
       <div>
         {sidebar.map((post, index) =>
-        <NavLink id={post.hash} to={`/${match.params.page}/${post.hash}`}
+        <NavLink key={post.hash} id={post.hash} to={`/${match.params.page}/${post.hash}`}
         className={`list-group-item list-group-item-action align-items-start`}>
-        <h5 class="mb-1">{post.title}</h5><small><Moment format="MMMM D, YYYY [at] h:mm A z">{post.pubdate}</Moment></small>
+        <h5 class="mb-1">{post.title}</h5><small>Modified: <Moment format="MM/DD/YYYY [at] h:mm A z">{post.pubdate}</Moment></small>
         <Badge variant="light">{post.status}</Badge>
         </NavLink>
       )}
@@ -27,10 +27,10 @@ function mapStateToProps({posts}){
     hash: posts[post].hash,
     title: posts[post].title,
     status: posts[post].status,
-    pubdate: posts[post].pubdate,
+    lastupdate: posts[post].lastupdate,
   }));
 
-  postsObj.sort((a, b) => a.pubdate < b.pubdate);
+  postsObj.sort((a, b) => a.lastupdate < b.lastupdate);
 
   return {sidebar: postsObj};
 }

@@ -14,7 +14,6 @@ class App extends Component {
     this.props.dispatch(handleInitialData())
   }
   render () {
-    console.log(this.props)
     const {loading, agent, postcount} = this.props
     return (
       <Router>
