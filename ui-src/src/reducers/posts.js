@@ -16,7 +16,7 @@ export default function posts(state = {}, action) {
     case DELETE_POST:
     let newState = Object.assign([], state);
     let indexToDelete = Object.keys(state).findIndex(post => {
-       return state[post].hash === action.post.hash
+       return state[post].hash === action.hash
      })
     newState.splice(indexToDelete, 1);
     return newState;
