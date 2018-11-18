@@ -1,27 +1,28 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { handleInitialData } from '../actions'
-import { FaEdit } from 'react-icons/fa'
-import LoadingBar from 'react-redux-loading-bar'
-import { Container, Row, Col, Badge } from 'react-bootstrap'
-import { BrowserRouter as Router, Route, Link, NavLink, Redirect} from 'react-router-dom'
-import Post from './Post'
-import Compose from './Compose'
-import Sidebar from './Sidebar'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {handleInitialData} from '../actions';
+import {FaEdit} from 'react-icons/fa';
+import LoadingBar from 'react-redux-loading-bar';
+import {Container, Row, Col, Badge} from 'react-bootstrap';
+import {BrowserRouter as Router, Route, Link, NavLink, Redirect} from 'react-router-dom';
+import Post from './Post';
+import PropTypes from 'prop-types';
+import Compose from './Compose';
+import Sidebar from './Sidebar';
 
 class App extends Component {
   componentDidMount () {
-    this.props.dispatch(handleInitialData())
+    this.props.dispatch(handleInitialData());
   }
   render () {
-    const {loading, agent, postcount} = this.props
+    const {loading, agent, postcount} = this.props;
     return (
       <Router>
         <React.Fragment>
-            <LoadingBar />
-              <Route exact path="/" render={() => (
-                  <Redirect to='/post' />
-                )}/>
+          <LoadingBar />
+          <Route exact path="/" render={() => (
+            <Redirect to='/post' />
+          )}/>
           <Container fluid={true}>
             <Row>
               <Col md={3} className="px-0 border-right" id="sticky-sidebar">
@@ -31,44 +32,50 @@ class App extends Component {
                   </header>
                   <ul className="nav nav-pills justify-content-center border-bottom pb-3 pt-1">
                     <li className="nav-item">
-                      <NavLink className="nav-link" to='/post'>Articles <Badge variant="light">{agent !== null ? postcount : "0"}</Badge></NavLink>
+                      <NavLink className="nav-link" to='/post'>Articles <Badge variant="light">{agent !== null ? postcount : '0'}</Badge></NavLink>
                     </li>
                     <li className="nav-item">
                       <NavLink className="nav-link" to='/compose'><FaEdit /></NavLink>
                     </li>
                   </ul>
                   <div id="post-list" className="list-group list-group-flush">
-                    <Route path={"/:page?/:id?/"} component={Sidebar} />
-                      {agent !== null &&
+                    <Route path={'/:page?/:id?/'} component={Sidebar} />
+                    {agent !== null &&
                         <span className="footer-author"><small><strong>Signed as: </strong>{agent.name}</small></span>
-                      }
+                    }
                   </div>
                 </div>
               </Col>
               <div id="content" className="col-9 px-5 mt-4">
-              {loading === true ? (
-                <p>Loading data from Holochain...</p>
-              ) : (
-                <React.Fragment>
-                <Route path="/compose/:id?/" component={Compose} />
-                <Route path={"/post/:id?/"} component={Post} />
-                </React.Fragment>
-              )}
+                {loading === true ? (
+                  <p>Loading data from Holochain...</p>
+                ) : (
+                  <React.Fragment>
+                    <Route path="/compose/:id?/" component={Compose} />
+                    <Route path={'/post/:id?/'} component={Post} />
+                  </React.Fragment>
+                )}
               </div>
             </Row>
           </Container>
         </React.Fragment>
       </Router>
-    )
+    );
   }
 }
 
-function mapStateToProps ({ agent, posts }) {
+App.propTypes = {
+  dispatch: PropTypes.func,
+  agent: PropTypes.object,
+  postcount: PropTypes.number
+};
+
+function mapStateToProps ({agent, posts}) {
   return {
     agent,
     loading: agent === null,
     postcount: Object.values(posts).length
-  }
+  };
 }
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps)(App);
