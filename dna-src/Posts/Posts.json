@@ -6,8 +6,7 @@
     "title",
     "status",
     "content",
-    "author",
-    "uuid"
+    "author"
   ],
   "properties": {
     "title": {
