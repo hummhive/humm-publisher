@@ -10,8 +10,12 @@ var TAGS_LINK = "tag_link";
 /* Public Exposed Functions */
 
 function CreatePost(content) {
-  content.pubdate = new Date();
   content.author = App.Agent.String;
+  if(typeof content.pubdate === "undefined")
+  content.pubdate = +new Date
+  if(typeof content.lastupdate === "undefined")
+  content.lastupdate = +new Date
+  if(typeof content.tags !== "undefined")
   content.tags = JSON.parse(JSON.stringify(content.tags).replace(/"\s+|\s+"/g,'"'))
   var postHash = commit(POSTS_TAG, content);
   CreatePostLinks(content, postHash)
@@ -97,7 +101,15 @@ function DeletePost(post) {
 function EditPost(post) {
   if (post.hash !== HC.HashNotFound) {
     var prevState = get(post.hash)
-    var newState = {title: post.title, content: post.content, author: post.author, tags: post.tags, status: post.status}
+    var newState = {
+      title: post.title,
+      content: post.content,
+      author: post.author,
+      tags: post.tags,
+      status: post.status,
+      pubdate: post.pubdate,
+      lastupdate: +new Date
+    }
     post.prevState = prevState.status
     try{
       var newPost = CreatePost(newState)
