@@ -20,8 +20,8 @@
       "type": "string",
       "pattern": ".+"
     },
-    "status": {
-      "type": "string",
+    "pubdate": {
+      "type": "number",
       "pattern": ".+"
     },
     "status": {
