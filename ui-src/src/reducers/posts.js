@@ -1,4 +1,4 @@
-import { RECEIVE_POSTS, DELETE_POST } from '../actions/posts';
+import { RECEIVE_POSTS, DELETE_POST, EDIT_POST, ADD_POST } from '../actions/posts';
 
 export default function posts(state = {}, action) {
   switch (action.type) {
@@ -8,12 +8,25 @@ export default function posts(state = {}, action) {
       ...action.posts,
     };
 
+    case ADD_POST:
+    let newArray = Object.assign([], state);
+    newArray.splice(Object.keys(newArray).length, 0, action.post)
+    return newArray
+
     case DELETE_POST:
-    const newState = Object.assign([], state);
-    const indexToDelete = Object.keys(state).findIndex(post => {
-       return post.hash == action.hash
+    let newState = Object.assign([], state);
+    let indexToDelete = Object.keys(state).findIndex(post => {
+       return state[post].hash === action.post.hash
      })
     newState.splice(indexToDelete, 1);
+    return newState;
+
+    case EDIT_POST:
+    newState = Object.assign([], state);
+    indexToDelete = Object.keys(state).findIndex(post => {
+       return state[post].hash === action.post.prevHash
+     })
+    newState[indexToDelete] = action.post
     return newState;
 
   default:
