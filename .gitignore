@@ -118,10 +118,4 @@ typings/
 
 agent.txt
 priv.key
-
-build/
 db/
-dna/
-ui/
-.dist/
-.cache/
