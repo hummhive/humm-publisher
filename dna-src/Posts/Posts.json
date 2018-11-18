@@ -5,7 +5,9 @@
   "required": [
     "title",
     "status",
-    "content"
+    "content",
+    "author",
+    "uuid"
   ],
   "properties": {
     "title": {
@@ -24,13 +26,13 @@
       "type": "number",
       "pattern": ".+"
     },
-    "status": {
-      "type": "string",
-      "pattern": ".+"
-    },
     "tags": {
       "type": "array",
       "items": {}
+    },
+    "uuid": {
+      "type": "string",
+      "pattern": ".+"
     }
   }
 }

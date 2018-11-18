@@ -9,6 +9,19 @@ var TAGS_LINK = "tag_link";
 
 /* Public Exposed Functions */
 
+function CreatePostAPI(postEntry) {
+  postEntry = JSON.parse(postEntry);
+  postEntry.uuid = generateUUIDv4();
+  var postHash = commit(POSTS_TAG, postEntry);
+
+  CreatePostLinks(postEntry, postHash);
+
+  if ("tags" in postEntry)
+    CreateTags(postEntry, postHash);
+
+  return postHash;
+}
+
 function CreatePost(content) {
   content.author = App.Agent.String;
   if(typeof content.pubdate === "undefined")
@@ -17,12 +30,17 @@ function CreatePost(content) {
   content.lastupdate = +new Date
   if(typeof content.tags !== "undefined")
   content.tags = JSON.parse(JSON.stringify(content.tags).replace(/"\s+|\s+"/g,'"'))
+
   var postHash = commit(POSTS_TAG, content);
+
   CreatePostLinks(content, postHash)
+
   if ("tags" in content)
-  CreateTags(content, postHash)
+    CreateTags(content, postHash)
+
   return postHash;
 }
+
 function GetPublicPosts(query) {
   if(typeof query !== "undefined"){
     var links = getLinks(anchor("tags", query.tag), TAGS, { Load: true})
@@ -134,7 +152,7 @@ function GetPost(hash) {
 function CreatePostLinks(content, postHash){
   if(content.status === "publish")
     commit(POSTS_LINK,{Links:[{Base: anchor("posts", "public"),Link: postHash,Tag: POSTS_TAG}]});
-    commit(POSTS_LINK,{Links:[{Base: App.Agent.Hash,Link: postHash,Tag: POSTS_TAG}]});
+  commit(POSTS_LINK,{Links:[{Base: App.Agent.Hash,Link: postHash,Tag: POSTS_TAG}]});
 }
 
 function UnlinkPostFromTags(postHash){
@@ -150,6 +168,11 @@ function CreateTags(content, postHash){
   })
 }
 
+// UUIDv4 credit: https://gist.github.com/LeverOne/1308368
+function generateUUIDv4(a,b) {
+  for(b=a='';a++<36;b+=a*51&52?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'-');
+  return b;
+}
 
 // -----------------------------------------------------------------
 //  The Genesis Function https://developer.holochain.org/genesis
