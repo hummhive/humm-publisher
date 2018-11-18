@@ -10,11 +10,12 @@ export function receivePosts (posts) {
   }
 }
 
-export function addNewPost (hash, title, author, pubdate, lastupdate, tags, content, status) {
+export function addNewPost (hash, uuid, title, author, pubdate, lastupdate, tags, content, status) {
   return {
     type: ADD_POST,
     post: {
     hash,
+    uuid,
     title,
     author,
     pubdate,
@@ -26,11 +27,12 @@ export function addNewPost (hash, title, author, pubdate, lastupdate, tags, cont
   }
 }
 
-export function editPost (hash, title, author, pubdate, lastupdate, tags, content, status, prevHash) {
+export function editPost (hash, uuid, title, author, pubdate, lastupdate, tags, content, status, prevHash) {
   return {
     type: EDIT_POST,
     post: {
     hash,
+    uuid,
     title,
     author,
     pubdate,

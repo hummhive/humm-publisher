@@ -17,20 +17,20 @@ export function handleInitialData() {
 export function newPostDispatch(title, author, pubdate, lastupdate, tags, content, status) {
   return (dispatch) => {
     return fetchPOST('/fn/Posts/CreatePost', {title, tags, content, status})
-    .then(hash => {dispatch(addNewPost(hash, title, author, pubdate, lastupdate, tags, content, status))}).catch( err => {console.error( 'Error Creating Post: ', err );})
+    .then(response => {dispatch(addNewPost(response.hash, response.uuid, title, author, pubdate, lastupdate, tags, content, status))}).catch( err => {console.error( 'Error Creating Post: ', err );})
   }
 }
 
 export function deletePostDispatch(hash, status){
   return (dispatch) =>{
     return fetchPOST('/fn/Posts/DeletePost', {hash, status})
-    .then(() => dispatch(deletePost(hash)))
+    .then(response => {dispatch(deletePost(hash))}).catch( err => {console.error( 'Error Deleting Post: ', err );})
   }
 }
 
-export function editPostDispatch(prevHash, title, author, pubdate, lastupdate, tags, content, status){
+export function editPostDispatch(prevHash, uuid, title, author, pubdate, lastupdate, tags, content, status){
   return (dispatch) =>{
-    return fetchPOST('/fn/Posts/EditPost', {"hash": prevHash, title, tags, content, status})
-    .then(hash => {dispatch(editPost(hash, title, author, pubdate, lastupdate, tags, content, status, prevHash))}).catch( err => {console.error( 'Error Editing Post: ', err );})
+    return fetchPOST('/fn/Posts/EditPost', {"hash": prevHash, uuid, title, tags, content, status})
+    .then(response => {dispatch(editPost(response.hash, uuid, title, author, pubdate, lastupdate, tags, content, status, prevHash))}).catch( err => {console.error( 'Error Editing Post: ', err );})
   }
 }
