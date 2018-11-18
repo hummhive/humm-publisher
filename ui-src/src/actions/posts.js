@@ -1,6 +1,7 @@
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const ADD_POST = 'ADD_POST'
 export const DELETE_POST = 'DELETE_POST'
+export const EDIT_POST = 'EDIT_POST'
 
 export function receivePosts (posts) {
   return {
@@ -9,16 +10,42 @@ export function receivePosts (posts) {
   }
 }
 
-export function addNewPost (post) {
+export function addNewPost (hash, title, author, pubdate, lastupdate, tags, content, status) {
   return {
     type: ADD_POST,
-    post
+    post: {
+    hash,
+    title,
+    author,
+    pubdate,
+    lastupdate,
+    tags,
+    content,
+    status
+  }
   }
 }
 
-export function deletePost(post) {
+export function editPost (hash, title, author, pubdate, lastupdate, tags, content, status, prevHash) {
+  return {
+    type: EDIT_POST,
+    post: {
+    hash,
+    title,
+    author,
+    pubdate,
+    lastupdate,
+    tags,
+    content,
+    status,
+    prevHash
+  }
+  }
+}
+
+export function deletePost(hash) {
   return {
     type: DELETE_POST,
-    post
+    hash
   }
 }
