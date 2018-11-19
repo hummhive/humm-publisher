@@ -9,8 +9,7 @@
     "rootParentId",
     "parentId",
     "body",
-    "author",
-    "createdAt"
+    "author"
   ],
   "properties": {
     "uuid": {
