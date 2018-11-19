@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {handleInitialData} from '../actions';
-import {FaEdit} from 'react-icons/fa';
+import {FaEdit, FaComments} from 'react-icons/fa';
 import LoadingBar from 'react-redux-loading-bar';
 import {Container, Row, Col, Badge} from 'react-bootstrap';
 import {BrowserRouter as Router, Route, Link, NavLink, Redirect} from 'react-router-dom';
 import Post from './Post';
 import PropTypes from 'prop-types';
 import Compose from './Compose';
+import Comment from './Comment';
 import Sidebar from './Sidebar';
 
 class App extends Component {
@@ -35,6 +36,9 @@ class App extends Component {
                       <NavLink className="nav-link" to='/post'>Articles <Badge variant="light">{agent !== null ? postcount : '0'}</Badge></NavLink>
                     </li>
                     <li className="nav-item">
+                      <NavLink className="nav-link" to='/comment'><FaComments /></NavLink>
+                    </li>
+                    <li className="nav-item">
                       <NavLink className="nav-link" to='/compose'><FaEdit /></NavLink>
                     </li>
                   </ul>
@@ -53,6 +57,7 @@ class App extends Component {
                   <React.Fragment>
                     <Route path="/compose/:id?/" component={Compose} />
                     <Route path={'/post/:id?/'} component={Post} />
+                    <Route path={'/comment/:id?/'} component={Comment} />
                   </React.Fragment>
                 )}
               </div>
@@ -67,6 +72,7 @@ class App extends Component {
 App.propTypes = {
   dispatch: PropTypes.func,
   agent: PropTypes.object,
+  loading: PropTypes.bool,
   postcount: PropTypes.number
 };
 
