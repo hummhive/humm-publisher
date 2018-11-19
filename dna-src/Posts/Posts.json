@@ -22,7 +22,7 @@
       "pattern": ".+"
     },
     "pubdate": {
-      "type": "number",
+      "type": "string",
       "pattern": ".+"
     },
     "tags": {
