@@ -121,7 +121,7 @@ class Compose extends Component {
               tag="div"
               text={this.state.content}
               onChange={this.handleContentChange}
-              options={{autoLink: true, toolbar: {buttons: ['bold', 'italic', 'h1', 'h2', 'image', 'anchor', 'orderedlist', 'unorderedlist', 'justifyLeft', 'justifyCenter', 'justifyRight']}}}
+              options={{placeholder: false, autoLink: true, toolbar: {buttons: ['bold', 'italic', 'h1', 'h2', 'image', 'anchor', 'orderedlist', 'unorderedlist', 'justifyLeft', 'justifyCenter', 'justifyRight']}}}
             />
           </div>
           {typeof match.params.id !== 'undefined' && match.params.id === post.hash ? (
