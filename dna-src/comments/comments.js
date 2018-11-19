@@ -38,8 +38,32 @@ function commentUpdate (commentHash) {
 }
 
 function commentDelete (commentHash) {
-  var result = remove(commentHash, "");
-  return result;
+  
+  var comment = get(commentHash)
+  comment.deleted = true;
+  comment.deletedAt = new Date();
+  var updatedComment = update("comment", comment, commentHash)
+
+  commit('comment_post_link',{
+    Links: [
+      {
+        Base: anchor('comment', comment.parentId),
+        Link: commentHash,
+        Tag: 'comment',
+        LinkAction: HC.LinkAction.Del
+      }
+    ]
+  });
+
+  commit('comment_post_link', {
+    Links: [{
+      Base: anchor('comment', comment.parentId),
+      Link: updatedComment,
+      Tag: 'comment'
+    }]
+  });
+
+  return "Comment Marked as Deleted";
 }
 
 function getLinkedComments(parentId) {
