@@ -2,6 +2,10 @@
   min-height: 4rem;
 }
 
+.medium-editor-element {
+	min-height: 350px !important;
+}
+
 #main-content {
   border: 0;
 }
@@ -62,6 +66,8 @@ blockquote::before{
 .form-group.button-group {
 	position: fixed;
 	bottom: 0;
+	right: 10px;
+	/* top: 13px; */
 }
 
 body {
