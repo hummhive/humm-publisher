@@ -21,11 +21,13 @@ class Post extends Component {
       const {post, match, location} = this.props;
 
       if (post === null) {
-        return <p>There are no posts yet, <Link to='/compose'>start by making one!</Link></p>;
+        return <p>There are no posts yet, <Link to='/compose'>start by making one!</Link> 😁</p>;
       }
 
       if (typeof match.params.id === 'undefined' && post !== null) {
-        return <Redirect push to={{pathname: `/post/${post.hash}`, state: {referrer: typeof location.state !== 'undefined' && location.state.referrer === 'updated' ? 'updated' : null}}} />;
+        return <Redirect push to={{pathname: `/post/${post.hash}`,
+          state: {referrer: typeof location.state !== 'undefined' &&
+          location.state.referrer === 'updated' ? 'updated' : null}}} />;
       }
 
       return (
@@ -38,7 +40,7 @@ class Post extends Component {
             <button id="deletePost" type="button" className="btn btn-outline-dark btn-sm" onClick={this.handleChange}>Mark as Deleted</button>
           </div>
           <h1 id="thePost-title">{post.title}</h1>
-          <p><small>Published on: <Moment format="MMMM D, YYYY [at] h:mm A z">{post.pubdate}</Moment></small></p>
+          <p><small>Published on: <Moment interval={0} format="MMMM D, YYYY [at] h:mm A z">{post.pubdate}</Moment></small></p>
           <div dangerouslySetInnerHTML={{__html: post.content}} />
         </React.Fragment>
       );

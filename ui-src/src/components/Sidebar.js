@@ -13,7 +13,7 @@ class Sidebar extends Component {
         {sidebar.map(post =>
           <NavLink key={post.hash} id={post.hash} to={`/${match.params.page}/${post.hash}`}
             className={'list-group-item list-group-item-action align-items-start'}>
-            <h5 className="mb-1">{post.title}</h5><small>Modified: <Moment format="MM/DD/YYYY [at] h:mm A z">{post.pubdate}</Moment></small>
+            <h5 className="mb-1">{post.title}</h5><small>Modified: <Moment interval={0} format="MM/DD/YYYY [at] h:mm A z">{post.lastupdate}</Moment></small>
             <Badge variant="light">{post.status}</Badge>
           </NavLink>
         )}
