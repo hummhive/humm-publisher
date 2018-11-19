@@ -32,9 +32,9 @@ function CreatePost(postEntry) {
   if(typeof postEntry.uuid === "undefined")
   postEntry.uuid = generateUUIDv4();
   if(typeof postEntry.pubdate === "undefined")
-  postEntry.pubdate = +new Date
+  postEntry.pubdate = new Date();
   if(typeof postEntry.lastupdate === "undefined")
-  postEntry.lastupdate = +new Date
+  postEntry.lastupdate = new Date();
   if(typeof postEntry.tags !== "undefined")
   postEntry.tags = JSON.parse(JSON.stringify(postEntry.tags).replace(/"\s+|\s+"/g,'"'))
   var postHash = commit(POSTS_TAG, postEntry);
@@ -116,7 +116,7 @@ function DeletePost(post) {
         ]
       });
     UnlinkPostFromTags(post.hash);
-    remove(post.hash, "post deleted by agent");
+    remove(post.hash, "Post Deleted by Agent");
     return "Post Deleted";
   }else{
     return "Hash not found!"
@@ -133,7 +133,7 @@ function EditPost(post) {
       tags: post.tags,
       status: post.status,
       pubdate: post.pubdate,
-      lastupdate: +new Date
+      lastupdate: new Date()
     }
     post.prevState = prevState.status
     try{
