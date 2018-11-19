@@ -23,7 +23,7 @@ class Sidebar extends Component {
 }
 
 Sidebar.propTypes = {
-  sidebar: PropTypes.object,
+  sidebar: PropTypes.array,
   match: PropTypes.object
 };
 
