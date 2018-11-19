@@ -9,7 +9,6 @@
 // -----------------------------------------------------------------
 
 function commentCreate (commentEntry) {
-  commentEntry = JSON.parse(commentEntry);
   commentEntry.uuid = generateUUIDv4();
   var commentHash = commit("comment", commentEntry);
   commentEntry.hash = commentHash;
