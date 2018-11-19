@@ -10,6 +10,7 @@
 
 function commentCreate (commentEntry) {
   commentEntry.uuid = generateUUIDv4();
+  commentEntry.createdAt = new Date();
   var commentHash = commit("comment", commentEntry);
   commentEntry.hash = commentHash;
   createCommentPostLink(commentEntry);
@@ -38,7 +39,7 @@ function commentUpdate (commentHash) {
 }
 
 function commentDelete (commentHash) {
-  
+
   var comment = get(commentHash)
   comment.deleted = true;
   comment.deletedAt = new Date();
