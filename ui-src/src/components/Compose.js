@@ -24,8 +24,8 @@ class Compose extends Component {
     dispatch(newPostDispatch(
       this.state.title,
       agent.name,
-      +new Date(),
-      +new Date(),
+      new Date(),
+      new Date(),
       this.state.tags.split(','),
       this.state.content,
       this.state.status)).then(() => {
@@ -44,7 +44,7 @@ class Compose extends Component {
       this.state.title,
       agent.name,
       post.pubdate,
-      +new Date(),
+      new Date(),
       this.state.tags,
       this.state.content,
       this.state.status)).then(() => {
