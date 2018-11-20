@@ -6,7 +6,6 @@ import {newPostDispatch, editPostDispatch} from '../actions';
 import {Redirect} from 'react-router-dom';
 import Editor from 'react-medium-editor';
 require('medium-editor/dist/css/medium-editor.css');
-require('medium-editor/dist/css/themes/beagle.css');
 
 class Compose extends Component {
   state = {
