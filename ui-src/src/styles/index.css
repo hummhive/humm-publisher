@@ -22,7 +22,6 @@
 	position: fixed;
 	bottom: 0;
 	right: 10px;
-	/* top: 13px; */
 }
 
 body {
@@ -41,10 +40,15 @@ body {
   min-height: 100vh;
 }
 
+#post-list {
+	overflow-y: scroll;
+	max-height: 550px;
+}
+
 /* BEAGLE STYLING */
 
 .medium-editor-element {
-	min-height: 4000px !important;
+	min-height: 400px !important;
 }
 
 .medium-editor-toolbar-form {
