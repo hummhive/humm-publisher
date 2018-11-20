@@ -6,12 +6,16 @@
 //  Exposed functions with custom logic https://developer.holochain.org/API_reference
 // -----------------------------------------------------------------
 
+const COMMENT = 'comment';
+const COMMENT_LINK = 'comment_post_link';
+const COMMENT_AUTHOR_LINK = 'comment_author_link';
+
 function commentCreate (commentEntry) {
   commentEntry.uuid = generateUUIDv4();
   commentEntry.createdAt = new Date();
   commentEntry.deleted = false;
   commentEntry.updatedAt = new Date();
-  const commentHash = commit('comment', commentEntry);
+  const commentHash = commit(COMMENT, commentEntry);
   commentEntry.hash = commentHash;
   createCommentPostLink(commentEntry);
   createCommentAuthorLink(commentEntry);
@@ -22,21 +26,6 @@ function commentRead (commentHash) {
   return get(commentHash);
 }
 
-// TODO: function not implemented
-function commentUpdate (commentHash) {
-  const sampleValue = {
-    uuid: '3d97d337-1444-4104-b1b4-c48e9404e8db',
-    rootParentId: '598a94b9-0225-4ee1-85a9-46dd7a4497ab',
-    parentId: '28fcbff4-8d2f-494c-a2c5-9dd845f1ab5a',
-    body: 'I enjoyed reading this article because it was well written.',
-    author: 'Pablo Picapiedra',
-    createdAt: '2018-11-11',
-    updatedAt: '2018-11-12'
-  };
-  const commentOutHash = update('comment', sampleValue, commentHash);
-  return commentOutHash;
-}
-
 function commentDelete (commentObj) {
   const comments = getLinkedComments(commentObj.parentId);
   const comment = comments.filter(item => item.Hash === commentObj.hash);
@@ -45,24 +34,24 @@ function commentDelete (commentObj) {
     comment[0].Entry.deleted = true;
     comment[0].Entry.updatedAt = new Date();
 
-    const updatedComment = update('comment', comment[0].Entry, comment[0].Hash);
+    const updatedComment = update(COMMENT, comment[0].Entry, comment[0].Hash);
 
-    commit('comment_post_link', {
+    commit(COMMENT_LINK, {
       Links: [
         {
-          Base: anchor('comment', commentObj.parentId),
+          Base: anchor(COMMENT, commentObj.parentId),
           Link: comment[0].Hash,
-          Tag: 'comment',
+          Tag: COMMENT,
           LinkAction: HC.LinkAction.Del
         }
       ]
     });
 
-    commit('comment_post_link', {
+    commit(COMMENT_LINK, {
       Links: [{
-        Base: anchor('comment', commentObj.parentId),
+        Base: anchor(COMMENT, commentObj.parentId),
         Link: updatedComment,
-        Tag: 'comment'
+        Tag: COMMENT
       }]
     });
     return 'Comment Marked as Deleted';
@@ -71,25 +60,25 @@ function commentDelete (commentObj) {
 }
 
 function getLinkedComments(parentId) {
-  return getLinks(anchor('comment', parentId), 'comment', {Load: true});
+  return getLinks(anchor(COMMENT, parentId), COMMENT, {Load: true});
 }
 
 function createCommentPostLink(comment) {
-  commit('comment_post_link', {
+  commit(COMMENT_LINK, {
     Links: [{
-      Base: anchor('comment', comment.parentId),
+      Base: anchor(COMMENT, comment.parentId),
       Link: comment.hash,
-      Tag: 'comment'
+      Tag: COMMENT
     }]
   });
 }
 
 function createCommentAuthorLink(comment) {
-  commit('comment_author_link', {
+  commit(COMMENT_AUTHOR_LINK, {
     Links: [{
-      Base: anchor('comment', comment.author),
+      Base: anchor(COMMENT, comment.author),
       Link: comment.hash,
-      Tag: 'comment'
+      Tag: COMMENT
     }]
   });
 }
@@ -98,24 +87,6 @@ function createCommentAuthorLink(comment) {
 function generateUUIDv4(a, b) {
 for(b=a='';a++<36;b+=a*51&52?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'-');
 return b;
-}
-
-// -----------------------------------------------------------------
-//  TODO
-// -----------------------------------------------------------------
-
-function commentUpdate (commentHash) {
-  const sampleValue = {
-    uuid: '3d97d337-1444-4104-b1b4-c48e9404e8db',
-    rootParentId: '598a94b9-0225-4ee1-85a9-46dd7a4497ab',
-    parentId: '28fcbff4-8d2f-494c-a2c5-9dd845f1ab5a',
-    body: 'I enjoyed reading this article because it was well written.',
-    author: 'Pablo Picapiedra',
-    createdAt: '2018-11-11',
-    updatedAt: '2018-11-12'
-  };
-  const commentOutHash = update('comment', sampleValue, commentHash);
-  return commentOutHash;
 }
 
 // -----------------------------------------------------------------
@@ -162,13 +133,14 @@ function genesis () {
  * @return {boolean} is valid?
  */
 function validateCommit (entryName, entry, header, pkg, sources) {
-  return true;
   switch (entryName) {
-    case 'comment':
+    case COMMENT:
+    case COMMENT_LINK:
+    case COMMENT_AUTHOR_LINK:
       // be sure to consider many edge cases for validating
       // do not just flip this to true without considering what that means
       // the action will ONLY be successfull if this returns true, so watch out!
-      return false;
+      return true;
     default:
       // invalid entry name
       return false;
@@ -185,13 +157,14 @@ function validateCommit (entryName, entry, header, pkg, sources) {
  * @return {boolean} is valid?
  */
 function validatePut (entryName, entry, header, pkg, sources) {
-  return true;
   switch (entryName) {
-    case 'comment':
+    case COMMENT:
+    case COMMENT_LINK:
+    case COMMENT_AUTHOR_LINK:
       // be sure to consider many edge cases for validating
       // do not just flip this to true without considering what that means
       // the action will ONLY be successfull if this returns true, so watch out!
-      return false;
+      return true;
     default:
       // invalid entry name
       return false;
@@ -209,13 +182,14 @@ function validatePut (entryName, entry, header, pkg, sources) {
  * @return {boolean} is valid?
  */
 function validateMod (entryName, entry, header, replaces, pkg, sources) {
-  return true;
   switch (entryName) {
-    case 'comment':
+    case COMMENT:
+    case COMMENT_LINK:
+    case COMMENT_AUTHOR_LINK:
       // be sure to consider many edge cases for validating
       // do not just flip this to true without considering what that means
       // the action will ONLY be successfull if this returns true, so watch out!
-      return false;
+      return true;
     default:
       // invalid entry name
       return false;
@@ -231,17 +205,7 @@ function validateMod (entryName, entry, header, replaces, pkg, sources) {
  * @return {boolean} is valid?
  */
 function validateDel (entryName, hash, pkg, sources) {
-  return true;
-  switch (entryName) {
-    case 'comment':
-      // be sure to consider many edge cases for validating
-      // do not just flip this to true without considering what that means
-      // the action will ONLY be successfull if this returns true, so watch out!
-      return false;
-    default:
-      // invalid entry name
-      return false;
-  }
+return null;
 }
 
 /**
@@ -254,13 +218,14 @@ function validateDel (entryName, hash, pkg, sources) {
  * @return {boolean} is valid?
  */
 function validateLink (entryName, baseHash, links, pkg, sources) {
-  return true;
   switch (entryName) {
-    case 'comment':
+    case COMMENT:
+    case COMMENT_LINK:
+    case COMMENT_AUTHOR_LINK:
       // be sure to consider many edge cases for validating
       // do not just flip this to true without considering what that means
       // the action will ONLY be successfull if this returns true, so watch out!
-      return false;
+      return true;
     default:
       // invalid entry name
       return false;
