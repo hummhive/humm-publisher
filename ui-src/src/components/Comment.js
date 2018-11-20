@@ -55,6 +55,7 @@ handleChange = (hash, parentId) => {
 
 render () {
   const {post, match} = this.props;
+  const {comments} = this.state;
 
   if (post === null) {
     return <p>There are no posts yet, <Link to='/compose'>start by making one!</Link> 😁</p>;
@@ -64,22 +65,22 @@ render () {
     return <p>Please select one of the posts from the sidebar</p>;
   }
 
-  if (this.state.comments.length === 0) {
+  if (comments.length === 0) {
     return <p>This post does not have any comments! 😥</p>;
   }
 
   return (
     <React.Fragment>
-      {Object.keys(this.state.comments).map(comment =>
-        <Card key={this.state.comments[comment].Entry.hash} className="mb-3" style={this.state.comments[comment].Entry.deleted === false ? {opacity: '1'} : {opacity: '0.5'}}>
-          <Card.Header><small>{this.state.comments[comment].Hash} - <Moment interval={0} format="MM/DD/YYYY [at] h:mm A z">{this.state.comments[comment].Entry.createdAt}</Moment></small></Card.Header>
+      {Object.keys(comments).map(comment =>
+        <Card key={comments[comment].Entry.hash} className="mb-3" style={comments[comment].Entry.deleted === false ? {opacity: '1'} : {opacity: '0.5'}}>
+          <Card.Header><small>{comments[comment].Hash} - <Moment interval={0} format="MM/DD/YYYY [at] h:mm A z">{comments[comment].Entry.createdAt}</Moment></small></Card.Header>
           <Card.Body>
-            <Card.Title>{this.state.comments[comment].Entry.author} Said:</Card.Title>
+            <Card.Title>{comments[comment].Entry.author} Said:</Card.Title>
             <Card.Text>
-              {this.state.comments[comment].Entry.deleted === false ? this.state.comments[comment].Entry.body : <Alert variant='light'>This comment has been marked as deleted</Alert>}
+              {comments[comment].Entry.deleted === false ? comments[comment].Entry.body : <Alert variant='light'>This comment has been marked as deleted</Alert>}
             </Card.Text>
-            {this.state.comments[comment].Entry.deleted === false && (
-              <button type="button" className="btn btn-outline-dark btn-sm" onClick={() => this.handleChange(this.state.comments[comment].Hash, post.uuid)}>Mark as Deleted</button>
+            {comments[comment].Entry.deleted === false && (
+              <button type="button" className="btn btn-outline-dark btn-sm" onClick={() => this.handleChange(comments[comment].Hash, post.uuid)}>Mark as Deleted</button>
             )}
           </Card.Body>
         </Card>
