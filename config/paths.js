@@ -56,6 +56,9 @@ module.exports = {
   yarnLockFile: resolveBase('yarn.lock'),
   testsSetup: resolveApp('src/setupTests.ts'),
   appNodeModules: resolveBase('node_modules'),
+  appTsConfig: resolveBase('tsconfig.json'),
+  appTsProdConfig: resolveBase('tsconfig.json'),
+  appTsLint: resolveBase('tslint.json'),
   publicUrl: getPublicUrl(resolveBase('package.json')),
   servedPath: getServedPath(resolveBase('package.json')),
 };
