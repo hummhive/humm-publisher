@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Alert, Card} from 'react-bootstrap';
+import {Card} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import {fetchPOST} from '../utils/helpers';
 import {Link} from 'react-router-dom';
@@ -77,7 +77,7 @@ render () {
           <Card.Body>
             <Card.Title>{comments[comment].Entry.author} Said:</Card.Title>
             <Card.Text>
-              {comments[comment].Entry.deleted === false ? comments[comment].Entry.body : <Alert variant='light'>This comment has been marked as deleted</Alert>}
+              {comments[comment].Entry.body}
             </Card.Text>
             {comments[comment].Entry.deleted === false && (
               <button type="button" className="btn btn-outline-dark btn-sm" onClick={() => this.handleChange(comments[comment].Hash, post.uuid)}>Mark as Deleted</button>
