@@ -44,7 +44,7 @@ class Compose extends Component {
       agent.name,
       post.pubdate,
       new Date(),
-      this.state.tags,
+      this.state.tags.split(','),
       this.state.content,
       this.state.status)).then(() => {
       this.setState(() => ({
@@ -68,7 +68,7 @@ class Compose extends Component {
     });
   }
 
-  // todo: need to replace with better approach
+  // need to replace with better approach since this is deprecated.
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.post !== null && nextProps.post.hash === nextProps.match.params.id) {
       this.state = {
@@ -120,7 +120,7 @@ class Compose extends Component {
               tag="div"
               text={this.state.content}
               onChange={this.handleContentChange}
-              options={{placeholder: false, autoLink: true, toolbar: {buttons: ['bold', 'italic', 'h1', 'h2', 'image', 'anchor', 'orderedlist', 'unorderedlist', 'justifyLeft', 'justifyCenter', 'justifyRight']}}}
+              options={{placeholder: false, autoLink: true, toolbar: {buttons: ['bold', 'italic', 'h1', 'h2', 'h3', 'image', 'anchor', 'orderedlist', 'unorderedlist', 'justifyLeft', 'justifyCenter', 'justifyRight', 'html']}}}
             />
           </div>
           {typeof match.params.id !== 'undefined' && match.params.id === post.hash ? (
