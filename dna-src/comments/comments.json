@@ -8,6 +8,7 @@
     "uuid",
     "parentId",
     "body",
+    "uuid",
     "author"
   ],
   "properties": {

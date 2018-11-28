@@ -6,6 +6,7 @@
     "title",
     "status",
     "content",
+    "uuid",
     "author"
   ],
   "properties": {
@@ -22,6 +23,10 @@
       "pattern": ".+"
     },
     "pubdate": {
+      "type": "string",
+      "pattern": ".+"
+    },
+    "lastupdate": {
       "type": "string",
       "pattern": ".+"
     },
