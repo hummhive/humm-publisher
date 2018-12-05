@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Form, Alert, OverlayTrigger, Tooltip} from 'react-bootstrap';
+import { WithContext as ReactTags } from 'react-tag-input';
+import {Form, Alert, Row, OverlayTrigger, Tooltip, Container, Col} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import {newPostDispatch, editPostDispatch} from '../actions';
 import {Redirect} from 'react-router-dom';
@@ -10,7 +11,7 @@ require('medium-editor/dist/css/medium-editor.css');
 class Compose extends Component {
   state = {
     title: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.title : '',
-    tags: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.tags : '',
+    tags: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.tags.map(tag => { return {id: tag, text: tag}}) : [],
     content: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.content : '',
     status: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.status : '',
     redirect: false,
@@ -73,22 +74,44 @@ class Compose extends Component {
     if (nextProps.post !== null && nextProps.post.hash === nextProps.match.params.id) {
       this.state = {
         title: nextProps.post.title,
-        tags: nextProps.post.tags,
+        tags: nextProps.post.tags.map(tag => { return {id: tag, text: tag}}),
         content: nextProps.post.content,
         status: nextProps.post.status
       };
     } else {
       this.state = {
         title: '',
-        tags: '',
+        tags: [],
         content: '',
         status: ''
       };
     }
   }
 
+  handleDelete(i) {
+      const { tags } = this.state;
+      this.setState({
+        tags: tags.filter((tag, index) => index !== i),
+      });
+    }
+
+    handleAddition(tag) {
+     this.setState(state => ({ tags: [...state.tags, tag] }));
+    }
+
+    handleDrag(tag, currPos, newPos) {
+      const tags = [...this.state.tags];
+      const newTags = tags.slice();
+
+      newTags.splice(currPos, 1);
+      newTags.splice(newPos, 0, tag);
+
+      // re-render
+      this.setState({ tags: newTags });
+    }
+
   render() {
-    const {post, match, history} = this.props;
+    const {post, match, history, agent} = this.props;
     const {content, title} = this.state;
     const submitEnabled = content.length > 0 && title.length > 0;
 
@@ -102,43 +125,62 @@ class Compose extends Component {
       return <p>This hash does not exist...</p>;
     }
 
-
     return (
       <React.Fragment>
-        {typeof history.location.state !== 'undefined' && history.location.state.referrer === 'created' && (
-          <Alert variant='primary'>The post has been created {post.status === 'publish' ? 'and published to the blog' : 'and stored as a draft'}</Alert>
-        )}
-        <Form onSubmit={typeof match.params.id !== 'undefined' && match.params.id === post.hash ? this.handleUpdateSubmit : this.handleSubmit}>
-          <div className="form-group">
-            <input id="title" name="title" value={this.state.title} className="form-control form-control-lg" type="text" size="50" onChange={this.handleChange} placeholder="Some Sweet Title Here" />
-          </div>
-          <div className="form-group">
-            <input id="tags" name="tags" value={this.state.tags} className="form-control form-control-lg" type="text" size="50" onChange={this.handleChange} placeholder="Write Some Tags: holochain, beta, politics, news" />
-          </div>
-          <div className="form-group">
-            <Editor
-              tag="div"
-              text={this.state.content}
-              onChange={this.handleContentChange}
-              options={{placeholder: false, autoLink: true, toolbar: {buttons: ['bold', 'italic', 'h1', 'h2', 'h3', 'image', 'anchor', 'orderedlist', 'unorderedlist', 'justifyLeft', 'justifyCenter', 'justifyRight', 'html']}}}
-            />
-          </div>
-          {typeof match.params.id !== 'undefined' && match.params.id === post.hash ? (
-            <div className="form-group button-group">
-              <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">WARNING: The Hash of the post will be replaced!!</Tooltip>}>
-                <button type="submit" id="saveDraft" name="status" value="draft" onClick={this.handleChange} className="btn btn-outline-btn-secondary mr-1" disabled={!submitEnabled}>Save as Draft</button>
-              </OverlayTrigger>
-              <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">WARNING: The Hash of the post will be replaced!!</Tooltip>}>
-                <button type="submit" id="publishPost" name="status" value="publish" onClick={this.handleChange} className="btn btn-primary" disabled={!submitEnabled}>Re-Publish</button>
-              </OverlayTrigger>
-            </div>
-          ) : (
-            <div className="form-group button-group">
-              <button type="submit" id="saveDraft" name="status" value="draft" onClick={this.handleChange} className="btn btn-outline-btn-secondary mr-1" disabled={!submitEnabled}>Save as Draft</button>
-              <button type="submit" id="publishPost" name="status" value="publish" onClick={this.handleChange} className="btn btn-primary" disabled={!submitEnabled}>Publish</button>
-            </div>
-          )}
-        </Form>
+        <div className="sub-header">
+          <Container>
+            <Row>
+              <Col>
+                <span className="nav-sub-header">{agent.name} Playspace > <a href="humm.earth/blog">Humm.earth</a></span>
+              </Col>
+              <Col>
+                {typeof match.params.id !== 'undefined' && match.params.id === post.hash ? (
+                  <div className="form-group button-group float-right m-0">
+                    <button type="button" className="btn btn-blue">PREVIEW</button>
+                    <button type="button" className="btn btn-red">DELETE</button>
+                    <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">WARNING: The Hash of the post will be replaced!!</Tooltip>}>
+                      <button type="submit" id="saveDraft" name="status" value="draft" onClick={this.handleChange} className="btn btn-orange mr-1" disabled={!submitEnabled}>Save as Draft</button>
+                    </OverlayTrigger>
+                    <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">WARNING: The Hash of the post will be replaced!!</Tooltip>}>
+                      <button type="submit" id="publishPost" name="status" value="publish" onClick={this.handleChange} className="btn btn-green" disabled={!submitEnabled}>UPDATE</button>
+                    </OverlayTrigger>
+                  </div>
+                ) : (
+                  <div className="form-group button-group float-right m-0">
+                    <button type="submit" id="saveDraft" name="status" value="draft" onClick={this.handleChange} className="btn btn-orange mr-1" disabled={!submitEnabled}>Save as Draft</button>
+                    <button type="submit" id="publishPost" name="status" value="publish" onClick={this.handleChange} className="btn btn-green" disabled={!submitEnabled}>Publish</button>
+                  </div>
+                )}
+              </Col>
+            </Row>
+          </Container>
+        </div>
+        <div id="content" className="mt-5">
+          <Container>
+            <Form onSubmit={typeof match.params.id !== 'undefined' && match.params.id === post.hash ? this.handleUpdateSubmit : this.handleSubmit}>
+              <div className="form-group m-0">
+                <input id="title" name="title" value={this.state.title} className="form-control form-control-lg" type="text" size="50" onChange={this.handleChange} placeholder="Title Goes Here" />
+              </div>
+                            <div className="form-group">
+              <ReactTags
+                tags={this.state.tags}
+                handleDelete={this.handleDelete.bind(this)}
+                handleAddition={this.handleAddition.bind(this)}
+                placeholder="Create Topic"
+                handleDrag={this.handleDrag.bind(this)}
+              />
+                </div>
+              <div className="form-group">
+                <Editor
+                  tag="div"
+                  text={this.state.content}
+                  onChange={this.handleContentChange}
+                  options={{placeholder: false, autoLink: true, toolbar: {buttons: ['bold', 'italic', 'h1', 'h2', 'h3', 'image', 'anchor', 'orderedlist', 'unorderedlist', 'justifyLeft', 'justifyCenter', 'justifyRight', 'html']}}}
+                />
+              </div>
+            </Form>
+          </Container>
+        </div>
       </React.Fragment>
     );
   }

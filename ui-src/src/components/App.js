@@ -2,14 +2,16 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {handleInitialData} from '../actions';
 import {FaEdit, FaComments} from 'react-icons/fa';
+import logo from '../images/logo.png';
+import settings from '../images/settings.png';
 import LoadingBar from 'react-redux-loading-bar';
 import {Container, Row, Col, Badge} from 'react-bootstrap';
 import {BrowserRouter as Router, Route, Link, NavLink, Redirect} from 'react-router-dom';
 import Post from './Post';
+import Manage from './Manage';
 import PropTypes from 'prop-types';
 import Compose from './Compose';
 import Comment from './Comment';
-import Sidebar from './Sidebar';
 
 class App extends Component {
   componentDidMount () {
@@ -21,48 +23,39 @@ class App extends Component {
       <Router>
         <React.Fragment>
           <LoadingBar />
-          <Route exact path="/" render={() => (
-            <Redirect to='/post' />
-          )}/>
-          <Container fluid={true}>
-            <Row>
-              <Col md={3} className="px-0 border-right" id="sticky-sidebar">
-                <div className="py-0 sticky-top">
-                  <header className="navbar navbar-expand flex-column flex-md-row bd-navbar mb-3 border-bottom">
-                    <Link className="navbar-brand m-auto" to="/post" aria-label="Bootstrap">Humm Publisher</Link>
-                  </header>
-                  <ul className="nav nav-pills justify-content-center border-bottom pb-3 pt-1">
-                    <li className="nav-item">
-                      <NavLink className="nav-link" to='/post'>Articles <Badge variant="light">{agent !== null ? postcount : '0'}</Badge></NavLink>
-                    </li>
-                    <li className="nav-item">
-                      <NavLink className="nav-link" to='/comment'><FaComments /></NavLink>
-                    </li>
-                    <li className="nav-item">
-                      <NavLink className="nav-link" to='/compose'><FaEdit /></NavLink>
-                    </li>
-                  </ul>
-                  <div id="post-list" className="list-group list-group-flush">
-                    <Route path={'/:page?/:id?/'} component={Sidebar} />
-                    {agent !== null &&
-                        <span className="footer-author"><small><strong>Signed as: </strong>{agent.name}</small></span>
-                    }
+          <header>
+            <Container fluid={true}>
+              <Row>
+                <Col xs={2}>
+                  <Link to="/"><img className="logo" src={logo} width="113" height="36" /></Link>
+                </Col>
+                <Col xs={7}>
+                  <ul className="nav-buttons">
+                  <li><Link to="/compose"><button type="button" className="btn btn-header-orange">NEW STORY</button></Link></li>
+                    <li><Link to="/manage"><button type="button" className="btn btn-header-normal">MANAGE</button></Link></li>
+                    <li><Link to="/comment"><button type="button" className="btn btn-header-normal">COMMENTS</button></Link></li>                  </ul>
+                </Col>
+                <Col>
+                  <div className="float-right">
+                    <ul className="nav-right">
+                      <li><img className="avatar rounded" src="https://s3-alpha-sig.figma.com/img/726c/d8ae/837dd6531cd328f75775923da7cd6aa2?Expires=1544400000&Signature=VZSMgNNqgfxpSJtW8ek2NypVGk0-aIXBeQgRq1l5IZuMkahpuJL~DMRxLLxPyNdEL2cXmng-DEjTGa9De9Ty1AUjq5pJ-bGkOie~bkOskR4u5OlT1xs2qNYp89tWe2dhqtj-2FUHEDVyRakZPTeEipE8J-FNcQYR961jH457Bw7RlEwuBo6LOaqKM6DPbkCnIJQTqiJKGqRadjipdiaZV0pzcnvqd7G4Gsp8O8AyVgx-KcYDKCvNqswK7qqW8SWke7CzgIOKiT6NDN7-kKX2rJw8DZjJm3YIYGviHX1a6xoOoY54GUJw5NW2Ph9JiqJaUrYvJVmqhhVYTh~wfrpHkw__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA" width="37" height="37" /></li>
+                      <li><img className="setting-icon" src={settings} width="37" height="37" /></li>
+                    </ul>
                   </div>
-                </div>
-              </Col>
-              <div id="content" className="col-9 px-5 mt-4">
-                {loading === true ? (
-                  <p>Loading data from Holochain...</p>
-                ) : (
-                  <React.Fragment>
-                    <Route path="/compose/:id?/" component={Compose} />
-                    <Route path={'/post/:id?/'} component={Post} />
-                    <Route path={'/comment/:id?/'} component={Comment} />
-                  </React.Fragment>
-                )}
-              </div>
-            </Row>
-          </Container>
+                </Col>
+              </Row>
+            </Container>
+          </header>
+          {loading === true ? (
+            <div className="loading-container mt-5 text-center"><p>Loading data from Holochain...</p></div>
+          ) : (
+            <React.Fragment>
+              <Route path="/compose/:id?/" component={Compose} />
+              <Route path="/manage/" component={Manage} />
+              <Route path={'/post/:id?/'} component={Post} />
+              <Route path={'/comment/:id?/'} component={Comment} />
+            </React.Fragment>
+          )}
         </React.Fragment>
       </Router>
     );
