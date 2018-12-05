@@ -1,6 +1,157 @@
-.bd-navbar {
-  min-height: 4rem;
+/* Import */
+
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+/* Header */
+
+header {
+	padding-left: 73px;
+	box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.07);
+	padding-bottom: 12px;
+	padding-top: 12px;
 }
+
+header .logo{
+  opacity: 0.5;
+}
+
+header .sub-header {
+	background: #2E2E2E;
+	padding: 10px;
+	width: 100%;
+	margin-top: 10px;
+}
+
+header .setting-icon {
+	opacity: 0.5;
+}
+
+header .nav-right{
+  padding-right: 72px;
+}
+
+header .nav-right li{
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+header .nav-buttons, .nav-right{
+  margin: 0;
+}
+
+header .nav-buttons li, .nav-right li {
+	display: inline;
+}
+
+/* Sub Header */
+
+.sub-header {
+	background: #2E2E2E;
+	padding: 10px;
+}
+
+.nav-sub-header {
+	color: #c0c0c0;
+	text-transform: capitalize;
+	font-size: 20px;
+  line-height: 35px;
+}
+
+.nav-sub-header a {
+	color: #fff;
+}
+
+/* Buttons */
+
+.btn-header-normal {
+	border: 1px solid #DCDADA;
+	background: #fff;
+	border-radius: 6px;
+	color: #666;
+	text-transform: uppercase;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.btn-header-orange {
+	border: 1px solid #DCDADA;
+	background: #EF7503;
+	border-radius: 6px;
+	color: #FFF;
+	text-transform: uppercase;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.btn-orange{
+  background: #FF8311;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #fff;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.btn-green{
+  background: #01D716;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #fff;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.btn-red{
+  background: #2687CD;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #fff;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.btn-red{
+  background: #DB3131;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #fff;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+/* Tabs */
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+	color: #FFF;
+	background-color: #0FAE16;
+	border: 1px solid #E0E0E0;
+}
+
+.nav-tabs .nav-link {
+	border: 1px solid transparent;
+	color: #fff;
+	background: #637C93;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-size: 17px;
+}
+
+.nav-tabs .nav-link:first-child {
+	margin-left: 21px;
+}
+
+.list-group-item {
+	border: 1px solid #DCDADA;
+}
+
+/* Content */
+
+.medium-editor-element {
+	word-wrap: break-word;
+	min-height: 30px;
+	border: 1px solid #DCDADA;
+}
+
 
 #main-content {
   border: 0;
@@ -18,31 +169,77 @@
 	box-shadow: none;
 }
 
-.form-group.button-group {
-	position: fixed;
-	bottom: 0;
-	right: 10px;
+#title{
+border: 0;
+font-size: 30px;
 }
 
-body {
-	overflow-x: hidden;
+/* Styles for the input */
+div.ReactTags__tagInput {
+    width: 281px;
+    border-radius: 2px;
+    display: inline-block;
+		float: left;
 }
 
-#title, #tags {
-  border-top: 0;
-  border-left: 0;
-  border-right: 0;
-  border-radius: 0;
-  border-bottom: 1px solid #f4f4f4;
+div.ReactTags__tags {
+    position: relative;
 }
 
-#sticky-sidebar {
-  min-height: 100vh;
+div.ReactTags__tagInput input.ReactTags__tagInputField,
+div.ReactTags__tagInput input.ReactTags__tagInputField:focus {
+    height: 31px;
+    margin: 0;
+    font-size: 12px;
+    width: 100%;
+    border: 1px solid #D0CECE;
+    padding: 0 4px;
 }
 
-#post-list {
-	overflow-y: scroll;
-	max-height: 550px;
+/* Styles for selected tags */
+div.ReactTags__selected span.ReactTags__tag {
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 12px;
+    display: inline-block;
+    padding: 5px;
+    margin: 0 5px;
+    cursor: move;
+    border-radius: 2px;
+}
+div.ReactTags__selected a.ReactTags__remove {
+    color: #aaa;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+/* Styles for suggestions */
+div.ReactTags__suggestions {
+    position: absolute;
+}
+div.ReactTags__suggestions ul {
+    list-style-type: none;
+    box-shadow: .05em .01em .5em rgba(0,0,0,.2);
+    background: white;
+    width: 200px;
+}
+div.ReactTags__suggestions li {
+    border-bottom: 1px solid #ddd;
+    padding: 5px 10px;
+    margin: 0;
+}
+div.ReactTags__suggestions li mark {
+    text-decoration: underline;
+    background: none;
+    font-weight: 600;
+}
+div.ReactTags__suggestions ul li.ReactTags__activeSuggestion {
+    background: #b7cfe0;
+    cursor: pointer;
+}
+
+div.ReactTags__tags.react-tags-wrapper {
+	padding-bottom: 17px;
 }
 
 /* BEAGLE STYLING */
@@ -193,3 +390,9 @@ blockquote::before{
 
 .medium-editor-toolbar-actions li, .medium-editor-toolbar-actions button {
 border-radius: 50px; }
+
+
+/* Main */
+body{
+font-family: 'Roboto', sans-serif;
+}
