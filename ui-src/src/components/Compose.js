@@ -69,25 +69,6 @@ class Compose extends Component {
     });
   }
 
-  // need to replace with better approach since this is deprecated.
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.post !== null && nextProps.post.hash === nextProps.match.params.id) {
-      this.state = {
-        title: nextProps.post.title,
-        tags: nextProps.post.tags.map(tag => ({id: tag, text: tag})),
-        content: nextProps.post.content,
-        status: nextProps.post.status
-      };
-    } else {
-      this.state = {
-        title: '',
-        tags: [],
-        content: '',
-        status: ''
-      };
-    }
-  }
-
   handleDelete(i) {
     const {tags} = this.state;
     this.setState({
