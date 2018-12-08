@@ -1,17 +1,17 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { WithContext as ReactTags } from 'react-tag-input';
+import {WithContext as ReactTags} from 'react-tag-input';
 import {Form, Alert, Row, OverlayTrigger, Tooltip, Container, Col} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import {newPostDispatch, editPostDispatch} from '../actions';
 import {Redirect} from 'react-router-dom';
-import Editor from 'react-medium-editor';
-require('medium-editor/dist/css/medium-editor.css');
+import CKEditor from '@ckeditor/ckeditor5-react';
+import InlineEditor from '@ckeditor/ckeditor5-build-inline';
 
 class Compose extends Component {
   state = {
     title: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.title : '',
-    tags: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.tags.map(tag => { return {id: tag, text: tag}}) : [],
+    tags: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.tags.map(tag => ({id: tag, text: tag})) : [],
     content: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.content : '',
     status: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.status : '',
     redirect: false,
@@ -74,7 +74,7 @@ class Compose extends Component {
     if (nextProps.post !== null && nextProps.post.hash === nextProps.match.params.id) {
       this.state = {
         title: nextProps.post.title,
-        tags: nextProps.post.tags.map(tag => { return {id: tag, text: tag}}),
+        tags: nextProps.post.tags.map(tag => ({id: tag, text: tag})),
         content: nextProps.post.content,
         status: nextProps.post.status
       };
@@ -89,26 +89,27 @@ class Compose extends Component {
   }
 
   handleDelete(i) {
-      const { tags } = this.state;
-      this.setState({
-        tags: tags.filter((tag, index) => index !== i),
-      });
-    }
+    const {tags} = this.state;
+    this.setState({
+      tags: tags.filter((tag, index) => index !== i)
+    });
+  }
 
-    handleAddition(tag) {
-     this.setState(state => ({ tags: [...state.tags, tag] }));
-    }
+  handleAddition(tag) {
+    this.setState(state => ({tags: [...state.tags, tag]}));
+  }
 
-    handleDrag(tag, currPos, newPos) {
-      const tags = [...this.state.tags];
-      const newTags = tags.slice();
+  handleDrag(tag, currPos, newPos) {
+    const tags = [...this.state.tags];
+    const newTags = tags.slice();
 
-      newTags.splice(currPos, 1);
-      newTags.splice(newPos, 0, tag);
+    newTags.splice(currPos, 1);
+    newTags.splice(newPos, 0, tag);
 
-      // re-render
-      this.setState({ tags: newTags });
-    }
+    // re-render
+    this.setState({tags: newTags});
+  }
+
 
   render() {
     const {post, match, history, agent} = this.props;
@@ -131,7 +132,7 @@ class Compose extends Component {
           <Container>
             <Row>
               <Col>
-                <span className="nav-sub-header">{agent.name} Playspace > <a href="humm.earth/blog">Humm.earth</a></span>
+                <span className="nav-sub-header">{agent.name}'s Playspace > <a href="humm.earth/blog">Humm.earth</a></span>
               </Col>
               <Col>
                 {typeof match.params.id !== 'undefined' && match.params.id === post.hash ? (
@@ -147,7 +148,7 @@ class Compose extends Component {
                   </div>
                 ) : (
                   <div className="form-group button-group float-right m-0">
-                    <button type="submit" id="saveDraft" name="status" value="draft" onClick={this.handleChange} className="btn btn-orange mr-1" disabled={!submitEnabled}>Save as Draft</button>
+                    <button type="submit" id="saveDraft" name="status" value="draft" onClick={this.handleChange} className="btn btn-orange" disabled={!submitEnabled}>Save as Draft</button>
                     <button type="submit" id="publishPost" name="status" value="publish" onClick={this.handleChange} className="btn btn-green" disabled={!submitEnabled}>Publish</button>
                   </div>
                 )}
@@ -161,21 +162,23 @@ class Compose extends Component {
               <div className="form-group m-0">
                 <input id="title" name="title" value={this.state.title} className="form-control form-control-lg" type="text" size="50" onChange={this.handleChange} placeholder="Title Goes Here" />
               </div>
-                            <div className="form-group">
-              <ReactTags
-                tags={this.state.tags}
-                handleDelete={this.handleDelete.bind(this)}
-                handleAddition={this.handleAddition.bind(this)}
-                placeholder="Create Topic"
-                handleDrag={this.handleDrag.bind(this)}
-              />
-                </div>
+              <div className="form-group ml-3 mt-1">
+                <ReactTags
+                  tags={this.state.tags}
+                  handleDelete={this.handleDelete.bind(this)}
+                  handleAddition={this.handleAddition.bind(this)}
+                  placeholder="Create Topic"
+                  handleDrag={this.handleDrag.bind(this)}
+                />
+              </div>
               <div className="form-group">
-                <Editor
-                  tag="div"
-                  text={this.state.content}
-                  onChange={this.handleContentChange}
-                  options={{placeholder: false, autoLink: true, toolbar: {buttons: ['bold', 'italic', 'h1', 'h2', 'h3', 'image', 'anchor', 'orderedlist', 'unorderedlist', 'justifyLeft', 'justifyCenter', 'justifyRight', 'html']}}}
+                <CKEditor
+                  editor={ InlineEditor }
+                  data={this.state.content}
+                  onChange={ (event, editor) => {
+                    const data = editor.getData();
+                    this.handleContentChange(data);
+                  } }
                 />
               </div>
             </Form>
