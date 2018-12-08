@@ -15,7 +15,7 @@ class Manage extends Component {
         <Container className="mt-5">
           <Row>
             <Col>
-              <h1>{this.state.key}</h1>
+              <h1 className="heading-manage mt-4 mb-5 ml-4">{this.state.key}</h1>
               <Tabs className="mt-5" defaultActiveKey="profile" id="uncontrolled-tab-example" activeKey={this.state.key} onSelect={key => this.setState({key})}>
                 <Tab eventKey="All Stories" title={`All - ${stories_count}`}>
                   <PostList label="All" />
@@ -37,10 +37,11 @@ class Manage extends Component {
 
 function mapStateToProps({posts}) {
   const postsObj = Object.values(posts).sort((a, b) => a.lastupdate < b.lastupdate);
-  return {post: postsObj ? postsObj : null,
+  return {
+    post: postsObj ? postsObj : null,
     stories_count: postsObj.length,
-    drafts_count: Object.keys(postsObj).filter(post => posts.status === 'draft').length,
-    published_count: Object.keys(postsObj).filter(post => posts.status === 'publish').length
+    drafts_count: postsObj.filter(post => post.status === 'draft').length,
+    published_count: postsObj.filter(post => post.status === 'publish').length
   };
 }
 
