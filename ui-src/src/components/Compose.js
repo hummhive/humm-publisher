@@ -94,7 +94,6 @@ class Compose extends Component {
 
 
   render() {
-
     const {post, match, history, agent} = this.props;
     const {content, title} = this.state;
     const submitEnabled = content.length > 0 && title.length > 0;
@@ -118,7 +117,7 @@ class Compose extends Component {
                 <span className="nav-sub-header">{agent.name}'s Playspace > <a href="humm.earth/blog">Humm.earth</a></span>
               </Col>
               <Col>
-              <ComposeButtons submitEnabled={submitEnabled} />
+                <ComposeButtons submitEnabled={submitEnabled} postStatus={post !== null && post.status} />
               </Col>
             </Row>
           </Container>
@@ -165,16 +164,13 @@ Compose.propTypes = {
 };
 
 function mapStateToProps({agent, posts}, OwnProps) {
-  if (Object.keys(posts).length === 0) {
-    return {agent, post: null};
-  }
   if (typeof OwnProps.match.params.id !== 'undefined') {
     const id = Object.keys(posts).filter(index => posts[index].hash === OwnProps.match.params.id);
     const post = posts[id];
     return {agent, post: post ? posts[id] : null};
   }
-  const postsObj = Object.values(posts).sort((a, b) => a.lastupdate < b.lastupdate);
-  return {agent, post: postsObj[0]};
+
+  return {agent, post: null};
 }
 
 export default connect(mapStateToProps)(Compose);
