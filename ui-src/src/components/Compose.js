@@ -5,6 +5,7 @@ import {Form, Alert, Row, OverlayTrigger, Tooltip, Container, Col} from 'react-b
 import PropTypes from 'prop-types';
 import {newPostDispatch, editPostDispatch} from '../actions';
 import {Redirect} from 'react-router-dom';
+import ComposeButtons from './ComposeButtons';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import InlineEditor from '@ckeditor/ckeditor5-build-inline';
 
@@ -93,6 +94,7 @@ class Compose extends Component {
 
 
   render() {
+
     const {post, match, history, agent} = this.props;
     const {content, title} = this.state;
     const submitEnabled = content.length > 0 && title.length > 0;
@@ -116,30 +118,14 @@ class Compose extends Component {
                 <span className="nav-sub-header">{agent.name}'s Playspace > <a href="humm.earth/blog">Humm.earth</a></span>
               </Col>
               <Col>
-                {typeof match.params.id !== 'undefined' && match.params.id === post.hash ? (
-                  <div className="form-group button-group float-right m-0">
-                    <button type="button" className="btn btn-blue">PREVIEW</button>
-                    <button type="button" className="btn btn-red">DELETE</button>
-                    <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">WARNING: The Hash of the post will be replaced!!</Tooltip>}>
-                      <button type="submit" id="saveDraft" name="status" value="draft" onClick={this.handleChange} className="btn btn-orange mr-1" disabled={!submitEnabled}>Save as Draft</button>
-                    </OverlayTrigger>
-                    <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">WARNING: The Hash of the post will be replaced!!</Tooltip>}>
-                      <button type="submit" id="publishPost" name="status" value="publish" onClick={this.handleChange} className="btn btn-green" disabled={!submitEnabled}>UPDATE</button>
-                    </OverlayTrigger>
-                  </div>
-                ) : (
-                  <div className="form-group button-group float-right m-0">
-                    <button type="submit" id="saveDraft" name="status" value="draft" onClick={this.handleChange} className="btn btn-orange" disabled={!submitEnabled}>Save as Draft</button>
-                    <button type="submit" id="publishPost" name="status" value="publish" onClick={this.handleChange} className="btn btn-green" disabled={!submitEnabled}>Publish</button>
-                  </div>
-                )}
+              <ComposeButtons submitEnabled={submitEnabled} />
               </Col>
             </Row>
           </Container>
         </div>
         <div id="content" className="mt-5">
           <Container>
-            <Form onSubmit={typeof match.params.id !== 'undefined' && match.params.id === post.hash ? this.handleUpdateSubmit : this.handleSubmit}>
+            <Form id="submit-content" onSubmit={typeof match.params.id !== 'undefined' && match.params.id === post.hash ? this.handleUpdateSubmit : this.handleSubmit}>
               <div className="form-group m-0">
                 <input id="title" name="title" value={this.state.title} className="form-control form-control-lg" type="text" size="50" onChange={this.handleChange} placeholder="Title Goes Here" />
               </div>
