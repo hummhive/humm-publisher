@@ -1,6 +1,7 @@
 /* Import */
 
-@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600');
 
 /* Header */
 
@@ -48,6 +49,11 @@ header .nav-buttons li, .nav-right li {
 .sub-header {
 	background: #2E2E2E;
 	padding: 10px;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.button-group .btn {
+	margin-left: 15px;
 }
 
 .nav-sub-header {
@@ -92,6 +98,15 @@ header .nav-buttons li, .nav-right li {
   text-transform: uppercase;
 }
 
+.btn-blue{
+  background: #2687CD;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #fff;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
 .btn-green{
   background: #01D716;
   border-radius: 4px;
@@ -101,8 +116,17 @@ header .nav-buttons li, .nav-right li {
   text-transform: uppercase;
 }
 
-.btn-red{
-  background: #2687CD;
+.btn-light-green{
+  background: #42D781;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #fff;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.btn-dark{
+  background: #5A5A5A;
   border-radius: 4px;
   font-weight: bold;
   color: #fff;
@@ -119,6 +143,18 @@ header .nav-buttons li, .nav-right li {
   text-transform: uppercase;
 }
 
+.btn-red-dark{
+  background: #A10404;
+  border-radius: 4px;
+	font-family: Source Sans Pro;
+	font-weight: 600;
+  color: #fff;
+  font-size: 17px;
+  text-transform: capitalize;
+}
+
+
+
 /* Tabs */
 
 .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
@@ -134,6 +170,7 @@ header .nav-buttons li, .nav-right li {
 	font-weight: bold;
 	text-transform: uppercase;
 	font-size: 17px;
+	margin-right: 8px;
 }
 
 .nav-tabs .nav-link:first-child {
@@ -141,7 +178,29 @@ header .nav-buttons li, .nav-right li {
 }
 
 .list-group-item {
+	border: 0px;
+}
+
+.tab-content > .tab-pane {
 	border: 1px solid #DCDADA;
+	padding: 40px;
+	border-radius: 8px;
+}
+
+.publish-status {
+	color: #0FAE16;
+	padding-right: 5px;
+}
+
+.draft-status {
+	color: #EF7503;
+	padding-right: 5px;
+}
+
+h1.heading-manage {
+	font-size: 36px;
+	font-weight: 300;
+	color: #777;
 }
 
 /* Content */
@@ -169,9 +228,11 @@ header .nav-buttons li, .nav-right li {
 	box-shadow: none;
 }
 
-#title{
-border: 0;
-font-size: 30px;
+#title {
+	border: 0;
+	font-size: 30px;
+	color: #939292;
+	font-weight: 300;
 }
 
 /* Styles for the input */
@@ -186,31 +247,42 @@ div.ReactTags__tags {
     position: relative;
 }
 
-div.ReactTags__tagInput input.ReactTags__tagInputField,
-div.ReactTags__tagInput input.ReactTags__tagInputField:focus {
-    height: 31px;
-    margin: 0;
-    font-size: 12px;
-    width: 100%;
-    border: 1px solid #D0CECE;
-    padding: 0 4px;
+div.ReactTags__tagInput input.ReactTags__tagInputField, div.ReactTags__tagInput input.ReactTags__tagInputField:focus {
+	height: 31px;
+	margin: 0;
+	width: 100%;
+	border: 1px solid #D0CECE;
+	padding: 0 4px;
+	font-size: 18px;
+	font-weight: 300;
+	padding-left: 11px;
+	color: #111;
+	opacity: 1;
 }
 
 /* Styles for selected tags */
 div.ReactTags__selected span.ReactTags__tag {
-    border: 1px solid #ddd;
-    background: #fff;
-    font-size: 12px;
-    display: inline-block;
-    padding: 5px;
-    margin: 0 5px;
-    cursor: move;
-    border-radius: 2px;
+	border: 1px solid #ddd;
+	background: #fff;
+	font-size: 18px;
+	display: inline-block;
+	padding: 5px;
+	margin: 0 5px;
+	cursor: move;
+	border-radius: 2px;
+	font-weight: 300;
+	color: #666;
+	padding-top: 2px;
+	text-transform: capitalize;
+	padding-bottom: 2px;
 }
+
 div.ReactTags__selected a.ReactTags__remove {
-    color: #aaa;
-    margin-left: 5px;
-    cursor: pointer;
+	color: #aaa;
+	margin-right: 4px;
+	cursor: pointer;
+	float: left;
+	padding-left: 2px;
 }
 
 /* Styles for suggestions */
@@ -239,157 +311,40 @@ div.ReactTags__suggestions ul li.ReactTags__activeSuggestion {
 }
 
 div.ReactTags__tags.react-tags-wrapper {
-	padding-bottom: 17px;
+	min-height: 35px;
 }
 
-/* BEAGLE STYLING */
+/* CK EDITOR */
 
-.medium-editor-element {
-	min-height: 400px !important;
+.ck.ck-content.ck-editor__editable {
+	border: 1px solid #DCDADA;
+	border-radius: 8px !important;
+	padding: 20px;
+	padding-top: 10px;
+	padding-left: 30px;
+	padding-right: 250px;
+	color: #555;
+	min-height: 400px;
 }
 
-.medium-editor-toolbar-form {
-	padding: 7px;
+/* Comment Tabs */
+
+.card{
+	border: 0;
+}
+.card-header {
+	background-color: white;
+	border-bottom: 0;
 }
 
-.medium-editor-toolbar-form .medium-editor-toolbar-input {
-	height: 25px;
-	padding-left: 6px;
-	border: 1px solid #f0f0f0;
-	margin-left: 17px;
-	padding-bottom: 0;
-	margin-top: 4px;
-	padding-top: 1px;
+.card-body {
+	border: 1px solid #BDBDBD;
+	border-radius: 8px;
 }
 
-#medium-editor-toolbar-anchor-target-field-1 {
-	margin-left: 12px;
+.buttons-ft {
+	padding-top: 10px;
 }
-
-blockquote{
-  font-size: 1.4em;
-  width:60%;
-  font-family:Open Sans;
-  font-style:italic;
-  color: #555555;
-  padding:1.2em 30px 1.2em 75px;
-  border-left:8px solid #007bff ;
-  line-height:1.6;
-  position: relative;
-  background:#EDEDED;
-}
-
-blockquote::before{
-  font-family:Arial;
-  content: "\201C";
-  color:#78C0A8;
-  font-size:4em;
-  position: absolute;
-  left: 10px;
-  top:-10px;
-}
-
-.medium-editor-element {
-	word-wrap: break-word;
-	min-height: 100px;
-	outline: none;
-	padding-top: 6px;
-	padding-bottom: 32px;
-	padding-left: 7px;
-}
-
-.medium-editor-toolbar {
-	height: auto;
-}
-
-.medium-editor-placeholder-relative, .medium-editor-placeholder-relative::after {
-	font-style: normal;
-	color: #777;
-	font-size: 20px;
-	/* margin-top: 0px; */
-}
-
-.medium-toolbar-arrow-under:after {
-  border-color: #fff transparent transparent transparent;
-  top: 40px; }
-
-.medium-toolbar-arrow-over:before {
-  border-color: transparent transparent #000 transparent; }
-
-  .medium-editor-toolbar {
-  	background-color: #fff;
-  	border: none;
-  	border-radius: 50px;
-  	box-shadow: 0px 2px 5px #ddd;
-  }
-  .medium-editor-toolbar li button {
-    background-color: transparent;
-    border: none;
-    box-sizing: border-box;
-    color: #000;
-    height: 40px;
-    min-width: 40px;
-    padding: 5px 12px;
-    -webkit-transition: background-color .2s ease-in, color .2s ease-in;
-            transition: background-color .2s ease-in, color .2s ease-in; }
-    .medium-editor-toolbar li button:hover {
-      color: #007bff; }
-  .medium-editor-toolbar li .medium-editor-button-first {
-    border-bottom-left-radius: 50px;
-    border-top-left-radius: 50px;
-    padding-left: 24px; }
-  .medium-editor-toolbar li .medium-editor-button-last {
-    border-bottom-right-radius: 50px;
-    border-right: none;
-    border-top-right-radius: 50px;
-    padding-right: 24px; }
-  .medium-editor-toolbar li .medium-editor-button-active {
-    color: #007bff; }
-
-.medium-editor-toolbar-form {
-  background: #fff;
-  border-radius: 50px;
-  color: #ccc;
-  overflow: hidden; }
-  .medium-editor-toolbar-form .medium-editor-toolbar-input {
-    background: #fff;
-    box-sizing: border-box;
-    color: #ccc;
-    height: 40px;
-    padding-left: 16px;
-    width: 220px; }
-    .medium-editor-toolbar-form .medium-editor-toolbar-input::-webkit-input-placeholder {
-      color: #f8f5f3;
-      color: rgba(248, 245, 243, 0.8); }
-    .medium-editor-toolbar-form .medium-editor-toolbar-input:-moz-placeholder {
-      /* Firefox 18- */
-      color: #f8f5f3;
-      color: rgba(248, 245, 243, 0.8); }
-    .medium-editor-toolbar-form .medium-editor-toolbar-input::-moz-placeholder {
-      /* Firefox 19+ */
-      color: #f8f5f3;
-      color: rgba(248, 245, 243, 0.8); }
-    .medium-editor-toolbar-form .medium-editor-toolbar-input:-ms-input-placeholder {
-      color: #f8f5f3;
-      color: rgba(248, 245, 243, 0.8); }
-  .medium-editor-toolbar-form a {
-    color: #ccc;
-    -webkit-transform: translateY(2px);
-            transform: translateY(2px); }
-  .medium-editor-toolbar-form .medium-editor-toolbar-close {
-    margin-right: 16px; }
-
-.medium-editor-toolbar-anchor-preview {
-  background: #000;
-  border-radius: 50px;
-  padding: 5px 12px; }
-
-.medium-editor-anchor-preview a {
-  color: #ccc;
-  text-decoration: none; }
-
-.medium-editor-toolbar-actions li, .medium-editor-toolbar-actions button {
-border-radius: 50px; }
 
 
 /* Main */
