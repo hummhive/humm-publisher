@@ -143,7 +143,10 @@ class Compose extends Component {
                 <span className="nav-sub-header">{agent.name}'s Playspace > <a href="humm.earth/blog">Humm.earth</a></span>
               </Col>
               <Col>
-                <ComposeButtons submitEnabled={submitEnabled} handleSubmit={this.handleSubmit} handleUpdateSubmit={this.handleUpdateSubmit} deletePost={this.deletePost} postStatus={post !== null && post.status} />
+                <ComposeButtons submitEnabled={submitEnabled}
+                handleSubmit={this.handleSubmit}
+                handleUpdateSubmit={this.handleUpdateSubmit}
+                deletePost={this.deletePost} post={post !== null && post} />
               </Col>
             </Row>
           </Container>
