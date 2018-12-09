@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Tab, Tabs, Container, Row, Col} from 'react-bootstrap';
+import {Tab, Tabs, Container, Row, Col, Alert} from 'react-bootstrap';
 import PostList from './PostList';
 
 class Manage extends Component {
@@ -9,12 +9,26 @@ class Manage extends Component {
   }
 
   render () {
-    const {stories_count, drafts_count, published_count} = this.props;
+    const {stories_count, drafts_count, published_count, history, post} = this.props;
+
+    if (post === null) {
+      return <p>There are no posts yet, <Link to='/compose'>start by making one!</Link> 😁</p>;
+    }
+
+    const PostAlert = () => {
+    if(typeof history.location.state !== 'undefined' && history.location.state.referrer === 'deleted'){
+      return <Alert variant='success'>The post {history.location.state.postName} has been deleted</Alert>
+    }else{
+      return null
+    }
+  }
+
     return (
       <React.Fragment>
         <Container className="mt-5">
           <Row>
             <Col>
+            <PostAlert />
               <h1 className="heading-manage mt-4 mb-5 ml-4">{this.state.key}</h1>
               <Tabs className="mt-5" defaultActiveKey="profile" id="uncontrolled-tab-example" activeKey={this.state.key} onSelect={key => this.setState({key})}>
                 <Tab eventKey="All Stories" title={`All - ${stories_count}`}>
@@ -36,7 +50,7 @@ class Manage extends Component {
 }
 
 function mapStateToProps({posts}) {
-  const postsObj = Object.values(posts).sort((a, b) => a.lastupdate < b.lastupdate);
+  const postsObj = Object.values(posts).sort((a, b) => new Date(b.lastupdate) - new Date(a.lastupdate));
   return {
     post: postsObj ? postsObj : null,
     stories_count: postsObj.length,
