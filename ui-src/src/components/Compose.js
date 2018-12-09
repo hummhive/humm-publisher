@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import {WithContext as ReactTags} from 'react-tag-input';
 import {Form, Alert, Row, OverlayTrigger, Tooltip, Container, Col} from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import {newPostDispatch, editPostDispatch} from '../actions';
-import {Redirect} from 'react-router-dom';
+import {newPostDispatch, editPostDispatch, deletePostDispatch} from '../actions';
+import {Redirect, withRouter} from 'react-router-dom';
 import ComposeButtons from './ComposeButtons';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import InlineEditor from '@ckeditor/ckeditor5-build-inline';
@@ -15,11 +15,12 @@ class Compose extends Component {
     tags: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.tags.map(tag => ({id: tag, text: tag})) : [],
     content: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.content : '',
     status: this.props.post !== null && this.props.post.hash === this.props.match.params.id ? this.props.post.status : '',
-    redirect: false,
-    toHome: false
+    redirectCreate: false,
+    redirectUpdate: false
   }
 
   handleSubmit = e => {
+    console.log('test');
     e.preventDefault();
     const {dispatch, agent} = this.props;
     dispatch(newPostDispatch(
@@ -27,16 +28,17 @@ class Compose extends Component {
       agent.name,
       new Date(),
       new Date(),
-      this.state.tags.split(','),
+      this.state.tags.map(tag => tag.text),
       this.state.content,
-      this.state.status)).then(() => {
+      e.target.id)).then(() => {
       this.setState(() => ({
-        redirect: true
+        redirectCreate: true
       }));
     });
   }
 
   handleUpdateSubmit = e => {
+    console.log(this.props.post);
     e.preventDefault();
     const {dispatch, post, agent} = this.props;
     dispatch(editPostDispatch(
@@ -46,13 +48,23 @@ class Compose extends Component {
       agent.name,
       post.pubdate,
       new Date(),
-      this.state.tags.split(','),
+      this.state.tags.map(tag => tag.text),
       this.state.content,
-      this.state.status)).then(() => {
+      e.target.id)).then(() => {
       this.setState(() => ({
-        toHome: true
+        redirectUpdate: true
       }));
     });
+  }
+
+  deletePost = () => {
+    const {dispatch, post} = this.props;
+    if (post !== null) {
+      const path = '/';
+      dispatch(deletePostDispatch(post.hash, post.status)).then(() =>
+        this.props.history.push({pathname: path, state: {referrer: 'deleted', postName: post.title}})
+      );
+    }
   }
 
   handleChange = e => {
@@ -81,32 +93,49 @@ class Compose extends Component {
     this.setState(state => ({tags: [...state.tags, tag]}));
   }
 
-  handleDrag(tag, currPos, newPos) {
-    const tags = [...this.state.tags];
-    const newTags = tags.slice();
-
-    newTags.splice(currPos, 1);
-    newTags.splice(newPos, 0, tag);
-
-    // re-render
-    this.setState({tags: newTags});
+  // need to replace with better approach since this is deprecated.
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+    if (nextProps.post !== null && nextProps.post.hash === nextProps.match.params.id) {
+      this.state = {
+        title: nextProps.post.title,
+        tags: nextProps.post.tags.map(tag => ({id: tag, text: tag})),
+        content: nextProps.post.content,
+        status: nextProps.post.status
+      };
+    } else {
+      this.state = {
+        title: '',
+        tags: [],
+        content: '',
+        status: ''
+      };
+    }
   }
-
 
   render() {
     const {post, match, history, agent} = this.props;
     const {content, title} = this.state;
     const submitEnabled = content.length > 0 && title.length > 0;
 
-    if (this.state.redirect === true) {
+    if (this.state.redirectCreate === true) {
       return <Redirect push to={{pathname: `/compose/${post.hash}`, state: {referrer: 'created'}}} />;
-    } else if (this.state.toHome === true) {
-      return <Redirect push to={{pathname: '/post/', state: {referrer: 'updated'}}} />;
+    } else if (this.state.redirectUpdate === true) {
+      return <Redirect push to={{pathname: `/compose/${post.hash}`, state: {referrer: 'updated'}}} />;
     }
 
     if (post === null && typeof match.params.id !== 'undefined') {
       return <p>This hash does not exist...</p>;
     }
+
+    const PostAlert = () => {
+      if (typeof history.location.state !== 'undefined' && history.location.state.referrer === 'created') {
+        return <Alert variant='success'>The post has been created {post.status === 'publish' ? 'and published to the blog' : 'and stored as a draft'}</Alert>;
+      } else if (typeof history.location.state !== 'undefined' && history.location.state.referrer === 'updated') {
+        return <Alert variant='primary'>The post has been updated {post.status === 'publish' ? 'and re-published to the blog' : 'and stored as a draft'}</Alert>;
+      }
+      return null;
+    };
 
     return (
       <React.Fragment>
@@ -117,13 +146,14 @@ class Compose extends Component {
                 <span className="nav-sub-header">{agent.name}'s Playspace > <a href="humm.earth/blog">Humm.earth</a></span>
               </Col>
               <Col>
-                <ComposeButtons submitEnabled={submitEnabled} postStatus={post !== null && post.status} />
+                <ComposeButtons submitEnabled={submitEnabled} handleSubmit={this.handleSubmit} handleUpdateSubmit={this.handleUpdateSubmit} deletePost={this.deletePost} postStatus={post !== null && post.status} />
               </Col>
             </Row>
           </Container>
         </div>
         <div id="content" className="mt-5">
           <Container>
+            <PostAlert />
             <Form id="submit-content" onSubmit={typeof match.params.id !== 'undefined' && match.params.id === post.hash ? this.handleUpdateSubmit : this.handleSubmit}>
               <div className="form-group m-0">
                 <input id="title" name="title" value={this.state.title} className="form-control form-control-lg" type="text" size="50" onChange={this.handleChange} placeholder="Title Goes Here" />
@@ -134,7 +164,6 @@ class Compose extends Component {
                   handleDelete={this.handleDelete.bind(this)}
                   handleAddition={this.handleAddition.bind(this)}
                   placeholder="Create Topic"
-                  handleDrag={this.handleDrag.bind(this)}
                 />
               </div>
               <div className="form-group">
@@ -166,11 +195,20 @@ Compose.propTypes = {
 function mapStateToProps({agent, posts}, OwnProps) {
   if (typeof OwnProps.match.params.id !== 'undefined') {
     const id = Object.keys(posts).filter(index => posts[index].hash === OwnProps.match.params.id);
+    if (id.length === 0) {
+      const postsObj = Object.values(posts).sort((a, b) => new Date(b.lastupdate) - new Date(a.lastupdate));
+      return {agent, post: postsObj[0]};
+    }
     const post = posts[id];
     return {agent, post: post ? posts[id] : null};
+  }
+
+  if (posts.length > 0) {
+    const postsObj = Object.values(posts).sort((a, b) => new Date(b.lastupdate) - new Date(a.lastupdate));
+    return {agent, post: postsObj[0]};
   }
 
   return {agent, post: null};
 }
 
-export default connect(mapStateToProps)(Compose);
+export default withRouter(connect(mapStateToProps)(Compose));
