@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Badge} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import {NavLink, withRouter} from 'react-router-dom';
 import Moment from 'react-moment';
 
 class PostList extends Component {
   render () {
-    const {postlist, match, label} = this.props;
+    const {postlist} = this.props;
     return (
       <div>
         {postlist.map(post =>
@@ -15,7 +14,7 @@ class PostList extends Component {
             className={'list-group-item list-group-item-action align-items-start'}>
             <h5 className="mb-1">{post.title}</h5>
             <span className={post.status === 'publish' ? 'publish-status' : 'draft-status'}> {post.status === 'publish' ? 'published' : 'drafted'}</span>
-            <small><Moment interval={0} format="MM/DD/YYYY [at] h:mm A z">{post.lastupdate}</Moment></small>
+            <Moment interval={0} format="MM/DD/YYYY">{post.lastupdate}</Moment> {post.wordcount} words
           </NavLink>
         )}
       </div>
@@ -29,18 +28,20 @@ PostList.propTypes = {
 };
 
 function mapStateToProps({posts}, OwnProps) {
+
   let postsObj = Object.keys(posts).map(post => ({
     hash: posts[post].hash,
     title: posts[post].title,
     status: posts[post].status,
-    lastupdate: posts[post].lastupdate
+    lastupdate: posts[post].lastupdate,
+    wordcount: posts[post].content.trim().split(/\s+/).length
   }));
 
   if (OwnProps.status) {
     postsObj = postsObj.filter(post => post.status === OwnProps.status);
   }
 
-  postsObj.sort((a, b) => a.lastupdate < b.lastupdate);
+  postsObj = Object.values(posts).sort((a, b) => a.lastupdate < b.lastupdate);
 
   return {postlist: postsObj};
 }
