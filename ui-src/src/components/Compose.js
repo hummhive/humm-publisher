@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {WithContext as ReactTags} from 'react-tag-input';
-import {Form, Alert, Row, OverlayTrigger, Tooltip, Container, Col} from 'react-bootstrap';
+import {Form, Alert, Row, Container, Col} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import {newPostDispatch, editPostDispatch, deletePostDispatch} from '../actions';
 import {Redirect, withRouter} from 'react-router-dom';
@@ -20,7 +20,6 @@ class Compose extends Component {
   }
 
   handleSubmit = e => {
-    console.log('test');
     e.preventDefault();
     const {dispatch, agent} = this.props;
     dispatch(newPostDispatch(
@@ -38,7 +37,6 @@ class Compose extends Component {
   }
 
   handleUpdateSubmit = e => {
-    console.log(this.props.post);
     e.preventDefault();
     const {dispatch, post, agent} = this.props;
     dispatch(editPostDispatch(
@@ -95,7 +93,6 @@ class Compose extends Component {
 
   // need to replace with better approach since this is deprecated.
   UNSAFE_componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     if (nextProps.post !== null && nextProps.post.hash === nextProps.match.params.id) {
       this.state = {
         title: nextProps.post.title,
