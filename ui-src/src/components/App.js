@@ -5,8 +5,8 @@ import {FaEdit, FaComments} from 'react-icons/fa';
 import logo from '../images/logo.png';
 import settings from '../images/settings.png';
 import LoadingBar from 'react-redux-loading-bar';
-import {Container, Row, Col, Badge} from 'react-bootstrap';
-import {BrowserRouter as Router, Route, Link, NavLink, Redirect} from 'react-router-dom';
+import {Container, Row, Col} from 'react-bootstrap';
+import {BrowserRouter as Router, Route, Link, Switch} from 'react-router-dom';
 import Post from './Post';
 import Manage from './Manage';
 import PropTypes from 'prop-types';
@@ -18,7 +18,7 @@ class App extends Component {
     this.props.dispatch(handleInitialData());
   }
   render () {
-    const {loading, agent, postcount} = this.props;
+    const {loading} = this.props;
     return (
       <Router>
         <React.Fragment>
@@ -32,7 +32,7 @@ class App extends Component {
                 <Col xs={7}>
                   <ul className="nav-buttons">
                   <li><Link to="/compose"><button type="button" className="btn btn-header-orange">NEW STORY</button></Link></li>
-                    <li><Link to="/manage"><button type="button" className="btn btn-header-normal">MANAGE</button></Link></li>
+                    <li><Link to="/"><button type="button" className="btn btn-header-normal">MANAGE</button></Link></li>
                     <li><Link to="/comment"><button type="button" className="btn btn-header-normal">COMMENTS</button></Link></li>                  </ul>
                 </Col>
                 <Col>
@@ -49,12 +49,12 @@ class App extends Component {
           {loading === true ? (
             <div className="loading-container mt-5 text-center"><p>Loading data from Holochain...</p></div>
           ) : (
-            <React.Fragment>
-              <Route path="/compose/:id?/" component={Compose} />
-              <Route path="/manage/" component={Manage} />
+            <Switch>
+              <Route exact path='/' component={Manage} />
+              <Route path={'/compose/:id?/'} component={Compose} />
               <Route path={'/post/:id?/'} component={Post} />
               <Route path={'/comment/:id?/'} component={Comment} />
-            </React.Fragment>
+            </Switch>
           )}
         </React.Fragment>
       </Router>
@@ -65,15 +65,13 @@ class App extends Component {
 App.propTypes = {
   dispatch: PropTypes.func,
   agent: PropTypes.object,
-  loading: PropTypes.bool,
-  postcount: PropTypes.number
+  loading: PropTypes.bool
 };
 
-function mapStateToProps ({agent, posts}) {
+function mapStateToProps ({agent}) {
   return {
     agent,
-    loading: agent === null,
-    postcount: Object.values(posts).length
+    loading: agent === null
   };
 }
 
