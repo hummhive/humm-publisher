@@ -115,7 +115,7 @@ render () {
         {Object.values(approved === true ?
           this.state.approvedComments : deleted === true ?
             this.state.deletedComments : this.state.comments).map(comment =>
-          <Card key={comment.Hash} className="mb-3" style={comment.Entry.deleted === false ? {opacity: '1'} : {opacity: '0.5'}}>
+          <Card key={comment.Hash} className="mb-3">
             <Card.Header><div className="float-left">{comment.Entry.author} - <Moment interval={0} format="h:mm A z - MMM. D, YYYY">{comment.Entry.createdAt}</Moment></div> <div className="float-right">Replying to <a href="http://humm.earth/blog/">{comment.postTitle}</a>, posted on Humm.earth</div></Card.Header>
             <Card.Body>
               <Card.Text>
