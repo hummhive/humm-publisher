@@ -60,7 +60,15 @@ header .nav-buttons li, .nav-right li {
 	color: #c0c0c0;
 	text-transform: capitalize;
 	font-size: 20px;
-  line-height: 35px;
+	line-height: 28px;
+	padding-left: 16px;
+}
+
+.sub-header .button-group .btn {
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 20px;
+	padding-right: 20px;
 }
 
 .nav-sub-header a {
@@ -190,11 +198,30 @@ header .nav-buttons li, .nav-right li {
 .publish-status {
 	color: #0FAE16;
 	padding-right: 5px;
+	font-weight: bold;
+	text-transform: capitalize;
+}
+
+.postlist-container .list-group-item {
+	border-top: 1px solid #ddd;
+	border-left: 0;
+	border-right: 0;
+	border-radius: 0;
+}
+
+.postlist-container .list-group-item:first-child {
+	border-top: 0;
+}
+
+.postlist-container .list-group-item:last-child {
+	border-bottom: 1px solid #ddd;
 }
 
 .draft-status {
 	color: #EF7503;
 	padding-right: 5px;
+	font-weight: bold;
+	text-transform: capitalize;
 }
 
 h1.heading-manage {
@@ -250,6 +277,7 @@ div.ReactTags__tags {
 div.ReactTags__tagInput input.ReactTags__tagInputField, div.ReactTags__tagInput input.ReactTags__tagInputField:focus {
 	height: 31px;
 	margin: 0;
+	border-radius: 2px;
 	width: 100%;
 	border: 1px solid #D0CECE;
 	padding: 0 4px;
@@ -265,11 +293,12 @@ div.ReactTags__selected span.ReactTags__tag {
 	border: 1px solid #ddd;
 	background: #fff;
 	font-size: 18px;
+	padding-right: 12px;
 	display: inline-block;
-	padding: 5px;
+	padding-left: 5px;
 	margin: 0 5px;
 	cursor: move;
-	border-radius: 2px;
+	border-radius: 4px;
 	font-weight: 300;
 	color: #666;
 	padding-top: 2px;
@@ -282,7 +311,18 @@ div.ReactTags__selected a.ReactTags__remove {
 	margin-right: 4px;
 	cursor: pointer;
 	float: left;
-	padding-left: 2px;
+	background: #aaa;
+	color: #fff;
+	border-radius: 30px;
+	line-height: 4px;
+	margin-top: 4px;
+	padding-bottom: 7px;
+	padding-top: 7px;
+	font-weight: bold;
+	margin-right: 12px;
+	padding-left: 4px;
+	padding-right: 4px;
+	font-size: 21px;
 }
 
 /* Styles for suggestions */
@@ -327,23 +367,50 @@ div.ReactTags__tags.react-tags-wrapper {
 	min-height: 400px;
 }
 
-/* Comment Tabs */
+/* Comments */
 
-.card{
+.comments-container{
+	padding-left: 73px;
+	padding-right: 73px;
+}
+
+.comments-container .card{
 	border: 0;
 }
-.card-header {
+
+.comments-container h3{
+	text-align: center;
+	color: #666;
+	margin-bottom: 50px;
+	font-size: 24px;
+}
+.comments-container .card-header {
 	background-color: white;
 	border-bottom: 0;
+	padding-left: 4px;
+	padding-bottom: 4px;
 }
 
-.card-body {
+.comments-container .card-body {
 	border: 1px solid #BDBDBD;
 	border-radius: 8px;
 }
 
-.buttons-ft {
-	padding-top: 10px;
+.comments-container .buttons-ft {
+	padding-top: 0px;
+	padding-left: 0px;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 40px;
+	width: 97%;
+	margin: auto;
+}
+
+.comments-container .caret {
+	width: ;
+	width: 63px;
+	height: ;
+	height: 19px;
+	margin: auto;
 }
 
 
