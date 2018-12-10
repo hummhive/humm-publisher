@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {handleInitialData} from '../actions';
-import {FaEdit, FaComments} from 'react-icons/fa';
 import logo from '../images/logo.png';
 import settings from '../images/settings.png';
 import avatar from '../images/no-avatar.png';

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 class ComposeButtons extends Component {
   render() {
@@ -37,4 +38,13 @@ class ComposeButtons extends Component {
     );
   }
 }
+
+ComposeButtons.propTypes = {
+  deletePost: PropTypes.func,
+  post: PropTypes.object,
+  handleUpdateSubmit: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  submitEnabled: PropTypes.bool
+};
+
 export default ComposeButtons;

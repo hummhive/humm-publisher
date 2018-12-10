@@ -88,8 +88,8 @@ class Compose extends Component {
     newTags.splice(newPos, 0, tag);
 
     // re-render
-    this.setState({ tags: newTags });
-}
+    this.setState({tags: newTags});
+  }
 
   handleDelete(i) {
     const {tags} = this.state;
@@ -155,9 +155,9 @@ class Compose extends Component {
               </Col>
               <Col>
                 <ComposeButtons submitEnabled={submitEnabled}
-                handleSubmit={this.handleSubmit}
-                handleUpdateSubmit={this.handleUpdateSubmit}
-                deletePost={this.deletePost} post={post !== null && post} />
+                  handleSubmit={this.handleSubmit}
+                  handleUpdateSubmit={this.handleUpdateSubmit}
+                  deletePost={this.deletePost} post={post !== null && post} />
               </Col>
             </Row>
           </Container>

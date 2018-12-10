@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Card, Container, Row, Col, Alert} from 'react-bootstrap';
+import {Card, Container, Row, Col} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import {fetchPOST} from '../utils/helpers';
 import {Link} from 'react-router-dom';
@@ -19,7 +19,7 @@ state = {
 }
 
 componentDidMount () {
-  const {match, post} = this.props;
+  const {post} = this.props;
   const commentsArr = [];
   if (post !== null) {
     Object.values(post).map(obj => {
@@ -76,9 +76,8 @@ handleClick(event) {
 }
 
 render () {
-  console.log(this.state);
-  const {post, match} = this.props;
-  const {comments, all, approved, deleted} = this.state;
+  const {post} = this.props;
+  const {comments, approved, deleted} = this.state;
 
   if (post === null) {
     return <p>There are no posts yet, <Link to='/compose'>start by making one!</Link> 😁</p>;
@@ -89,13 +88,12 @@ render () {
   }
 
   const Heading = () => {
-    if (all === true) {
-      return <h3> All Comments </h3>;
-    } else if (approved === true) {
+    if (approved === true) {
       return <h3> Approved Comments </h3>;
     } else if (deleted === true) {
       return <h3> Deleted Comments </h3>;
     }
+    return <h3> All Comments </h3>;
   };
 
   return (
@@ -140,8 +138,7 @@ render () {
 }
 
 Comment.propTypes = {
-  match: PropTypes.object,
-  history: PropTypes.object
+  post: PropTypes.object
 };
 
 function mapStateToProps({posts}, OwnProps) {
