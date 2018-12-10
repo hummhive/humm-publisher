@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Card, Container, Row, Col} from 'react-bootstrap';
+import {Card, Container, Row, Col, Alert} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import {fetchPOST} from '../utils/helpers';
 import {Link} from 'react-router-dom';
 import Moment from 'react-moment';
-import CommentsButtons from './CommentsButtons';
+import caret from '../images/caret.png';
 
 class Comment extends Component {
 state = {
@@ -13,6 +13,8 @@ state = {
   approved: false,
   deleted: false,
   comments: [],
+  approvedComments: [],
+  deletedComments: [],
   commentLoaded: false
 }
 
@@ -28,9 +30,12 @@ componentDidMount () {
             commentsArr.push(...comments);
           }
         }).then(() => {
+          commentsArr.sort((a, b) => a.Entry.createdAt < b.Entry.createdAt);
           this.setState({
-            comments: commentsArr.sort((a, b) =>
-              a.Entry.createdAt < b.Entry.createdAt), commentLoaded: true
+            comments: commentsArr,
+            approvedComments: commentsArr.filter(comment => comment.Entry.deleted === false),
+            deletedComments: commentsArr.filter(comment => comment.Entry.deleted === true),
+            commentLoaded: true
           });
         });
     });
@@ -68,6 +73,7 @@ handleClick(event) {
 }
 
 render () {
+  console.log(this.state);
   const {post, match} = this.props;
   const {comments, all, approved, deleted} = this.state;
 
@@ -89,19 +95,10 @@ render () {
     }
   };
 
-  if (deleted === true) {
-    const rendercomments = Object.values(comments).filter(comment => comment.Entry.deleted === deleted);
-  } else if (approved === true) {
-    const rendercomments = Object.values(comments).filter(comment => comment.Entry.deleted !== deleted);
-  } else if (all === true) {
-    const rendercomments = comments;
-  }
-
-
   return (
     <React.Fragment>
       <div className="sub-header">
-        <Container>
+        <Container fluid={true}>
           <Row>
             <Col>
               <div className="form-group button-group float-right m-0">
@@ -113,19 +110,22 @@ render () {
           </Row>
         </Container>
       </div>
-      <Container className="mt-5">
+      <Container fluid={true} className="mt-5 comments-container">
         <Heading />
-        {Object.keys(comments).map(comment =>
-          <Card key={comments[comment].Hash} className="mb-3" style={comments[comment].Entry.deleted === false ? {opacity: '1'} : {opacity: '0.5'}}>
-            <Card.Header><small>{comments[comment].Entry.author} - <Moment interval={0} format="MM/DD/YYYY [at] h:mm A z">{comments[comment].Entry.createdAt}</Moment></small></Card.Header>
+        {Object.values(approved === true ?
+          this.state.approvedComments : deleted === true ?
+            this.state.deletedComments : this.state.comments).map(comment =>
+          <Card key={comment.Hash} className="mb-3" style={comment.Entry.deleted === false ? {opacity: '1'} : {opacity: '0.5'}}>
+            <Card.Header><div className="float-left">{comment.Entry.author} - <Moment interval={0} format="h:mm A z - MMM. D, YYYY">{comment.Entry.createdAt}</Moment></div> <div className="float-right">Replying to <a href="http://humm.earth/blog/">{comment.postTitle}</a>, posted on Humm.earth</div></Card.Header>
             <Card.Body>
               <Card.Text>
-                {comments[comment].Entry.body}
+                {comment.Entry.body}
               </Card.Text>
             </Card.Body>
+            <img className="caret" src={caret} />
             <div className="buttons-ft">
-              {comments[comment].Entry.deleted === false && (
-                <button type="button" className="btn btn-red-dark" onClick={() => this.handleChange(comments[comment].Hash, post.uuid)}>Delete</button>
+              {comment.Entry.deleted === false && (
+                <button type="button" className="btn btn-red-dark" onClick={() => this.handleChange(comment.Hash, post.uuid)}>Delete</button>
               )}
             </div>
           </Card>
