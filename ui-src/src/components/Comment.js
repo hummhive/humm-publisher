@@ -26,7 +26,10 @@ componentDidMount () {
       fetchPOST('http://139.162.16.199:3141/fn/comments/getLinkedComments', obj.uuid)
         .then(comments => {
           if (comments.length > 0) {
-            Object.values(comments).map(comment => comment.postTitle = obj.title);
+            Object.values(comments).map(comment => {
+              comment.postTitle = obj.title;
+              comment.postHash = obj.hash;
+            });
             commentsArr.push(...comments);
           }
         }).then(() => {
@@ -116,7 +119,7 @@ render () {
           this.state.approvedComments : deleted === true ?
             this.state.deletedComments : this.state.comments).map(comment =>
           <Card key={comment.Hash} className="mb-3">
-            <Card.Header><div className="float-left">{comment.Entry.author} - <Moment interval={0} format="h:mm A z - MMM. D, YYYY">{comment.Entry.createdAt}</Moment></div> <div className="float-right">Replying to <a href="http://humm.earth/blog/">{comment.postTitle}</a>, posted on Humm.earth</div></Card.Header>
+            <Card.Header><div className="float-left">{comment.Entry.author} - <Moment interval={0} format="h:mm A z - MMM. D, YYYY">{comment.Entry.createdAt}</Moment></div> <div className="float-right">Replying to <a target="_blank" rel="noopener noreferrer" href={`http://humm.earth/blog/${comment.postHash}`}>{comment.postTitle}</a>, posted on Humm.earth</div></Card.Header>
             <Card.Body>
               <Card.Text>
                 {comment.Entry.body}
