@@ -151,7 +151,7 @@ class Compose extends Component {
           <Container>
             <Row>
               <Col>
-                <span className="nav-sub-header">{agent.name}'s Playspace > <a href="humm.earth/blog">Humm.earth</a></span>
+                <span className="nav-sub-header">{agent.name}&#39;s Playspace &gt; <a href="http://humm.earth/blog">Humm.earth</a></span>
               </Col>
               <Col>
                 <ComposeButtons submitEnabled={submitEnabled}
