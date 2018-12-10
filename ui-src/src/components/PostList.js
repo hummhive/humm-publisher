@@ -8,13 +8,13 @@ class PostList extends Component {
   render () {
     const {postlist} = this.props;
     return (
-      <div>
+      <div className="postlist-container">
         {postlist.map(post =>
           <NavLink key={post.hash} id={post.hash} to={`/compose/${post.hash}`}
             className={'list-group-item list-group-item-action align-items-start'}>
             <h5 className="mb-1">{post.title}</h5>
             <span className={post.status === 'publish' ? 'publish-status' : 'draft-status'}> {post.status === 'publish' ? 'published' : 'drafted'}</span>
-            <Moment interval={0} format="MM/DD/YYYY">{post.lastupdate}</Moment> {post.wordcount} words
+            <Moment interval={0} format="MMM. D, YYYY.">{post.lastupdate}</Moment> {post.wordcount} words
           </NavLink>
         )}
       </div>
@@ -28,20 +28,19 @@ PostList.propTypes = {
 };
 
 function mapStateToProps({posts}, OwnProps) {
-
-  let postsObj = Object.keys(posts).map(post => ({
-    hash: posts[post].hash,
-    title: posts[post].title,
-    status: posts[post].status,
-    lastupdate: posts[post].lastupdate,
-    wordcount: posts[post].content.trim().split(/\s+/).length
+  let postsObj = Object.values(posts).map(post => ({
+    hash: post.hash,
+    title: post.title,
+    status: post.status,
+    lastupdate: post.lastupdate,
+    wordcount: post.content.trim().split(/\s+/).length
   }));
 
   if (OwnProps.status) {
     postsObj = postsObj.filter(post => post.status === OwnProps.status);
   }
 
-  postsObj = Object.values(posts).sort((a, b) => a.lastupdate < b.lastupdate);
+  postsObj = Object.values(postsObj).sort((a, b) => a.lastupdate < b.lastupdate);
 
   return {postlist: postsObj};
 }
