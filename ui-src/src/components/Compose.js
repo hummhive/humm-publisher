@@ -80,6 +80,17 @@ class Compose extends Component {
     });
   }
 
+  handleDrag(tag, currPos, newPos) {
+    const tags = [...this.state.tags];
+    const newTags = tags.slice();
+
+    newTags.splice(currPos, 1);
+    newTags.splice(newPos, 0, tag);
+
+    // re-render
+    this.setState({ tags: newTags });
+}
+
   handleDelete(i) {
     const {tags} = this.state;
     this.setState({
@@ -158,11 +169,12 @@ class Compose extends Component {
               <div className="form-group m-0">
                 <input id="title" name="title" value={this.state.title} className="form-control form-control-lg" type="text" size="50" onChange={this.handleChange} placeholder="Title Goes Here" />
               </div>
-              <div className="form-group ml-3 mt-1">
+              <div className="form-group ml-3 mt-1 mb-2">
                 <ReactTags
                   tags={this.state.tags}
                   handleDelete={this.handleDelete.bind(this)}
                   handleAddition={this.handleAddition.bind(this)}
+                  handleDrag={this.handleDrag.bind(this)}
                   placeholder="Create Topic"
                 />
               </div>
