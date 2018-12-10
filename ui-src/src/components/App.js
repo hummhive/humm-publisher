@@ -4,10 +4,10 @@ import {handleInitialData} from '../actions';
 import {FaEdit, FaComments} from 'react-icons/fa';
 import logo from '../images/logo.png';
 import settings from '../images/settings.png';
+import avatar from '../images/no-avatar.png';
 import LoadingBar from 'react-redux-loading-bar';
 import {Container, Row, Col} from 'react-bootstrap';
 import {BrowserRouter as Router, Route, Link, Switch} from 'react-router-dom';
-import Post from './Post';
 import Manage from './Manage';
 import PropTypes from 'prop-types';
 import Compose from './Compose';
@@ -38,7 +38,7 @@ class App extends Component {
                 <Col>
                   <div className="float-right">
                     <ul className="nav-right">
-                      <li><img className="avatar rounded" src="https://s3-alpha-sig.figma.com/img/726c/d8ae/837dd6531cd328f75775923da7cd6aa2?Expires=1544400000&Signature=VZSMgNNqgfxpSJtW8ek2NypVGk0-aIXBeQgRq1l5IZuMkahpuJL~DMRxLLxPyNdEL2cXmng-DEjTGa9De9Ty1AUjq5pJ-bGkOie~bkOskR4u5OlT1xs2qNYp89tWe2dhqtj-2FUHEDVyRakZPTeEipE8J-FNcQYR961jH457Bw7RlEwuBo6LOaqKM6DPbkCnIJQTqiJKGqRadjipdiaZV0pzcnvqd7G4Gsp8O8AyVgx-KcYDKCvNqswK7qqW8SWke7CzgIOKiT6NDN7-kKX2rJw8DZjJm3YIYGviHX1a6xoOoY54GUJw5NW2Ph9JiqJaUrYvJVmqhhVYTh~wfrpHkw__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA" width="37" height="37" /></li>
+                      <li><img className="avatar rounded" src={avatar} width="37" height="37" /></li>
                       <li><img className="setting-icon" src={settings} width="37" height="37" /></li>
                     </ul>
                   </div>
@@ -52,7 +52,6 @@ class App extends Component {
             <Switch>
               <Route exact path='/' component={Manage} />
               <Route path={'/compose/:id?/'} component={Compose} />
-              <Route path={'/post/:id?/'} component={Post} />
               <Route path={'/comment/:id?/'} component={Comment} />
             </Switch>
           )}
