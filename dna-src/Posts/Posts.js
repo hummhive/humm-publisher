@@ -21,10 +21,14 @@ function CreatePostAPI(postEntry) {
   return postHash;
 }
 
+// TODO: Need to force post status into a defined sub-set or reject entry.
+
 function CreatePost(postEntry) {
   postEntry.author = App.Agent.String;
   postEntry.uuid = generateUUIDv4();
+  if (typeof postEntry.pubdate === 'undefined') {
   postEntry.pubdate = new Date();
+  }
   postEntry.lastupdate = new Date();
 
   if (typeof postEntry.tags !== 'undefined') {
@@ -129,6 +133,7 @@ function EditPost(post) {
       tags: post.tags,
       status: post.status,
       pubdate: prevState.pubdate,
+      uuid: prevState.uuid,
       lastupdate: new Date()
     };
     post.prevState = prevState.status;
