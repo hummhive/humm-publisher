@@ -1,13 +1,36 @@
 {
-  "Tests": [
-    {
-      "Convey": "test for sampleEntryCreate",
-      "Zome": "sampleZome",
-      "FnName": "sampleEntryCreate",
-      "Input": {
-        "text": "hello"
-      },
-      "Output": "%h1%"
-    }
-  ]
+    "Tests":[
+        {
+            "Convey":"Register User",
+            "Zome":"profiles",
+            "FnName":"register",
+            "Input":{"username":"cnorris", "firstName":"Chuck", "lastName":"Norris", "email":"chuck@norris.com"},
+            "Output":"%h6%",
+            "Err":""
+        },
+        {
+            "Convey":"1. Create new Space",
+            "Zome":"spaces",
+            "FnName":"newSpace",
+            "Input":{"name":"general"},
+            "RegExp": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+            "Err":""
+        },
+        {
+            "Convey":"2. Get the added members to the private room ",
+            "Zome":"membership",
+            "FnName":"getMembers",
+            "Input":"%r1%",
+            "Output":"%agent%",
+            "Err":""
+        },
+        {
+            "Convey":"3. Get my Spaces",
+            "Zome":"spaces",
+            "FnName":"getMySpaces",
+            "Input":"",
+            "RegExp": "(?s).*",
+            "Err":""
+        }
+    ]
 }
