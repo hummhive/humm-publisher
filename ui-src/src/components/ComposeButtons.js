@@ -41,7 +41,6 @@ class ComposeButtons extends Component {
 
 ComposeButtons.propTypes = {
   deletePost: PropTypes.func,
-  post: PropTypes.object,
   handleUpdateSubmit: PropTypes.func,
   handleSubmit: PropTypes.func,
   submitEnabled: PropTypes.bool
