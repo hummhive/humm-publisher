@@ -61,6 +61,7 @@ header .nav-buttons li, .nav-right li {
 	text-transform: capitalize;
 	font-size: 20px;
 	line-height: 28px;
+	font-weight: 300;
 	padding-left: 16px;
 }
 
@@ -169,6 +170,10 @@ header .nav-buttons li, .nav-right li {
 	color: #FFF;
 	background-color: #0FAE16;
 	border: 1px solid #E0E0E0;
+}
+
+.nav-tabs {
+	border: 0;
 }
 
 .nav-tabs .nav-link {
