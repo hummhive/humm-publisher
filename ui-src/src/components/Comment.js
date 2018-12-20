@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Card, Container, Row, Col} from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import {fetchPOST} from '../utils/helpers';
 import {Link} from 'react-router-dom';
 import Moment from 'react-moment';
 import caret from '../images/caret.png';
+import axios from 'axios';
 
 class Comment extends Component {
 state = {
@@ -23,14 +23,14 @@ componentDidMount () {
   const commentsArr = [];
   if (post !== null) {
     Object.values(post).map(obj => {
-      fetchPOST('http://139.162.16.199:3141/fn/comments/getLinkedComments', obj.uuid)
+      axios.post('http://139.162.16.199:3141/fn/comments/getLinkedComments', JSON.stringify(obj.uuid))
         .then(comments => {
-          if (comments.length > 0) {
-            Object.values(comments).map(comment => {
+          if (comments.data.length > 0) {
+            Object.values(comments.data).map(comment => {
               comment.postTitle = obj.title;
               comment.postHash = obj.hash;
             });
-            commentsArr.push(...comments);
+            commentsArr.push(...comments.data);
           }
         }).then(() => {
           commentsArr.sort((a, b) => a.Entry.createdAt < b.Entry.createdAt);
