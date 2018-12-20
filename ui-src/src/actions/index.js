@@ -6,13 +6,13 @@ import axios from 'axios';
 export function handleInitialData() {
   return dispatch => {
     dispatch(showLoading());
-    return axios.post('http://localhost:3141/fn/Posts/GetPostsByStatus', JSON.stringify('any'))
+    return axios.post('/fn/posts/GetPostsByStatus', JSON.stringify('any'))
       .then(entries => {
         dispatch(receivePosts(entries.data));
       }).catch(err => {
         //console.error('Error Handling Intial Post Data:', err);
       })
-      .then(() => axios.post('http://139.162.16.199:3141/fn/Posts/GetAgentInfo'))
+      .then(() => axios.post('/fn/posts/GetAgentInfo'))
       .then(agent => {
         dispatch(receiveAgent(agent.data));
       }).catch(err => {
@@ -23,7 +23,7 @@ export function handleInitialData() {
 }
 
 export function newPostDispatch(title, author, pubdate, lastupdate, tags, content, status) {
-  return dispatch => axios.post('http://localhost:3141/fn/Posts/CreatePost', {title, tags, content, status})
+  return dispatch => axios.post('/fn/posts/CreatePost', {title, tags, content, status})
     .then(response => {
       dispatch(addNewPost(response.data.hash, response.data.uuid, title, author, pubdate, lastupdate, tags, content, status));
     }).catch(err => {
@@ -32,7 +32,7 @@ export function newPostDispatch(title, author, pubdate, lastupdate, tags, conten
 }
 
 export function deletePostDispatch(hash, status) {
-  return dispatch => axios.post('http://localhost:3141/fn/Posts/DeletePost', {hash, status})
+  return dispatch => axios.post('/fn/posts/DeletePost', {hash, status})
     .then(response => {
       dispatch(deletePost(hash));
     }).catch(err => {
@@ -41,7 +41,7 @@ export function deletePostDispatch(hash, status) {
 }
 
 export function editPostDispatch(prevHash, uuid, title, author, pubdate, lastupdate, tags, content, status) {
-  return dispatch => axios.post('http://localhost:3141/fn/Posts/EditPost', {hash: prevHash, uuid, title, tags, content, status})
+  return dispatch => axios.post('/fn/Posts/EditPost', {hash: prevHash, uuid, title, tags, content, status})
     .then(response => {
       dispatch(editPost(response.data.hash, uuid, title, author, pubdate, lastupdate, tags, content, status, prevHash));
     }).catch(err => {
