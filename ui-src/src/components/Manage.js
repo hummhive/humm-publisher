@@ -52,7 +52,7 @@ class Manage extends Component {
 Manage.propTypes = {
   stories_count: PropTypes.number,
   drafts_count: PropTypes.number,
-  post: PropTypes.object,
+  post: PropTypes.array,
   published_count: PropTypes.number,
   history: PropTypes.object
 };
