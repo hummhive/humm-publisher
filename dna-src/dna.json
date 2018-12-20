@@ -14,9 +14,9 @@
     "RedundancyFactor": 0
   },
   "Zomes": [{
-      "Name": "Posts",
+      "Name": "posts",
       "Description": "Sign and Publish Posts locally or in the DHT",
-      "CodeFile": "Posts.js",
+      "CodeFile": "posts.js",
       "RibosomeType": "js",
       "BridgeFuncs": ["CreatePost", "GetPostsByStatus"],
       "Entries": [{
@@ -115,6 +115,133 @@
       ]
     },
     {
+          "Name": "membership",
+          "Description": "used to create membership for private Channels",
+          "RibosomeType": "js",
+          "CodeFile": "membership.js",
+          "Config": {
+            "ErrorHandling": "throwErrors"
+          },
+          "Entries": [
+              {
+                  "Name": "membership_link",
+                  "DataFormat": "links"
+              },
+              {
+                "Name": "local_space",
+                "DataFormat": "string",
+                "Sharing": "private"
+              },
+              {
+                  "Name": "local_membership_link",
+                  "DataFormat": "links"
+              }
+          ],
+          "Functions": [
+              {
+                  "Name": "addMember",
+                  "CallingType": "json",
+                  "Exposure": "public"
+              },
+              {
+                  "Name": "getMembers",
+                  "CallingType": "json",
+                  "Exposure": "public"
+              },
+              {
+                  "Name": "addRoomToMembersLocalChain",
+                  "CallingType": "json",
+                  "Exposure": "public"
+              }
+          ]
+      },
+      {
+            "Name": "spaces",
+            "Description": "Spaces Controller",
+            "RibosomeType": "js",
+            "CodeFile": "spaces.js",
+            "Entries": [
+                {
+                    "Name": "space",
+                    "DataFormat": "json",
+                    "SchemaFile": "spaces.json",
+                    "Sharing": "public"
+                },
+                {
+                    "Name": "space_links",
+                    "DataFormat": "links",
+                    "Sharing": "public"
+                },
+                {
+                   "Name": "admin_link",
+                   "DataFormat": "links"
+                 }
+            ],
+            "Functions": [
+                {
+                    "Name": "newSpace",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "getMySpaces",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                }
+            ]
+          },
+          {
+              "Name": "profiles",
+              "Description": "Profiles controller",
+              "RibosomeType": "js",
+              "CodeFile": "profiles.js",
+              "Entries": [
+                  {
+                      "Name": "registration_link",
+                      "DataFormat": "links",
+                      "Sharing":"public"
+                  },
+                  {
+                      "Name": "agent_profile_link",
+                      "DataFormat": "links",
+                      "Sharing":"public"
+                  },
+                  {
+                      "Name": "profile",
+                      "DataFormat": "json",
+                      "SchemaFile": "profile.json",
+                      "Sharing": "public"
+                  }
+              ],
+              "Functions": [
+                  {
+                      "Name": "register",
+                      "CallingType": "json",
+                      "Exposure": "public"
+                  },
+                  {
+                      "Name": "isRegistered",
+                      "CallingType": "json",
+                      "Exposure": "public"
+                  },
+                  {
+                      "Name": "getMyAgentHash",
+                      "CallingType": "string",
+                      "Exposure": "public"
+                  },
+                  {
+                      "Name": "getProfile",
+                      "CallingType": "json",
+                      "Exposure": "public"
+                  },
+                  {
+                      "Name": "updateProfile",
+                      "CallingType": "json",
+                      "Exposure": "public"
+                  }
+              ]
+          },
+          {
       "Name": "comments",
       "Description": "Manage individual comments",
       "RibosomeType": "js",

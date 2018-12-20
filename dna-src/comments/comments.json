@@ -8,7 +8,6 @@
     "uuid",
     "parentId",
     "body",
-    "uuid",
     "author"
   ],
   "properties": {
@@ -50,7 +49,7 @@
       "examples": [
         "I enjoyed reading this article because it was well written."
       ],
-      "pattern": "^(.*)$"
+      "pattern": ".+"
     },
     "author": {
       "$id": "#/properties/author",
