@@ -7,7 +7,7 @@
   "scripts": {
     "hc:build-common": "tsc -p dna-src && cpx \"dna-src/**/*.json\" build/dna",
     "hc:build": "rm -r build/dna; npm run hc:build-common",
-    "hc:build-win": "if not exist build\\dna\\ mkdir build\\dna && cmd /c rd /S /Q build\\dna && npm run hc:build-common",
+    "hc:build-win": "if exist build\\dna\\ cmd /c rd /S /Q build\\dna && npm run hc:build-common",
     "hc:dev": "npm run hc:build && cd build && hcdev web",
     "hc:win": "npm run hc:build-win && cd build && hcdev web",
     "hc:test": "npm run hc:build && cp -r ./test/ ./build/ && cd build && hcdev test",
