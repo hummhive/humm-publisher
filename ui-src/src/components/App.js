@@ -32,7 +32,7 @@ class App extends Component {
                   <ul className="nav-buttons">
                   <li><Link to="/compose"><button type="button" className="btn btn-header-orange">NEW STORY</button></Link></li>
                     <li><Link to="/"><button type="button" className="btn btn-header-normal">MANAGE</button></Link></li>
-                    <li><Link to="/comment"><button type="button" className="btn btn-header-normal">COMMENTS</button></Link></li>                  </ul>
+                    <li><Link to="/comments"><button type="button" className="btn btn-header-normal">COMMENTS</button></Link></li>                  </ul>
                 </Col>
                 <Col>
                   <div className="float-right">
@@ -51,7 +51,7 @@ class App extends Component {
             <Switch>
               <Route exact path='/' component={Manage} />
               <Route path={'/compose/:id?/'} component={Compose} />
-              <Route path={'/comment/:id?/'} component={Comment} />
+              <Route path={'/comments/:id?/'} component={Comment} />
             </Switch>
           )}
         </React.Fragment>
