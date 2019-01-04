@@ -27,7 +27,7 @@ function CreatePost(postEntry) {
   postEntry.author = App.Agent.String;
   postEntry.uuid = generateUUIDv4();
   if (typeof postEntry.pubdate === 'undefined') {
-  postEntry.pubdate = new Date();
+    postEntry.pubdate = new Date();
   }
   postEntry.lastupdate = new Date();
 
@@ -39,6 +39,9 @@ function CreatePost(postEntry) {
   if ('tags' in postEntry) {
     CreateTags(postEntry, postHash);
   }
+
+  debug("Created post: " + postHash + "\nFrom entry: " + JSON.stringify(postEntry));
+
   return {hash: postHash, uuid: postEntry.uuid};
 }
 
@@ -157,6 +160,7 @@ function EditPost(post) {
 
 function GetPost(hash) {
   const post = get(hash);
+  debug("Get post with hash: " + hash + "\nReturns: " + JSON.stringify(post));
   return post;
 }
 
