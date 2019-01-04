@@ -1,0 +1,15 @@
+dist: xenial
+language: node_js
+
+node_js:
+  - 'node'
+
+services:
+  - docker
+
+script:
+  - npm ci
+  - npm run hc:ci-test
+  - docker run --name holochain -v $(pwd)/build:/humm holochain/holochain-proto:develop bash -c "cd /humm; hcdev test"
+
+cache: npm
