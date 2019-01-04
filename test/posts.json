@@ -1,0 +1,36 @@
+{
+    "Tests": [
+        {
+            "Convey": "Create a new post",
+            "Zome": "posts",
+            "FnName": "CreatePost",
+            "Input": {
+                "content": "Hello this is a post.",
+                "status": "publish",
+                "tags": ["holochain", "shoe"],
+                "title": "Hello World"
+            },
+            "Regexp": "{\"hash\":\"[^\"]+\",\"uuid\":\"[^\"]+\"}"
+        },
+        {
+            "Convey": "Get a especific post",
+            "Zome": "posts",
+            "FnName": "GetPost",
+            "Input": "%h15%",
+            "Regexp": "{\"author\":\"%agentstr%\",\"content\":\"Hello this is a post\\.\",\"lastupdate\":\"[^\"]*\",\"pubdate\":\"[^\"]*\",\"status\":\"publish\",\"tags\":\\[\"holochain\",\"shoe\"\\],\"title\":\"Hello World\",\"uuid\":\"[^\"]*\"}"
+        },
+        {
+            "Convey": "Edit a especific post",
+            "Zome": "posts",
+            "FnName": "EditPost",
+            "Input": {
+                "content": "Hello this is an [edited] post.",
+                "hash": "%h15%",
+                "status": "publish",
+                "tags": ["holochain","edited"],
+                "title": "Hello World [edited]"
+            },
+            "Regexp": "{\"hash\":\"[^\"]+\",\"uuid\":\"[^\"]+\"}"
+        }
+    ]
+}
