@@ -7,15 +7,16 @@
   "scripts": {
     "hc:build-common": "tsc -p dna-src && cpx \"dna-src/**/*.json\" build/dna",
     "hc:build": "rm -r build/dna; npm run hc:build-common",
-    "hc:build-win": "if exist build\\dna\\ cmd /c rd /S /Q build\\dna && npm run hc:build-common",
+    "hc:build-win": "if exist build\\dna\\ rd /S /Q build\\dna && npm run hc:build-common",
     "hc:dev": "npm run hc:build && cd build && hcdev web",
     "hc:win": "npm run hc:build-win && cd build && hcdev web",
     "hc:test": "npm run hc:build && rm -r build/test && cp -r ./test/ ./build/ && cd build && hcdev test",
     "ui:build": "rm -r build/ui; node scripts/build.js && cp -r ui-src/build/ build/ui/",
     "start": "node scripts/start.js",
     "build": "mkdir -p build/ui build/dna; npm run hc:build && npm run ui:build",
+    "build-win": "if not exist build\\ui mkdir build\\ui\\ && if not exist build\\dna\\ mkdir build\\dna && npm run hc:build-win",
     "test": "node scripts/test.js --env=jsdom",
-    "hc:test-win": "npm run hc:build-win && if exist build\\test\\ cmd /c rd /S /Q build\\test && xcopy /s /e /y test build\\test\\ && cd build && hcdev test"
+    "hc:test-win": "npm run hc:build-win && if exist build\\test\\ rd /S /Q build\\test && xcopy /s /e /y test build\\test\\ && cd build && hcdev test"
   },
   "author": "",
   "license": "GPL",
