@@ -22,7 +22,7 @@
       "Entries": [{
           "Name": "post",
           "DataFormat": "json",
-          "SchemaFile": "Posts.json",
+          "SchemaFile": "posts.json",
           "Sharing": "public"
         },
         {
