@@ -2,10 +2,13 @@ dist: xenial
 language: node_js
 
 node_js:
-  - 'node'
+  - node
 
 services:
   - docker
+
+env:
+  - SERVER_IP_ADDRESS=172.104.209.104
 
 script:
   - npm ci
@@ -13,3 +16,13 @@ script:
   - docker run --name holochain -v $(pwd)/build:/humm holochain/holochain-proto:develop bash -c "cd /humm; hcdev test"
 
 cache: npm
+
+before_install:
+  - openssl aes-256-cbc -K $encrypted_15570ebfddeb_key -iv $encrypted_15570ebfddeb_iv
+    -in deploy_key.enc -out deploy_key -d
+  # Test it works
+  - eval "$(ssh-agent -s)"
+  - chmod 600 ./deploy_key
+  - echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  - ssh-add ./deploy_key
+  - ssh -i ./deploy_key root@$SERVER_IP_ADDRESS pwd
