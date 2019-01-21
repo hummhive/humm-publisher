@@ -104,7 +104,7 @@ class Compose extends Component {
 
   // need to replace with better approach since this is deprecated.
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.post !== null && nextProps.post.hash === nextProps.match.params.id) {
+    if (typeof nextProps.post !== 'undefined' && nextProps.post !== null && nextProps.post.hash === nextProps.match.params.id) {
       this.state = {
         title: nextProps.post.title,
         tags: nextProps.post.tags.map(tag => ({id: tag, text: tag})),
@@ -125,6 +125,12 @@ class Compose extends Component {
     const {post, match, history, agent} = this.props;
     const {content, title} = this.state;
     const submitEnabled = content.length > 0 && title.length > 0;
+
+    if (this.state.redirectCreate === true) {
+      return <Redirect push to={{pathname: `/compose/${post.hash}`, state: {referrer: 'created'}}} />;
+    } else if (this.state.redirectUpdate === true) {
+      return <Redirect push to={{pathname: `/compose/${post.hash}`, state: {referrer: 'updated'}}} />;
+    }
 
     if (this.state.redirectCreate === true) {
       return <Redirect push to={{pathname: `/compose/${post.hash}`, state: {referrer: 'created'}}} />;
@@ -205,7 +211,8 @@ Compose.propTypes = {
 };
 
 function mapStateToProps({agent, posts}, OwnProps) {
-  if (typeof OwnProps.match.params.id !== 'undefined') {
+
+  if (typeof OwnProps.match.params.id !== 'undefined' && posts.length !== 0) {
     const id = Object.keys(posts).filter(index => posts[index].hash === OwnProps.match.params.id);
     if (id.length === 0) {
       const postsObj = Object.values(posts).sort((a, b) => new Date(b.lastupdate) - new Date(a.lastupdate));
