@@ -40,7 +40,7 @@ function mapStateToProps({posts}, OwnProps) {
     postsObj = postsObj.filter(post => post.status === OwnProps.status);
   }
 
-  postsObj = Object.values(postsObj).sort((a, b) => a.lastupdate < b.lastupdate);
+  postsObj = Object.values(postsObj).sort((a, b) => new Date(b.lastupdate) - new Date(a.lastupdate));
 
   return {postlist: postsObj};
 }

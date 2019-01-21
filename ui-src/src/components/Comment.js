@@ -137,9 +137,6 @@ render () {
 }
 }
 
-Comment.propTypes = {
-  post: PropTypes.object
-};
 
 function mapStateToProps({posts}, OwnProps) {
   if (typeof OwnProps.match.params.id === 'undefined') {

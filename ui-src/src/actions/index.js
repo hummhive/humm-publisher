@@ -41,7 +41,7 @@ export function deletePostDispatch(hash, status) {
 }
 
 export function editPostDispatch(prevHash, uuid, title, author, pubdate, lastupdate, tags, content, status) {
-  return dispatch => axios.post('/fn/Posts/EditPost', {hash: prevHash, uuid, title, tags, content, status})
+  return dispatch => axios.post('/fn/posts/EditPost', {hash: prevHash, uuid, title, tags, content, status})
     .then(response => {
       dispatch(editPost(response.data.hash, uuid, title, author, pubdate, lastupdate, tags, content, status, prevHash));
     }).catch(err => {

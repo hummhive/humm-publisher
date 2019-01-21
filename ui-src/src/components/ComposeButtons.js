@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 class ComposeButtons extends Component {
   render() {
     const Buttons = () => {
-      if (this.props.post.status === 'publish') {
+      if (this.props.status === 'publish') {
         return <div className="form-group button-group float-right m-0">
           <a href={`https://humm.earth/blog/post/${this.props.post.hash}`} target="_blank" rel="noopener noreferrer"><button type="button" className="btn btn-blue">PREVIEW</button></a>
           <button type="button" onClick={this.props.deletePost} className="btn btn-red">DELETE</button>
@@ -16,7 +16,7 @@ class ComposeButtons extends Component {
             <button type="submit" form="submit-content" name="status" id="publish" onClick={this.props.handleUpdateSubmit} className="btn btn-green" disabled={!this.props.submitEnabled}>UPDATE</button>
           </OverlayTrigger>
         </div>;
-      } else if (this.props.post.status === 'draft') {
+      } else if (this.props.status === 'draft') {
         return <div className="form-group button-group float-right m-0">
           <a href={`https://humm.earth/blog/post/${this.props.post.hash}`} target="_blank" rel="noopener noreferrer"><button type="button" className="btn btn-blue">PREVIEW</button></a>
           <button type="button" onClick={this.props.deletePost} className="btn btn-red">DELETE</button>
