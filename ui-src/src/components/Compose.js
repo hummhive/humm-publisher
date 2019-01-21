@@ -157,7 +157,7 @@ class Compose extends Component {
                 <ComposeButtons submitEnabled={submitEnabled}
                   handleSubmit={this.handleSubmit}
                   handleUpdateSubmit={this.handleUpdateSubmit}
-                  deletePost={this.deletePost} post={post !== null && post} />
+                  deletePost={this.deletePost} post={post !== null && post} status={this.state.status} />
               </Col>
             </Row>
           </Container>
